@@ -108,6 +108,7 @@ const useStyles = makeStyles((theme) => ({
       const classes = useStyles();
       const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
       const fixedMiddleHeightPaper = clsx(classes.paper, classes.fixedMiddleHeight);
+
       return(
           <div className={classes.root}>
               <CssBaseline />
@@ -134,7 +135,7 @@ const useStyles = makeStyles((theme) => ({
                       // style={{height: '50%', paddingTop: 10}} 
                       >
                         <Paper >
-                          <UserPurchase />
+                          <UserPurchase {...props}/>
                         </Paper>
                       </div>
                     </Grid>

@@ -23,29 +23,44 @@ import PaletteIcon from '@material-ui/icons/Palette';
 import LogoSvg  from './logo';
 import { useRouter } from 'next/router'
 import useStyles from './header-styles';
-import LeftDrawer from '../Drawer/Drawer'
-function HideOnScroll(props) {
-  const { children, window } = props;
-  const trigger = useScrollTrigger({ target: window ? window() : undefined });
-
-  return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      <div>{children}</div>
-    </Slide>
-  );
-}
-
-HideOnScroll.propTypes = {
-  children: PropTypes.element.isRequired,
-  window: PropTypes.func,
-};
-
-
+import LeftDrawer from '../Drawer/Drawer';
+import { signIn, signOut, useSession,getSession, providers, signout } from 'next-auth/client'
+import AlertDialog from '../components/AlertDialog'
+import { useEffect } from 'react';
 function Header(props){
   const classes = useStyles();
   const {toggleDarkTheme} = props;
+  const [session] = useSession()
   const router = useRouter()
   const {themeType, themeName}= useSelector(state => state)
+  const onCancellDialog = (e) =>{
+    setAlertDialogState({
+      ...AlertDialogState,
+      open: false,
+    })
+  }
+  const onCloseDialog = () =>{
+    setAlertDialogState({
+      open: false,
+  ContentText: "",
+  ContentHeader: "",
+  closeButtom: "",
+  cancelButton:"",
+  handleClose: onCloseDialog,
+  CancellDialog: onCancellDialog
+    })
+    signOut() 
+  }
+  const [AlertDialogState, setAlertDialogState] =useState({
+    open: false,
+  ContentText: "",
+  ContentHeader: "",
+  closeButtom: "",
+  cancelButton:"",
+  handleClose: onCloseDialog,
+  CancellDialog: onCancellDialog
+  })
+
   const dispatch = useDispatch();
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -55,6 +70,7 @@ function Header(props){
   const isThemeOpen = Boolean(anchorElTheme);
   const ThemeId = isThemeOpen ? 'theme-popover' : undefined;
   const menuId = 'account-menu';
+  const [ loading] = useSession();
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -77,9 +93,26 @@ function Header(props){
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
-    router.push('/login')
   };
+  const LoginClicked = ()=>{
+    setAnchorEl(null);
+    router.push('/login')
+  }
 
+  
+  async function SingOut() {
+    
+      setAnchorEl(null);
+      setAlertDialogState({
+        handleClose: onCloseDialog,
+        open: true,
+        ContentText: `Are you sure, you want to logout from panel`,
+        ContentHeader: `Sing Out request`,
+        closeButtom: "Agree",
+        cancelButton:"Close",
+        CancellDialog: onCancellDialog
+      })
+  }
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -91,14 +124,20 @@ function Header(props){
       onClose={handleMenuClose}
       className={classes.menuItemMobile}
     >
-      <MenuItem onClick={handleMenuClose} >Login</MenuItem>
+      {session === null || session === undefined ? 
+      <MenuItem onClick={LoginClicked} >Login</MenuItem> :
+        <span>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem component="a" //href={`/api/auth/signout`} 
+      onClick={() => {SingOut() }}>Sign Out</MenuItem>
+      </span>}
     </Menu>
   );
 
   return(
     <div className={classes.grow}>
       <CssBaseline />
+      <AlertDialog {...AlertDialogState} />
       <LeftDrawer openDrawer={openDrawer}/>
         <>
           <AppBar  position="fixed" className={classes.appBar}>
@@ -146,9 +185,15 @@ function Header(props){
               aria-label="account of current user"
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
+              disableFocusRipple
+              disableRipple
               color="inherit"
-            >
+            >{
+              session === null || session === undefined  ? 
               <AccountCircle />
+              :
+              <img alt="image" src={session.user.image} style={{width:30, height:30, borderRadius: '50%'}} />
+            }
             </IconButton>
             <IconButton 
             edge="end"

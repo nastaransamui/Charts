@@ -20,6 +20,9 @@ function Orderbooks(props){
     const OpenCloseAlert =()=>{
         setAlertOpen(!alertOpen)
     }
+    const onCancellDialog =() =>{
+        setAlertOpen(false)
+    }
 
     const RowClicked =(value) =>{
         const BaseCurrency =value.rowData[`base-currency`].toUpperCase()
@@ -43,7 +46,10 @@ function Orderbooks(props){
         open={alertOpen} 
         handleClose={OpenCloseAlert}
         ContentHeader={ContentHeader}
-        ContentText={ContentText}/>
+        ContentText={ContentText}
+        closeButtom="NotAgree"
+        cancelButton="Close"
+        CancellDialog= {onCancellDialog}/>
             <Paper style={{ height: 840, width: '100%'}}>
                 <VirtualizedTable
                 theme={theme}

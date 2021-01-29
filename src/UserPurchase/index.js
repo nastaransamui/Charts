@@ -30,6 +30,7 @@ function UserPurchase(props){
     setValue(0)
     SetMarginClicked(!MarginClicked)
   };
+
     return(
         <Fragment>
             {MarginClicked ? 
@@ -50,7 +51,7 @@ function UserPurchase(props){
                 </AppBar>
               </div>
                   {TabsValue.map((t,i)=>(<TabPanel key={i} value={value} index={i}>
-                    <PurchaseForms />
+                    <PurchaseForms {...props}/>
                   </TabPanel>))}
             </div>
              : 
@@ -64,7 +65,7 @@ function UserPurchase(props){
                  </AppBar>
                </div>
                {TabsValueMargin.map((t,i)=>(<TabPanel key={i} value={value} index={i}>
-                 <PurchaseForms />
+                 <PurchaseForms {...props}/>
                </TabPanel>))}
              </div>
              }

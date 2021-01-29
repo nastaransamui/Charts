@@ -10,7 +10,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import '../styles/app.css'
 import '../styles/hamburger-menu.css'
 import { create } from 'jss';
-
+import { Provider } from 'next-auth/client'
 
 function MyApp(props) {
   const { Component, pageProps, router } = props;
@@ -34,6 +34,15 @@ function MyApp(props) {
     dispatch({type: 'themeType', payload: theme.palette.type === 'light' ? 'dark' : 'light'})
     setTheme(appTheme(newPaletteType,themeName))
   }
+  //Fixed login with facebook redirect
+  useEffect(() => {
+    if (router.asPath.endsWith("#_=_")) {
+      router.push({
+        pathname: router.pathname,
+        query: router.query
+      })
+    };
+  });
   
   return (
     <React.Fragment>
@@ -41,6 +50,7 @@ function MyApp(props) {
         <title>My page</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
+      <Provider options={{clientMaxAge:0, keepAlive: 0}}>
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
@@ -49,6 +59,7 @@ function MyApp(props) {
         key={router.route} 
         Dialog={false} />
       </ThemeProvider>
+      </Provider>
     </React.Fragment>
   );
 }

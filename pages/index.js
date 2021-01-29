@@ -7,6 +7,10 @@ import { setCookies,getCookies, checkCookies } from 'cookies-next';
 import Header from '../src/Header/Header'
 import { wrapper } from '../redux/store'
 import { useTheme, makeStyles } from '@material-ui/core/styles';
+import { connectToDatabase } from '../lib/mongodb';
+import { signIn, signOut, useSession,getSession, providers } from 'next-auth/client'
+
+import { csrfToken } from 'next-auth/client'
 const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(10),
@@ -25,6 +29,7 @@ const useStyles = makeStyles(theme => ({
 export default function Index(props) {
   const classes = useStyles();
   const theme = useTheme();
+  const [ session, loading] = useSession()
   return (
     <React.Fragment>
       <Head>
@@ -58,5 +63,13 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
     ctx.store.dispatch({type: 'themeName', payload: getCookies(ctx, 'themeName')})
   }
   const cookies = getCookies(ctx);
-  return {props: {cookies}}
+  const { client } = await connectToDatabase();
+  const isConnected = await client.isConnected();
+  const session = await getSession(ctx);
+  return {props: {
+    cookies, isConnected,
+    providers: await providers(ctx),
+    csrfToken: await csrfToken(ctx),
+    session
+  }}
 })

@@ -94,7 +94,6 @@ const useStyles = makeStyles((theme) => ({
       },
     },
     Singup: {
-      paddingRight: theme.spacing(70),
       fontWeight:800,
       color: 'black',
       cursor: 'pointer',
@@ -110,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'center',
+      cursor: 'pointer'
     },
     LoginedButtonBuy: {
       border: '1px solid #dfdfdf', 

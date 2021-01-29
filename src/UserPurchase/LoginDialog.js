@@ -36,6 +36,10 @@ export default function LoginDialog(props) {
   const handleClose = () => {
     setSingupDialogOpen(!SingupDialogOpen)
   };
+  const newProps = {
+    ...props,
+    Dialog: true,
+  }
 
   return (
     <div>
@@ -50,7 +54,7 @@ export default function LoginDialog(props) {
             </Typography>
           </Toolbar>
         </AppBar>
-        <SignInSide Dialog={true}/>
+        <SignInSide {...newProps}/>
       </Dialog>
     </div>
   );

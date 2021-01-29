@@ -13,6 +13,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from '../src/Header/Header'
 import Head from 'next/head';
 import { Paper } from '@material-ui/core';
+import { connectToDatabase } from '../lib/mongodb';
+import { signIn, signOut, useSession,getSession, providers } from 'next-auth/client';
+import { csrfToken } from 'next-auth/client'
 const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(10),
@@ -62,5 +65,13 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
     ctx.store.dispatch({type: 'themeName', payload: getCookies(ctx, 'themeName')})
   }
   const cookies = getCookies(ctx);
-  return {props: {cookies}}
+  const { client } = await connectToDatabase();
+  const isConnected = await client.isConnected();
+  const session = await getSession(ctx);
+  return {props: {
+    cookies, isConnected,
+    providers: await providers(ctx),
+    csrfToken: await csrfToken(ctx),
+    session
+  }}
 })

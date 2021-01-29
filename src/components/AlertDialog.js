@@ -12,7 +12,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function AlertDialog(props) {
-  const {open, handleClose, ContentText, closeButtom, ContentHeader} = props
+  const {open, handleClose, ContentText, closeButtom, ContentHeader, cancelButton, CancellDialog} = props
 
   return (
     <div>
@@ -21,9 +21,11 @@ export default function AlertDialog(props) {
         fullWidth
         TransitionComponent={Transition}
         keepMounted
-        onClose={handleClose}
+        onClose={CancellDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        onEscapeKeyDown={CancellDialog}
+        onBackdropClick={CancellDialog}
       >
         <DialogTitle id="alert-dialog-title">{ContentHeader}</DialogTitle>
         <DialogContent>
@@ -32,8 +34,11 @@ export default function AlertDialog(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          {closeButtom !== "NotAgree" && <Button variant="contained" onClick={handleClose} color="primary">
             {closeButtom}
+          </Button>}
+          <Button variant="contained" onClick={CancellDialog} color="secondary">
+            {cancelButton}
           </Button>
         </DialogActions>
       </Dialog>
@@ -46,8 +51,7 @@ AlertDialog.propTypes = {
   ContentText: PropTypes.string.isRequired,
   ContentHeader: PropTypes.string.isRequired,
   closeButtom: PropTypes.string.isRequired,
+  CancellDialog: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
+  cancelButton: PropTypes.string.isRequired
   };
-  AlertDialog.defaultProps ={
-    closeButtom: 'Close'
-}

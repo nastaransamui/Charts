@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState,useEffect } from 'react';
 import Dashboard from '../src/Dashboard/Dashboard'
 import { setCookies, getCookies,checkCookies, removeCookies } from 'cookies-next';
 import {useSelector} from 'react-redux';
@@ -8,12 +8,79 @@ import getExchangeData from '../lib/exchange'
 import getCandleChartData from '../lib/candleChartData'
 import { getPairSymbolHuobi } from '../lib/orderBook';
 import { getMarketTradeHuobi } from '../lib/marketTrades';
-
+import { signIn, signOut, useSession,getSession, providers } from 'next-auth/client'
+import { csrfToken } from 'next-auth/client'
+import AlertDialog from '../src/components/AlertDialog'
+import { useRouter } from 'next/router'
 export default function MainDashboard(props){
+  const router = useRouter()
+  const onCancellDialog = (e) =>{
+    setAlertDialogState({
+      ...AlertDialogState,
+      open: false
+    })
+  }
+  const onCloseDialog = (e) =>{
+    console.log('Onclose');
+    e.preventDefault();
+    setAlertDialogState({
+      open: false,
+  ContentText: "",
+  ContentHeader: "",
+  closeButtom: "",
+  cancelButton:"Close",
+  handleClose: onCloseDialog,
+  CancellDialog: onCancellDialog
+    })
+  }
+  const [AlertDialogState, setAlertDialogState] =useState({
+    open: false,
+  ContentText: "",
+  ContentHeader: "",
+  closeButtom: "",
+  cancelButton:"Close",
+  handleClose: onCloseDialog,
+  CancellDialog: onCancellDialog
+  })
+  useEffect(()=>{
+    let isMount = true;
+    if(isMount&& router.query.SendEmail !== undefined){
+      if(router.query.SendEmail === "true"){
+        setAlertDialogState({
+          handleClose: onCloseDialog,
+          CancellDialog: onCancellDialog,
+          open: true,
+          ContentText: `Verification email was sent to  with link kindly recheck your email and click on link to login.`,
+          ContentHeader:`Email sends`,
+          closeButtom: "NotAgree",
+          cancelButton:"Close",
+        })
+        router.push(router.pathname);
+      }
+    }
+    if(isMount&& router.query.error !== undefined){
+      if(router.query.error === "OAuthAccountNotLinked"){
+        setAlertDialogState({
+          handleClose: onCloseDialog,
+          CancellDialog: onCancellDialog,
+          open: true,
+          ContentText: `This Social Platform "email" has registerd account with us please try another platform.`,
+          ContentHeader:`Error: ${router.query.error}`,
+          closeButtom: "NotAgree",
+          cancelButton:"Close",
+        })
+        router.push(router.pathname);
+      }
+    }
+    return()=>{
+      isMount = false;
+    }
+  },[router])
     return(
         <Fragment>
             <Header {...props}/>
-        <Dashboard />
+            <AlertDialog {...AlertDialogState} />
+        <Dashboard {...props}/>
         </Fragment>
     )
 }
@@ -84,5 +151,10 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx)=>{
     ctx.store.dispatch({type: 'pairSymbol', payload: pairSymbol})
     const getMarketTrade = await getMarketTradeHuobi(marketTradeSymbol)
     ctx.store.dispatch({type: 'marketTrade', payload: getMarketTrade})
-    return {props: {cookies}}
+    const session = await getSession(ctx);
+    return {props: {
+      cookies,
+    providers: await providers(ctx),
+    csrfToken: await csrfToken(ctx),
+    session}}
 })

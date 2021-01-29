@@ -12,7 +12,8 @@ import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 import useStyles from './userPerchace-style';
 import LoginDialog from './LoginDialog'
-
+import { signIn, signOut, useSession,getSession, providers, signout } from 'next-auth/client'
+import AlertDialog from '../components/AlertDialog'
 export function valuetext(value){ return `${value} %`}
 const marks =[
     {
@@ -59,15 +60,44 @@ const ButtonValues = [
 function PurchaseForms(props){
     const classes = useStyles();
     const theme = useTheme();
+    const [session] = useSession()
     const [values, setValues]=useState({
         Price1: '',
         Price2: '',
         Amount1: '',
         Amount2: '',
     })
+
+    const onCancellDialog = (e) =>{
+        setAlertDialogState({
+            ...AlertDialogState,
+            open: false
+        })
+    }
+    const onCloseDialog = () =>{
+        setAlertDialogState({
+            open: false,
+        ContentText: "",
+        ContentHeader: "",
+        closeButtom: "",
+        cancelButton:"",
+        handleClose: onCloseDialog,
+        CancellDialog: onCancellDialog
+          })
+          signOut() 
+    }
     const [SinglePareData, setSinglePareData] = useState(null)
-    const [Login, SetLogin] = useState(false)
+    const [Login, SetLogin] = useState(session)
     const {Exchange, coingeckoSymbol, cryptoCompareTsym} = useSelector(state => state)
+    const [AlertDialogState, setAlertDialogState] =useState({
+        open: false,
+      ContentText: "",
+      ContentHeader: "",
+      closeButtom: "",
+      cancelButton:"",
+      handleClose: onCloseDialog,
+      CancellDialog: onCancellDialog
+      })
     useEffect(()=>{
         let isMount = true;
         if(isMount ){
@@ -87,14 +117,30 @@ function PurchaseForms(props){
         }
     },[Exchange])
     const onLogin = (value)=>{
-        if(value === 'Login'){SetLogin(!Login)}
+        if(value === 'Login'){SetLogin(session)}
     }
     const SubmitForm = value =>{}
     const SliderChage = (e, value)=>{}
     const [SingupDialogOpen, setSingupDialogOpen]=useState(false)
+
+    const SingOut = () =>{
+        setAlertDialogState({
+            handleClose: onCloseDialog,
+            open: true,
+            ContentText: `Are you sure, you want to logout from panel`,
+            ContentHeader: `Sing Out request`,
+            closeButtom: "Agree",
+            cancelButton:"Close",
+            CancellDialog: onCancellDialog
+          })
+    }
+
+
+
     return (
         <Fragment>
-        <LoginDialog SingupDialogOpen={SingupDialogOpen} setSingupDialogOpen={setSingupDialogOpen}/>
+        <LoginDialog  SingupDialogOpen={SingupDialogOpen} setSingupDialogOpen={setSingupDialogOpen}  {...props}/>
+        <AlertDialog {...AlertDialogState} />
             {SinglePareData &&
             <div className={classes.MainStyle}>
                 <span className={classes.SpanBuy}>
@@ -142,26 +188,21 @@ function PurchaseForms(props){
                     max={100} />
                     <Grid className={!Login ? classes.LoginButton : classes.LoginedButtonBuy}>
                         {
-                            Login ?
+                           session!== null ?
                             <>
                             <span className={classes.Login} onClick={(e)=>{SubmitForm(SinglePareData)}} >
                                 Buy {SinglePareData.symbol.toUpperCase()}
                             </span>
                            or 
-                           <span className={classes.Login} onClick={(e)=>{onLogin("Login")}}>
+                           <span className={classes.Login} onClick={SingOut}>
                                Sing Out
                            </span>
                             </>
                             :
                             <>
-                            <span className={classes.Singup} onClick={(e)=>{onLogin("Login")}} >
+                            <span className={classes.Singup} onClick={(e)=>{setSingupDialogOpen(true)}} >
                             Login
                             </span>
-                           or 
-                           <span className={classes.Singup} 
-                           onClick={(e)=>{setSingupDialogOpen(!SingupDialogOpen)}}>
-                               Sing up
-                           </span>
                            </>
                         }
                     </Grid>
@@ -208,21 +249,19 @@ function PurchaseForms(props){
                     max={100} />
                     <Grid className={!Login ? classes.LoginButton : classes.LoginedButtonSell}>
                         {
-                            Login ?
+                            session!== null ?
                             <>
                             <span className={classes.Login} onClick={(e)=>{SubmitForm(SinglePareData)}} >
                                 Sale {SinglePareData.symbol.toUpperCase()}
                             </span>
                            or 
-                           <span className={classes.Login} onClick={(e)=>{onLogin("Login")}}>
+                           <span className={classes.Login} onClick={SingOut}>
                                Sing Out
                            </span>
                             </>
                             :
                             <>
-                                <span className={classes.Singup} onClick={(e)=>{onLogin("Login")}} >Login</span>
-                                or 
-                                <span className={classes.Singup} onClick={(e)=>{setSingupDialogOpen(!SingupDialogOpen)}}>Sing up</span>
+                                <span className={classes.Singup} onClick={(e)=>{setSingupDialogOpen(true)}} >Login</span>
                             </>
                         }
                     </Grid>
