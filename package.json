@@ -24,6 +24,7 @@
     "react-material-ui-form-validator": "^2.1.2",
     "react-redux": "^7.2.2",
     "react-stockcharts": "^0.7.8",
+    "react-top-loading-bar": "^2.0.1",
     "react-virtualized": "^9.22.3",
     "redux": "^4.0.5",
     "sentiment": "^5.0.2"
