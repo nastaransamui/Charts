@@ -2,10 +2,12 @@ import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheets } from '@material-ui/core/styles';
 import appTheme from '../theme/appTheme';
-
+import Loading from '../theme/Loding'
+import { AppBar,Toolbar } from '@material-ui/core';
 export default class MyDocument extends Document {
   render() {
     const theme = appTheme('dark',"deepBlue")
+
     return (
       <Html lang="en">
         <Head>
@@ -15,8 +17,35 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r75/three.min.js"></script>
+          <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+          <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/bas2.js"></script>
         </Head>
         <body>
+          <div
+            id="preloader"
+            style={{
+              position: 'fixed',
+              zIndex: 10000,
+              background: theme.palette.type === 'dark' ? '#131625' : '#fafafa',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+          <AppBar  position="fixed" >
+          <Toolbar></Toolbar>
+          </AppBar>
+            <img
+              style={{
+                opacity: 0.5,
+                position: 'fixed',
+                top: 'calc(50% - 50px)',
+                left: 'calc(50% - 50px)'
+              }}
+              src="/loading.gif"
+              alt="loading"
+            />
+            </div>
           <Main />
           <NextScript />
         </body>

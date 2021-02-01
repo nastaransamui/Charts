@@ -1,15 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { getCookies } from 'cookies-next';
 import {connect} from "react-redux";
-import useStyles from './candleChart-style';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import MainChart from './MainChart'
 import  getCandleChartData  from "../../lib/candleChartData"
-import { element } from "prop-types";
 
 function ChartNormalize(props){
     const [data, setData] = useState(null);
-    const classes = useStyles();
     const {
         TraidingView, 
         PeriodicDataUpdate,

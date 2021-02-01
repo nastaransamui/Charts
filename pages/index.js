@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Head from 'next/head';
 import Copyright from '../src/Copyright';
@@ -8,9 +8,9 @@ import Header from '../src/Header/Header'
 import { wrapper } from '../redux/store'
 import { useTheme, makeStyles } from '@material-ui/core/styles';
 import { connectToDatabase } from '../lib/mongodb';
-import { signIn, signOut, useSession,getSession, providers } from 'next-auth/client'
-
+import { useSession,getSession, providers } from 'next-auth/client'
 import { csrfToken } from 'next-auth/client'
+
 const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(10),
@@ -67,9 +67,8 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   const isConnected = await client.isConnected();
   const session = await getSession(ctx);
   return {props: {
-    cookies, isConnected,
-    providers: await providers(ctx),
-    csrfToken: await csrfToken(ctx),
+    cookies,
+     isConnected,
     session
   }}
 })

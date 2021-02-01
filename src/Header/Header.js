@@ -1,12 +1,10 @@
-import React,{Fragment, useState} from 'react';
-import PropTypes from 'prop-types';
+import React,{Fragment, useState, useEffect} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import { useTheme } from '@material-ui/core/styles';
 import {useSelector, useDispatch} from 'react-redux';
-import { CssBaseline,Slide, Typography } from '@material-ui/core';
-import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import { CssBaseline, Typography } from '@material-ui/core';
 import Link from 'next/link';
 import clsx from 'clsx';
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
@@ -21,18 +19,33 @@ import Popover from '@material-ui/core/Popover';
 import palette from '../../theme/palette'
 import PaletteIcon from '@material-ui/icons/Palette';
 import LogoSvg  from './logo';
-import { useRouter } from 'next/router'
+import {  useRouter } from 'next/router'
+import Router from 'next/router'
 import useStyles from './header-styles';
 import LeftDrawer from '../Drawer/Drawer';
 import { signIn, signOut, useSession,getSession, providers, signout } from 'next-auth/client'
 import AlertDialog from '../components/AlertDialog'
-import { useEffect } from 'react';
+import LoadingBar from 'react-top-loading-bar'
 function Header(props){
   const classes = useStyles();
   const {toggleDarkTheme} = props;
-  const [session] = useSession()
+  const [session,loading] = useSession()
   const router = useRouter()
-  const {themeType, themeName}= useSelector(state => state)
+  const {themeType, themeName, isLoading}= useSelector(state => state)
+  const dispatch = useDispatch();
+  const theme = useTheme();
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorElTheme, setAnchorElTheme] = React.useState(null);
+  const isMenuOpen = Boolean(anchorEl);
+  const isThemeOpen = Boolean(anchorElTheme);
+  const ThemeId = isThemeOpen ? 'theme-popover' : undefined;
+  const menuId = 'account-menu';
+  const [Progress, SetProgress] = useState(isLoading)
+
+  useEffect(()=>{
+    if(loading) SetProgress(100)
+  },[loading])
   const onCancellDialog = (e) =>{
     setAlertDialogState({
       ...AlertDialogState,
@@ -60,17 +73,6 @@ function Header(props){
   handleClose: onCloseDialog,
   CancellDialog: onCancellDialog
   })
-
-  const dispatch = useDispatch();
-  const theme = useTheme();
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorElTheme, setAnchorElTheme] = React.useState(null);
-  const isMenuOpen = Boolean(anchorEl);
-  const isThemeOpen = Boolean(anchorElTheme);
-  const ThemeId = isThemeOpen ? 'theme-popover' : undefined;
-  const menuId = 'account-menu';
-  const [ loading] = useSession();
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -137,6 +139,10 @@ function Header(props){
   return(
     <div className={classes.grow}>
       <CssBaseline />
+      <LoadingBar 
+      color={theme.palette.secondary.main} 
+      onLoaderFinished={() => SetProgress(0)}
+      progress={Progress} />
       <AlertDialog {...AlertDialogState} />
       <LeftDrawer openDrawer={openDrawer}/>
         <>
@@ -163,9 +169,8 @@ function Header(props){
                     </Link>
                 </div>
                 <span className={classes.mobileMenu}>
-
-              <Button href='/about'><Typography  className={classes.headerButtons}>About</Typography></Button>
-              <Button href='/dashboard' ><Typography  className={classes.headerButtons}>Dashboard</Typography></Button>
+                <Button component="a" href="/dashboard"  onClick={()=>router.push('/dashboard', undefined, { shallow: true })}><Typography  className={classes.headerButtons}>Dashboard</Typography></Button>
+              <Button  component="a" href='/about' onClick={()=>router.push('/about', undefined, { shallow: true })}><Typography  className={classes.headerButtons}>About</Typography></Button>
                 </span>
               </div>
               <div className={classes.grow} />

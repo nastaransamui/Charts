@@ -14,7 +14,8 @@ const reducer = (state =
     pairSymbol: null,
     marketTradeSymbol: 'btcusdt',
     marketTradeSymbolTitle: 'BTC-USDT',
-    marketTrade: null
+    marketTrade: null,
+    isLoading: 0,
   },
    action) =>{
   switch (action.type) {
@@ -44,6 +45,8 @@ const reducer = (state =
       return {...state, marketTrade: action.payload};
     case 'marketTradeSymbolTitle':
       return {...state, marketTradeSymbolTitle: action.payload};
+    case 'isLoading':
+      return {...state, isLoading: action.payload};
     default:
       return state;
   }

@@ -44,8 +44,8 @@ import { format } from "d3-format";
 import { fitWidth } from "react-stockcharts/lib/helper";
 import { timeFormat } from "d3-time-format";
 import { ChartCanvas, Chart } from "react-stockcharts";
-import { last, toObject,timeIntervalBarWidth } from "react-stockcharts/lib/utils";
-import TraidingSvg from '../../public/tradingline.svg'
+import { last, timeIntervalBarWidth } from "react-stockcharts/lib/utils";
+
 import {TradingTooltips} from './TradingTooltips'
 import clsx from 'clsx';
 

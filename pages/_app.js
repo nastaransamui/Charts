@@ -1,22 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { ThemeProvider, jssPreset, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import appTheme from '../theme/appTheme';
 import { wrapper } from '../redux/store';
-import { setCookies,getCookies, checkCookies } from 'cookies-next';
+import { setCookies } from 'cookies-next';
 import {useSelector, useDispatch} from 'react-redux';
 import '../styles/app.css'
+import "../styles/loading.css"
 import '../styles/hamburger-menu.css'
-import { create } from 'jss';
 import { Provider } from 'next-auth/client'
-
+import { useRouter } from 'next/router'
+import Router from 'next/router'
+import Loading from '../theme/Loding';
 function MyApp(props) {
-  const { Component, pageProps, router } = props;
-  const {themeType, themeName}= useSelector(state => state)
+  const { Component, pageProps} = props;
+  const {themeType, themeName, isLoading}= useSelector(state => state)
   const dispatch = useDispatch();
   const [theme, setTheme] = useState(appTheme(themeType,themeName))
+  const [Preloading, SetPreloading] = useState(false)
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -44,6 +47,40 @@ function MyApp(props) {
     };
   });
   
+  //Remove preloader
+  useEffect(()=>{
+    const preloader = document.getElementById('preloader');
+    if (preloader !== null || undefined) {
+      preloader.remove();
+    }
+  },[])
+
+  const router = useRouter()
+
+  useEffect(() => {
+    Router.routeChangeComplete = (url) => {
+      dispatch( {type: 'isLoading', payload:  100})
+      SetPreloading(true)
+    };
+    
+    Router.routeChangeComplete()
+    const handleRouteChange = (url) => {
+      dispatch( {type: 'isLoading', payload:  0})
+      SetPreloading(false)
+    }
+    const handleRouteChangeComplete = (url )=>{
+      dispatch( {type: 'isLoading', payload:  100})
+      SetPreloading(true)
+    }
+    Router.events.on('routeChangeStart', handleRouteChange)
+    Router.events.on('routeChangeComplete', handleRouteChangeComplete)
+    return () => {
+      Router.events.off('routeChangeStart', handleRouteChange)
+      Router.events.off('routeChangeComplete', handleRouteChangeComplete)
+    }
+}, [])
+
+
   return (
     <React.Fragment>
       <Head>
@@ -52,12 +89,16 @@ function MyApp(props) {
       </Head>
       <Provider options={{clientMaxAge:0, keepAlive: 0}}>
       <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
+        {
+          !Preloading ? <Loading /> :
         <Component {...pageProps}
         toggleDarkTheme={toggleDarkTheme}
         key={router.route} 
         Dialog={false} />
+          // <span>Majid</span>
+      
+      }
       </ThemeProvider>
       </Provider>
     </React.Fragment>

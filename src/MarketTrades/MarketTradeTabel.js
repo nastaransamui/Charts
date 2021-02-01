@@ -1,9 +1,8 @@
-import React, {Fragment } from 'react';
+import React from 'react';
 
-import { TableSortLabel, TableHead, TableCell, Tooltip, TableContainer, Paper, Table, TableRow, TableBody } from '@material-ui/core';
+import { TableHead, TableCell, TableContainer, Paper, Table, TableRow, TableBody } from '@material-ui/core';
 import PropTypes from "prop-types";
 import _ from "lodash";
-import clsx from 'clsx';
 import {useTheme} from '@material-ui/core/styles'
 import useStyles from './marketTrades-style';
 

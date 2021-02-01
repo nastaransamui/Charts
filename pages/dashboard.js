@@ -12,6 +12,7 @@ import { signIn, signOut, useSession,getSession, providers } from 'next-auth/cli
 import { csrfToken } from 'next-auth/client'
 import AlertDialog from '../src/components/AlertDialog'
 import { useRouter } from 'next/router'
+import { route } from 'next/dist/next-server/server/router';
 export default function MainDashboard(props){
   const router = useRouter()
   const onCancellDialog = (e) =>{
@@ -20,6 +21,7 @@ export default function MainDashboard(props){
       open: false
     })
   }
+
   const onCloseDialog = (e) =>{
     console.log('Onclose');
     e.preventDefault();
@@ -42,6 +44,7 @@ export default function MainDashboard(props){
   handleClose: onCloseDialog,
   CancellDialog: onCancellDialog
   })
+
   useEffect(()=>{
     let isMount = true;
     if(isMount&& router.query.SendEmail !== undefined){
@@ -76,6 +79,7 @@ export default function MainDashboard(props){
       isMount = false;
     }
   },[router])
+
     return(
         <Fragment>
             <Header {...props}/>
@@ -93,53 +97,69 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx)=>{
     cryptoCompareTsym, 
     PeriodicDataUpdate,
     marketTradeSymbol,
-    marketTrade
+    marketTrade,
+    isLoading
   } = ctx.store.getState()
-
     if (!checkCookies(ctx, 'themeType')) {
         setCookies(ctx, 'themeType', 'dark')
         ctx.store.dispatch({type: 'themeType', payload: 'dark'});
+        ctx.store.dispatch( {type: 'isLoading', payload: 10})
     } else {
       ctx.store.dispatch({type: 'themeType', payload: getCookies(ctx, 'themeType')})
+      ctx.store.dispatch( {type: 'isLoading', payload:  10})
     }
     if (!checkCookies(ctx, 'themeName')) {
       setCookies(ctx, 'themeName', 'joker'); 
       ctx.store.dispatch({type: 'themeName', payload: 'joker'});
+        ctx.store.dispatch( {type: 'isLoading', payload: 20})
     } else {
       ctx.store.dispatch({type: 'themeName', payload: getCookies(ctx, 'themeName')})
+      ctx.store.dispatch( {type: 'isLoading', payload:  20})
     }
     if (!checkCookies(ctx, 'coingeckoSymbol')) {
         setCookies(ctx, 'coingeckoSymbol', 'usd')
         ctx.store.dispatch({type: 'coingeckoSymbol', payload: 'usd'});
+        ctx.store.dispatch( {type: 'isLoading', payload: 40})
     } else {
       ctx.store.dispatch({type: 'coingeckoSymbol', payload: getCookies(ctx, 'coingeckoSymbol')})
+      ctx.store.dispatch( {type: 'isLoading', payload:  40})
     }
     if (!checkCookies(ctx, 'cryptoCompareTsym')) {
         setCookies(ctx, 'cryptoCompareTsym',coingeckoSymbol !== 'usd' ? 'usd' : 'btc')
         ctx.store.dispatch({type: 'cryptoCompareTsym', payload: coingeckoSymbol !== 'usd' ? 'usd' : 'btc'});
+        ctx.store.dispatch( {type: 'isLoading', payload: 50})
     } else {
       ctx.store.dispatch({type: 'cryptoCompareTsym', payload: getCookies(ctx, 'cryptoCompareTsym')})
+      ctx.store.dispatch( {type: 'isLoading', payload:  50})
     }
     if (!checkCookies(ctx, 'PeriodicDataUpdate')) {
         setCookies(ctx, 'PeriodicDataUpdate', 'day')
         ctx.store.dispatch({type: 'PeriodicDataUpdate', payload: 'day'});
+        ctx.store.dispatch( {type: 'isLoading', payload: 70})
     } else {
       ctx.store.dispatch({type: 'PeriodicDataUpdate', payload: getCookies(ctx, 'PeriodicDataUpdate')})
+      ctx.store.dispatch( {type: 'isLoading', payload:  70})
     }
     if(!checkCookies(ctx, 'TraidingView')) {
       setCookies(ctx, 'TraidingView', false) ;ctx.store.dispatch({type: 'TraidingView', payload:  false});
+        ctx.store.dispatch( {type: 'isLoading', payload: 80})
     }else{
       ctx.store.dispatch({type: 'TraidingView', payload:  getCookies(ctx, 'TraidingView')});
+      ctx.store.dispatch( {type: 'isLoading', payload:  80})
     }
     if(!checkCookies(ctx, 'marketTradeSymbol')) {
       setCookies(ctx, 'marketTradeSymbol', 'btcusdt') ;ctx.store.dispatch({type: 'marketTradeSymbol', payload:  'btcusdt'});
+        ctx.store.dispatch( {type: 'isLoading', payload: 90})
     }else{
       ctx.store.dispatch({type: 'marketTradeSymbol', payload:  getCookies(ctx, 'marketTradeSymbol')});
+      ctx.store.dispatch( {type: 'isLoading', payload:  90})
     }
     if(!checkCookies(ctx, 'marketTradeSymbolTitle')) {
       setCookies(ctx, 'marketTradeSymbolTitle', 'BTC-USDT') ;ctx.store.dispatch({type: 'marketTradeSymbolTitle', payload:  'BTC-USDT'});
+        ctx.store.dispatch( {type: 'isLoading', payload: 100})
     }else{
       ctx.store.dispatch({type: 'marketTradeSymbolTitle', payload:  getCookies(ctx, 'marketTradeSymbolTitle')});
+      ctx.store.dispatch( {type: 'isLoading', payload:  100})
     }
 
     const Exchange = await getExchangeData(coingeckoSymbol)
@@ -156,5 +176,6 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx)=>{
       cookies,
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
+    isLoading,
     session}}
 })

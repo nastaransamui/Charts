@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { getCookies } from 'cookies-next';
 import {connect} from "react-redux";
 import { useTheme } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
@@ -12,7 +11,7 @@ import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 import useStyles from './userPerchace-style';
 import LoginDialog from './LoginDialog'
-import { signIn, signOut, useSession,getSession, providers, signout } from 'next-auth/client'
+import { signOut, useSession } from 'next-auth/client'
 import AlertDialog from '../components/AlertDialog'
 export function valuetext(value){ return `${value} %`}
 const marks =[
