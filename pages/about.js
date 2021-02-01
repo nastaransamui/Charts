@@ -16,6 +16,7 @@ import { Paper } from '@material-ui/core';
 import { connectToDatabase } from '../lib/mongodb';
 import { signIn, signOut, useSession,getSession, providers } from 'next-auth/client';
 import { csrfToken } from 'next-auth/client'
+import AboutPage from '../src/About/AboutPage'
 const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(10),
@@ -45,7 +46,7 @@ export default function About(props) {
     <Header {...props} />
     <main className={classes.containerWrap}>
     <div className={classes.appBarSpacer} />
-        <Typography variant="h4" component="h1" gutterBottom>About Page will come here</Typography>
+        <AboutPage />
     </main>
     </div>
     </Fragment>
