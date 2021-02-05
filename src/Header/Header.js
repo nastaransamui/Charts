@@ -44,7 +44,14 @@ function Header(props){
   const [Progress, SetProgress] = useState(isLoading)
 
   useEffect(()=>{
-    if(loading) SetProgress(100)
+    let isMount = true
+    if (isMount) {
+      if(loading) SetProgress(100)
+    }
+    return() =>{
+      loading,
+      isMount = false
+    }
   },[loading])
   const onCancellDialog = (e) =>{
     setAlertDialogState({
@@ -101,6 +108,11 @@ function Header(props){
     router.push('/login')
   }
 
+  const ChatClicked = ()=>{
+    setAnchorEl(null);
+    router.push('/chat')
+  }
+
   
   async function SingOut() {
     
@@ -129,8 +141,9 @@ function Header(props){
       {session === null || session === undefined ? 
       <MenuItem onClick={LoginClicked} >Login</MenuItem> :
         <span>
+        <MenuItem onClick={ChatClicked}>Chat Page</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem component="a" //href={`/api/auth/signout`} 
+      <MenuItem component="a" 
       onClick={() => {SingOut() }}>Sign Out</MenuItem>
       </span>}
     </Menu>
@@ -170,7 +183,7 @@ function Header(props){
                 </div>
                 <span className={classes.mobileMenu}>
                 <Button component="a" href="/dashboard"  onClick={()=>router.push('/dashboard', undefined, { shallow: true })}><Typography  className={classes.headerButtons}>Dashboard</Typography></Button>
-              <Button  component="a" href='/about' onClick={()=>router.push('/about', undefined, { shallow: true })}><Typography  className={classes.headerButtons}>About</Typography></Button>
+                <Button  component="a" href='/about' onClick={()=>router.push('/about', undefined, { shallow: true })}><Typography  className={classes.headerButtons}>About</Typography></Button>
                 </span>
               </div>
               <div className={classes.grow} />
@@ -197,7 +210,11 @@ function Header(props){
               session === null || session === undefined  ? 
               <AccountCircle />
               :
-              <img alt="image" src={session.user.image} style={{width:30, height:30, borderRadius: '50%'}} />
+              <>
+                {
+                  session.user.image !== null ? <img alt="image" src={session.user.image} style={{width:30, height:30, borderRadius: '50%'}} /> : <AccountCircle />
+                }
+              </>
             }
             </IconButton>
             <IconButton 

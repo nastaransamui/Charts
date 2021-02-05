@@ -1,22 +1,23 @@
-import React, {useEffect, useRef, useState} from 'react';
-import Typography from '@material-ui/core/Typography';
-import Head from 'next/head';
-import Copyright from '../src/Copyright';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import React, { Fragment, useEffect } from 'react';
 import { setCookies,getCookies, checkCookies } from 'cookies-next';
-import Header from '../src/Header/Header'
 import { wrapper } from '../redux/store'
 import { useTheme, makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Header from '../src/Header/Header'
+import Head from 'next/head';
+
 import { connectToDatabase } from '../lib/mongodb';
-import { useSession,getSession, providers } from 'next-auth/client'
+import { useSession,getSession, providers } from 'next-auth/client';
+import { useRouter } from 'next/router'
 import { csrfToken } from 'next-auth/client'
+import ChatPage from '../src/Chat/ChatPage';
+
 
 const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(10),
     minHeight: '100vh'
   },
-  appBarSpacer: theme.mixins.toolbar,
   mainWrap: {
     position: 'relative',
     width: '100%',
@@ -24,30 +25,43 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.background.paper,
     color: theme.palette.text.primary,
   },
-  
+  appBarSpacer: theme.mixins.toolbar,
 }));
-export default function Index(props) {
+
+export default function Chat(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const [ session, loading] = useSession()
-  
+  const [session] = useSession()
+  const router = useRouter()
+
+  useEffect(()=>{
+    let isMount = true;
+    if(isMount && session === null){
+      if(session === undefined){
+        router.push("/");
+      }
+    }
+    return() =>{
+      isMount = false;
+    }
+  },[session])
+
   return (
-    <React.Fragment>
+    <Fragment>
       <Head>
-        <title>
-          Home Page
-        </title>
-      </Head>
-      <CssBaseline />
-      <div className={classes.mainWrap}>
-        <Header {...props} />
-        <main className={classes.containerWrap}>
-              <div className={classes.appBarSpacer} />
-        <Typography variant="h4" component="h1" gutterBottom>Main Page will come here</Typography>
-        </main>
-        </div>
-        <Copyright />
-        </React.Fragment>
+    <title>
+      Chat Page
+    </title>
+  </Head>
+  <CssBaseline />
+  <div className={classes.mainWrap}>
+    <Header {...props} />
+    <main className={classes.containerWrap}>
+    <div className={classes.appBarSpacer} />
+        <ChatPage />
+    </main>
+    </div>
+    </Fragment>
   );
 }
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
@@ -67,9 +81,19 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   const { client } = await connectToDatabase();
   const isConnected = await client.isConnected();
   const session = await getSession(ctx);
+  if(ctx.res && session === null ){
+    return{
+      redirect:{
+        permanent: false,
+        destination: '/'
+      }
+    }
+  }
+
   return {props: {
-    cookies,
-     isConnected,
+    cookies, isConnected,
+    providers: await providers(ctx),
+    csrfToken: await csrfToken(ctx),
     session
   }}
 })

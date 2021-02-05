@@ -122,18 +122,12 @@ const useStyles = makeStyles((theme) => ({
                       </Paper>
                     </Grid>
                     <Grid item xs={12} md={6} lg={6}>
-                      <div 
-                      // style={{height: '41%'}} 
-                      >
-                        <Paper 
-                        // style={{height: '100%', overflow: 'hidden'}} 
-                        >
+                      <div >
+                        <Paper >
                           <CandleChart />
                         </Paper>
                       </div>
-                      <div 
-                      // style={{height: '50%', paddingTop: 10}} 
-                      >
+                      <div >
                         <Paper >
                           <UserPurchase {...props}/>
                         </Paper>

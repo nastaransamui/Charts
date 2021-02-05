@@ -9,7 +9,7 @@ import { setCookies } from 'cookies-next';
 import {useSelector, useDispatch} from 'react-redux';
 import '../styles/app.css'
 import "../styles/loading.css"
-import '../styles/hamburger-menu.css'
+import '../styles/hamburger-menu.css';
 import { Provider } from 'next-auth/client'
 import { useRouter } from 'next/router'
 import Router from 'next/router'
@@ -96,8 +96,6 @@ function MyApp(props) {
         toggleDarkTheme={toggleDarkTheme}
         key={router.route} 
         Dialog={false} />
-          // <span>Majid</span>
-      
       }
       </ThemeProvider>
       </Provider>

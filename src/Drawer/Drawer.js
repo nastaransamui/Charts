@@ -45,9 +45,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ClippedDrawer(props) {
   const classes = useStyles();
   const {openDrawer} = props
-  const router = useRouter()
-  const dispatch = useDispatch();
-  const {pairSymbol} = useSelector(state => state)
+
   return (
     <div className={classes.root}>
       <CssBaseline />

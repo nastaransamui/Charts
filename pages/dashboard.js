@@ -20,6 +20,7 @@ export default function MainDashboard(props){
       ...AlertDialogState,
       open: false
     })
+    router.replace(router.pathname)
   }
 
   const onCloseDialog = (e) =>{
@@ -58,7 +59,6 @@ export default function MainDashboard(props){
           closeButtom: "NotAgree",
           cancelButton:"Close",
         })
-        router.push(router.pathname);
       }
     }
     if(isMount&& router.query.error !== undefined){
@@ -72,7 +72,6 @@ export default function MainDashboard(props){
           closeButtom: "NotAgree",
           cancelButton:"Close",
         })
-        router.push(router.pathname);
       }
     }
     return()=>{

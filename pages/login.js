@@ -112,7 +112,7 @@ export default function SignInSide(props) {
       ...AlertDialogState,
       open: false
     })
-    console.log("hashem")
+    router.replace(router.pathname)
   }
   const onCloseDialog = (e) =>{
     e.preventDefault();
@@ -157,38 +157,39 @@ export default function SignInSide(props) {
   
   useEffect(()=>{
     let isMount = true;
-    if(isMount&& router.query.SendEmail !== undefined){
-      if(router.query.SendEmail === "true"){
-        setAlertDialogState({
-          handleClose: onCloseDialog,
-          CancellDialog: onCancellDialog,
-          open: true,
-          ContentText: `Verification email was sent to ${email} with link kindly recheck your email and click on link to login.`,
-          ContentHeader:`Email sends`,
-          closeButtom: "NotAgree",
-          cancelButton:"Close",
-        })
-        router.push(router.pathname);
+    if (isMount) {
+      if (router.query.SendEmail !== undefined) {
+        if(router.query.SendEmail === "true"){
+          setAlertDialogState({
+            handleClose: onCloseDialog,
+            CancellDialog: onCancellDialog,
+            open: true,
+            ContentText: `Verification email was sent to ${email} with link kindly recheck your email and click on link to login.`,
+            ContentHeader:`Email sends`,
+            closeButtom: "NotAgree",
+            cancelButton:"Close",
+          })
+        }else if(router.query.error !== undefined){
+          if (router.query.error === "OAuthAccountNotLinked") {
+            setAlertDialogState({
+              handleClose: onCloseDialog,
+              CancellDialog: onCancellDialog,
+              open: true,
+              ContentText: `This Social Platform "email" has registerd account with us please try another platform.`,
+              ContentHeader:`Error: ${router.query.error}`,
+              closeButtom: "NotAgree",
+              cancelButton:"Close",
+            })
+          }
+        }
       }
     }
-    if(isMount&& router.query.error !== undefined){
-      if(router.query.error === "OAuthAccountNotLinked"){
-        setAlertDialogState({
-          handleClose: onCloseDialog,
-          CancellDialog: onCancellDialog,
-          open: true,
-          ContentText: `This Social Platform "email" has registerd account with us please try another platform.`,
-          ContentHeader:`Error: ${router.query.error}`,
-          closeButtom: "NotAgree",
-          cancelButton:"Close",
-        })
-        router.push(router.pathname);
-      }
-    }
+
     return()=>{
       isMount = false;
     }
   },[router])
+
   useEffect(()=>{
     let isMount = true;
     if(isMount && session !== null){

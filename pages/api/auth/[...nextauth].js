@@ -1,6 +1,12 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 import {mySendVerificationRequest} from '../../../lib/SinginEmail'
+import {connectToDatabase } from '../../../lib/mongodb';
+import {
+  singInCallBack,
+  sessionCallBack
+} from '../../../lib/authCallBacks';
+const ObjectID = require('mongodb').ObjectID;
 const options = {
     providers: [
         Providers.Facebook({
@@ -49,7 +55,43 @@ const options = {
     // newUser: null // If set, new users will be directed here on first sign in
       },
       callbacks: {
-          
+        async signIn(user, account, profile) {
+          singInCallBack(user, account, profile)
+          // const { db } = await connectToDatabase();
+          // const users = await db.collection("users")
+          // console.log(user)
+          // users.updateOne({id: new ObjectID(user.id)},{$set: {
+          //   _id:  new ObjectID(user.id),
+          //   email: user.email,
+          //   name: "guest",
+          //   image: "https://source.unsplash.com/random",
+          //   emailVerified: user.emailVerified,
+          //   createdAt: user.createdAt,
+          // }})
+          return true
+        },
+        async session(session, user) {
+         await  sessionCallBack(session, user)
+          // if(user.name === null || user.image === null){
+          // session ={
+          //   user:{
+          //     name: "guest",
+          //     email: session.user.email,
+          //     image: "https://source.unsplash.com/random",
+          //   },
+          //   expires: session.expires
+          // }}
+          // if(user.name === null || user.picture === null){
+          // user ={
+          //   name: "guest",
+          //   email: user.email,
+          //   picture: "https://source.unsplash.com/random",
+          //   iat: user.iat,
+          //   exp: user.exp
+          // }}
+          // console.log(session)
+          return session
+        },
       }
 }
 
