@@ -101,7 +101,15 @@ font: {
     fontSize: '24px'
 }
 }));
+function isEmpty(obj) {
+  for(var prop in obj) {
+    if(obj.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
 
+  return JSON.stringify(obj) === JSON.stringify({});
+}
 export default function SignInSide(props) {
   const classes = useStyles();
   const theme = useTheme();
@@ -158,7 +166,7 @@ export default function SignInSide(props) {
   useEffect(()=>{
     let isMount = true;
     if (isMount) {
-      if (router.query.SendEmail !== undefined) {
+      if (!isEmpty(router.query)) {
         if(router.query.SendEmail === "true"){
           setAlertDialogState({
             handleClose: onCloseDialog,
@@ -169,18 +177,39 @@ export default function SignInSide(props) {
             closeButtom: "NotAgree",
             cancelButton:"Close",
           })
-        }else if(router.query.error !== undefined){
-          if (router.query.error === "OAuthAccountNotLinked") {
-            setAlertDialogState({
-              handleClose: onCloseDialog,
-              CancellDialog: onCancellDialog,
-              open: true,
-              ContentText: `This Social Platform "email" has registerd account with us please try another platform.`,
-              ContentHeader:`Error: ${router.query.error}`,
-              closeButtom: "NotAgree",
-              cancelButton:"Close",
-            })
-          }
+        }
+        if(router.query.error === "OAuthAccountNotLinked" || router.query.error === "OAuthAccountNotLinked#"){
+          setAlertDialogState({
+            handleClose: onCloseDialog,
+            CancellDialog: onCancellDialog,
+            open: true,
+            ContentText: `This Social Platform "email" has registerd account with us please try another platform.`,
+            ContentHeader:`Error: ${router.query.error}`,
+            closeButtom: "NotAgree",
+            cancelButton:"Close",
+          })
+        }
+        if(router.query.error === "Callback"){
+          setAlertDialogState({
+            handleClose: onCloseDialog,
+            CancellDialog: onCancellDialog,
+            open: true,
+            ContentText: `This is system ${router.query.error} Error please contact administrator.`,
+            ContentHeader:`Error: ${router.query.error}`,
+            closeButtom: "NotAgree",
+            cancelButton:"Close",
+          })
+        }
+        if(router.query.error === "OAuthCreateAccount"){
+          setAlertDialogState({
+            handleClose: onCloseDialog,
+            CancellDialog: onCancellDialog,
+            open: true,
+            ContentText: `This is system ${router.query.error} Error please contact administrator.`,
+            ContentHeader:`Error: ${router.query.error}`,
+            closeButtom: "NotAgree",
+            cancelButton:"Close",
+          })
         }
       }
     }
@@ -190,6 +219,7 @@ export default function SignInSide(props) {
     }
   },[router])
 
+  
   useEffect(()=>{
     let isMount = true;
     if(isMount && session !== null){

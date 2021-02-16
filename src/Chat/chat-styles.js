@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
             width: 20
         }
     },
-    me:{
+    you:{
         backgroundColor: theme.palette.primary.main,
         whiteSpace: 'pre-wrap',
         marginLeft: 18,
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor:theme.palette.primary.main
         }
     },
-    you:{
+    me:{
         backgroundColor: theme.palette.secondary.main,
         whiteSpace: 'pre-wrap',
         marginLeft: 60,

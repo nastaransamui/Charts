@@ -14,6 +14,7 @@ import { Provider } from 'next-auth/client'
 import { useRouter } from 'next/router'
 import Router from 'next/router'
 import Loading from '../theme/Loding';
+
 function MyApp(props) {
   const { Component, pageProps} = props;
   const {themeType, themeName, isLoading}= useSelector(state => state)

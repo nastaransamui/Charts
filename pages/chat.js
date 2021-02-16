@@ -5,13 +5,13 @@ import { useTheme, makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from '../src/Header/Header'
 import Head from 'next/head';
-
 import { connectToDatabase } from '../lib/mongodb';
 import { useSession,getSession, providers } from 'next-auth/client';
 import { useRouter } from 'next/router'
 import { csrfToken } from 'next-auth/client'
 import ChatPage from '../src/Chat/ChatPage';
-
+import { ownUser } from '../lib/ownUser';
+import {retriveMessages} from '../lib/retriveMessages'
 
 const useStyles = makeStyles(theme => ({
   containerWrap: {
@@ -33,7 +33,6 @@ export default function Chat(props) {
   const theme = useTheme();
   const [session] = useSession()
   const router = useRouter()
-
   useEffect(()=>{
     let isMount = true;
     if(isMount && session === null){
@@ -58,7 +57,7 @@ export default function Chat(props) {
     <Header {...props} />
     <main className={classes.containerWrap}>
     <div className={classes.appBarSpacer} />
-        <ChatPage />
+        <ChatPage {...props}/>
     </main>
     </div>
     </Fragment>
@@ -81,6 +80,8 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   const { client } = await connectToDatabase();
   const isConnected = await client.isConnected();
   const session = await getSession(ctx);
+  const profile = session !== null && await ownUser(session)
+  const ChatsMessages = profile !== null && await retriveMessages(profile)
   if(ctx.res && session === null ){
     return{
       redirect:{
@@ -89,11 +90,13 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
       }
     }
   }
-
+console.log(ChatsMessages)
   return {props: {
     cookies, isConnected,
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
+    profile,
+    ChatsMessages,
     session
   }}
 })

@@ -11,32 +11,28 @@ import {
 } from '@material-ui/core'
 import useStyles from './chat-styles';
 import { useSession } from 'next-auth/client';
-
+import axios from 'axios';
 
 export default function ChatLeftPanel(props){
     const classes = useStyles();
     const [session] = useSession();
-    const [users, setUsers] = useState(null)
-    useEffect(()=>{
-        let isMount = true;
-        if (isMount) {
-            fetch('http://localhost:3000/api/examples/users')
-            .then(response => response.json())
-            .then(data => {setUsers(data)})
-        }
-        return()=>{
-            isMount = false
-        }
-    },[])
+    const {profile, users, setReciver} = props
 
     const Search = (e) =>{
 
     }
 
+    const UserClicked = (user)=>{
+        const ChatRoomId = `${profile._id}--${user._id}`
+        const profileID = profile._id;
+        const userID = user._id
+        setReciver(user)
+    }
+
     return(
         <Grid item xs={3} className={classes.borderRight500}>
                   <List>
-                      <ListItem button key={session.user.name}>
+                      <ListItem button key={session.user.name} >
                           <ListItemIcon>
                           <Avatar alt={session.user.name} src={session.user.image} />
                           </ListItemIcon>
@@ -52,9 +48,9 @@ export default function ChatLeftPanel(props){
                       users !== null &&
                       <List>
                       {users.filter((d)=> {return d.email !== session.user.email}).map((d,i) =>{
-                          console.log(d)
+                          
                           return(
-                              <ListItem button key={d._id}>
+                              <ListItem button key={d._id} onClick={()=>UserClicked(d)}>
                                   <ListItemIcon>
                                       <Avatar alt={d.name} src={d.image} />
                                   </ListItemIcon>

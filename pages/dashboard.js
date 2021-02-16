@@ -62,7 +62,7 @@ export default function MainDashboard(props){
       }
     }
     if(isMount&& router.query.error !== undefined){
-      if(router.query.error === "OAuthAccountNotLinked"){
+      if(router.query.error === "OAuthAccountNotLinked" || router.query.error === "OAuthAccountNotLinked#"){
         setAlertDialogState({
           handleClose: onCloseDialog,
           CancellDialog: onCancellDialog,

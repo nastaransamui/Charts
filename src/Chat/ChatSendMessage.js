@@ -19,7 +19,7 @@ function ChatSendMessage(props){
     const classes = useStyles();
     const theme = useTheme();
     const [session] = useSession();
-    const {SendClicked, ChatValue, setChatValue} = props
+    const {SendClicked, ChatValue, setChatValue, profile, reciver} = props
     const [keysPressed, setKeysPressed] = useState({})
     const [ShowEmoji, SetShowEmoji] = useState(false)
     const handleKeyUp = (e) =>{
@@ -58,11 +58,11 @@ function ChatSendMessage(props){
         setChatValue(ChatValue.concat(`${emoji.native}`))
     }
 
+
     const SendMessage =(e)=>{
         SendClicked(e)
         SetShowEmoji(false)
     }
-    
     return(
         <Grid container style={{padding: '20px'}} className={classes.SendMain}>
             <Grid item xs={11}>
@@ -74,6 +74,7 @@ function ChatSendMessage(props){
             showSkinTones={false}
             emojiTooltip
             onClick={(emoji,event)=>{EmojiClicked(emoji,event)}}/>}
+            {profile !== undefined &&
                 <TextField 
                 autoComplete="off"
                 variant="outlined"
@@ -92,7 +93,7 @@ function ChatSendMessage(props){
                     </InputAdornment>
                     </Tooltip>
                 }}
-                />
+                />}
             </Grid>
             <Grid item xs={1} align="right">
                 <Fab color="primary" aria-label="add" disabled={ChatValue === ""} 

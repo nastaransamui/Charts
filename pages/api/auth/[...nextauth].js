@@ -4,8 +4,10 @@ import {mySendVerificationRequest} from '../../../lib/SinginEmail'
 import {connectToDatabase } from '../../../lib/mongodb';
 import {
   singInCallBack,
-  sessionCallBack
+  sessionCallBack,
+  jwtCallBack
 } from '../../../lib/authCallBacks';
+import Adapters from 'next-auth/adapters'
 const ObjectID = require('mongodb').ObjectID;
 const options = {
     providers: [
@@ -35,6 +37,11 @@ const options = {
     session:{jwt: true},
     maxAge: 30 * 24 * 60 * 60,
     updateAge: 24 * 60 * 60,
+    adapter: Adapters.TypeORM.Adapter({
+      type: 'mongodb',
+      database: 'charts',
+      synchronize: true
+    }),
     jwt:{
         encryption: true,
         secret: process.env.SECRET,
@@ -92,6 +99,10 @@ const options = {
           // console.log(session)
           return session
         },
+        async jwt(token, user, account, profile, isNewUser){
+          await jwtCallBack(token, user, account, profile, isNewUser)
+          return token
+        }
       }
 }
 

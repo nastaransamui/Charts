@@ -1,4 +1,4 @@
-// This is an example of to protect an API route
+
 import { getSession } from 'next-auth/client'
 import {connectToDatabase } from '../../../lib/mongodb'
 export default async (req, res) => {
@@ -12,7 +12,6 @@ export default async (req, res) => {
     .toArray();
 
   if (session) {
-    // res.send({ content: 'This is protected content. You can access this content because you are signed in.' })
     res.json(users);
   } else {
     res.json({ error: 'You must be sign in to view the protected content on this page.' })
