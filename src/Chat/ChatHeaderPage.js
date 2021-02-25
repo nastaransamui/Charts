@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, Fragment} from 'react';
 import Moment from 'react-moment';
 import moment from 'moment';
 import { useSession } from 'next-auth/client';
@@ -7,10 +7,9 @@ import {
     Typography
 } from '@material-ui/core';
 
-export default function ChatHeaderPage (props){
-    const [countdown, SetCountdown] = useState();
-    const [session] = useSession();
-  // count Down
+function ChatHeaderPage(props){
+  const [countdown, SetCountdown] = useState();
+  const [session] = useSession();
   useEffect(()=>{
     let  isMount = true;
     var CountDown = setInterval(() => {
@@ -32,12 +31,18 @@ export default function ChatHeaderPage (props){
        clearInterval(CountDown)
      }
    },[session])
-   
-    return(
+   return(
+    <Fragment>
+      {
+        (session !== null && session !== undefined) &&
         <Grid item xs={12} style={{display:'flex', justifyContent:'space-between'}}>
-        <Typography variant="h6" className="header-message">{session.user.name}</Typography>
-        <Typography variant="h6" className="header-message" align="left">Expire :<Moment format="MMMM Do YYYY, h:mm a">{session.expires}</Moment> </Typography>
-        <Typography variant="h6" className="header-message" align="left">{countdown} </Typography>
-    </Grid>
-    )
+          <Typography variant="h6" className="header-message">{session.user.name}</Typography>
+          <Typography variant="h6" className="header-message" align="left">Expire :<Moment format="MMMM Do YYYY, h:mm a">{session.expires}</Moment> </Typography>
+          <Typography variant="h6" className="header-message" align="left">{countdown} </Typography>
+        </Grid>
+      }
+    </Fragment>
+)
 }
+
+export default ChatHeaderPage;

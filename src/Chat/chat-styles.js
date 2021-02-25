@@ -1,8 +1,12 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles,withStyles } from '@material-ui/core/styles';
+import Badge from '@material-ui/core/Badge';
 const useStyles = makeStyles((theme) => ({
     table: {
       minWidth: 650,
     },
+    divider: {
+      background: theme.palette.primary.main,
+  },
     chatSection: {
       width: '100%',
       height: '80vh'
@@ -11,15 +15,16 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#e0e0e0'
     },
     borderRight500: {
-        border: '1px solid #e0e0e0'
+        border: `1px solid ${theme.palette.primary.main}`,
+        maxHeight: '110%',height:'auto', overflow: 'auto'
     },
     messageArea: {
-      height: '70vh',
+      height: '77vh',
       overflowY: 'auto',
-      border: '1px solid #e0e0e0',
+      border: `1px solid ${theme.palette.primary.main}`,
     },
     SendMain:{
-        border: '1px solid #e0e0e0',
+        border: `1px solid ${theme.palette.primary.main}`,
     },
     MainMessages: {
         height: 'clac(100% - 3rem)',
@@ -88,6 +93,66 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '50%',
         height: 42,
         width: 42
+    },
+    emojiPicker:{
+      position: 'absolute', bottom: '19%', left: '26.2%'
     }
   }));
 export default useStyles;  
+
+  //Online status
+  export const AvatarOnline = withStyles(theme => ({
+    badge: {
+      backgroundColor: '#44b700',
+      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+      '&::after': {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+        animation: '$ripple 1.2s infinite ease-in-out',
+        border: '1px solid #44b700',
+        content: '""',
+      },
+    },
+    '@keyframes ripple': {
+      '0%': {
+        transform: 'scale(.8)',
+        opacity: 1,
+      },
+      '100%': {
+        transform: 'scale(2.4)',
+        opacity: 0,
+      },
+    },
+  }))(Badge);
+  
+  //Ofline status
+  export const AvatarOfline = withStyles(theme => ({
+  badge: {
+    backgroundColor: '#f50000',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    '&::after': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      border: '1px solid #f50000',
+      content: '""',
+    },
+  },
+  '@keyframes ripple': {
+    '0%': {
+      transform: 'scale(.8)',
+      opacity: 1,
+    },
+    '100%': {
+      transform: 'scale(2.4)',
+      opacity: 0,
+    },
+  },
+  }))(Badge);

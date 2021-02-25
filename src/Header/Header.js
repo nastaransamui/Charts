@@ -110,11 +110,12 @@ function Header(props){
 
   const ChatClicked = ()=>{
     setAnchorEl(null);
-    router.push('/chat')
+    router.push('/chat', undefined, { shallow: true })
+
   }
 
   
-  async function SingOut() {
+function SingOut() {
     
       setAnchorEl(null);
       setAlertDialogState({

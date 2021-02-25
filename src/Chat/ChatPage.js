@@ -1,94 +1,101 @@
-
 import React, {useEffect, useState} from 'react';
 import useStyles from './chat-styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
-import { useSession } from 'next-auth/client';
-import ChatHeaderPage from './ChatHeaderPage';
-import ChatLeftPanel from './ChatLeftPanel'
+import PropTypes from 'prop-types';
 import ChatBody from './ChatBody'
+import ChatLeftPanel from './ChatLeftPanel'
+import ChatHeaderPage from './ChatHeaderPage'
 import ChatSendMessage from './ChatSendMessage'
-import moment from 'moment'
+import {
+    Divider,
+    Grid, Paper
+} from '@material-ui/core';
 import axios from 'axios';
-
-
-Array.prototype.last = function(){
-    return this[this.length - 1];
-}
-
-export const  createId = () => {
-  let s4 = () => {
-      return Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16)
-          .substring(1);
-  }
-  //return id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
-
+import io from 'socket.io-client'
+import moment from 'moment'
+import aes256 from 'aes256'
 const ChatPage = (props) => {
-  const classes = useStyles();
-  const [session] = useSession();
-  const [ChatValue, setChatValue] = useState('')
-  const {ChatsMessages, profile} = props
-  const [Messages,SetMessages] = useState(ChatsMessages.length !== undefined ? ChatsMessages : [])
-  const [state, SetState] = useState( { chats: [] })
-  const [users, setUsers] = useState(null)
-  const [reciver, setReciver] = useState(null)
-  useEffect(()=>{
-      let isMount = true;
-      if (isMount) {
-          fetch('http://localhost:3000/api/examples/users')
-          .then(response => response.json())
-          .then(data => {setUsers(data)})
-      }
-      return()=>{
-          isMount = false
-      }
-  },[])
-  
-
-  const SendClicked = (e) =>{
-    const now = moment().format()
-    const senderId = profile._id
-    const reciverId = reciver._id
-    const NewMessage = [{
-      id: createId(),
-      sender: senderId,
-      reciver: reciverId,
-      name: session.user.name,
-      body: ChatValue,
-      time: now
-    }]
-    axios.post('/api/chat/messages' , NewMessage[0])
-    .then((res)=>{
-      const chats = res.data.messages;
-      SetMessages(old => [...old, ...chats])
-      console.log(chats)
-      // SetState({chats})
-    })
-    setChatValue('')
-}
-
-  return (
-      <div>
-        {session !==undefined && <>
-          <Grid container>
-            <ChatHeaderPage />
-          </Grid>
-          <Grid container component={Paper} className={classes.chatSection}>
-              <ChatLeftPanel {...props}  users={users} reciver={reciver} setReciver={setReciver}/>
-              <Grid item xs={9}>
-                  {reciver !== null &&<ChatBody {...props} reciver={reciver} users={users} Messages={Messages}/>}
-                  <Divider />
-                  {reciver !== null &&<ChatSendMessage reciver={reciver} users={users}  {...props} SendClicked={SendClicked} ChatValue={ChatValue} setChatValue={setChatValue}/>}
-              </Grid>
-          </Grid>
-        </>
+    const classes = useStyles();
+    const {session, profile} = props
+    const [users, setUsers] = useState([])
+    const [Msg, setMsg] = useState([])
+    const [ChatValue, setChatValue] = useState('')
+    const [reciver, setReciver] = useState(null)
+    const socket = io();
+    var key = process.env.SECRET;
+    useEffect(()=>{
+        let isMount = true;
+        if (isMount) {
+            axios.get('/api/socketio')
+            .then((data)=>{
+                socket.sendBuffer = [];
+                // subscribe a new user
+                socket.emit("login", session.user.name);
+                // list of connected users
+                socket.on("users", data => {
+                    setUsers(data)
+                });
+                socket.on('singOut', (data) => {
+                    socket.emit("logout", session.user.name);
+                    setUsers(data)
+                  });
+            })
         }
-      </div>
-  );
+        return()=>{
+            isMount = false;
+            socket.off('login');
+            socket.off('users');
+            socket.off('singOut');
+            socket.disconnect()
+        }
+    },[])
+
+    const UserClicked =(d) =>{
+        socket.emit(`room`, profile[0]._id,d._id)
+        setReciver(d)
+        socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
+            setMsg(data[d._id])
+        })
+    }
+ 
+    const SendMessage =()=>{
+        const now = moment().format()
+        const senderId = profile[0]._id
+        const reciverId = reciver._id
+        const NewMessage = {
+        name: session.user.name,
+        senderId: senderId,
+        reciverId: reciverId,
+        body: aes256.encrypt(key, ChatValue),
+        time: now
+          }
+        socket.emit("sendMsg",NewMessage,profile[0]._id,reciver._id)
+        setChatValue('')
+        socket.on(`sendMsgReturn${profile[0]._id}${reciver._id}`, data =>{
+            if(data[reciver._id] === undefined) setMsg(data[profile[0]._id])
+            if(data[profile[0]._id] === undefined) setMsg(data[reciver._id])
+        })
+    }
+
+
+    return(
+        <div>
+            <Grid container>
+                <ChatHeaderPage />
+                <Grid container component={Paper} className={classes.chatSection}>
+                    <ChatLeftPanel users={users} UserClicked={UserClicked}/>
+                    <Grid item xs={9}>
+                        {reciver !== null && <ChatBody Msg={Msg} reciver={reciver} profile={profile} />}
+                        <Divider />
+                        {reciver !==null && <ChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue}/>}
+                    </Grid>
+                </Grid>
+            </Grid>
+        </div>
+    )
+}
+ChatPage.propTypes = {
+    session: PropTypes.object.isRequired,
+    profile: PropTypes.array.isRequired,
 }
 
 export default ChatPage;

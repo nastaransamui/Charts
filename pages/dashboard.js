@@ -24,7 +24,6 @@ export default function MainDashboard(props){
   }
 
   const onCloseDialog = (e) =>{
-    console.log('Onclose');
     e.preventDefault();
     setAlertDialogState({
       open: false,

@@ -56,6 +56,7 @@ function MarketTrade(props){
         }
         return()=>{
             isMount = false;
+            marketTradeData
         }
     },[marketTradeData])
     

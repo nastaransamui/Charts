@@ -8,8 +8,9 @@ import {
   jwtCallBack
 } from '../../../lib/authCallBacks';
 import Adapters from 'next-auth/adapters'
-const ObjectID = require('mongodb').ObjectID;
-const options = {
+
+
+export const options = {
     providers: [
         Providers.Facebook({
             clientId: process.env.FACEBOOK_ID,
@@ -34,7 +35,7 @@ const options = {
     database: process.env.DATABASE_URL,
     secret: process.env.SECRET,
     debug: false,
-    session:{jwt: true},
+    session:{jwt: false},
     maxAge: 30 * 24 * 60 * 60,
     updateAge: 24 * 60 * 60,
     adapter: Adapters.TypeORM.Adapter({
@@ -47,8 +48,54 @@ const options = {
         secret: process.env.SECRET,
     },
     events: {
-        // signIn: async (message) => {console.log('event nextauth: ' + message)},
-        // signOut: async (message) => {console.log('event nextauth: ' + JSON.stringify(message))},
+        signIn: async (message) => {
+          async function run() {
+            try {
+              const { db } = await connectToDatabase();
+            const users = await db.collection("users");
+            const filter = { _id: message.user.id};
+            const updateDoc = {
+              $set: {
+                online: true,
+              },
+            };
+            const updateDocImage = {
+              $set: {
+                online: true,
+                name : "Guest",
+                image: 'https://source.unsplash.com/random'
+              },
+            };
+            const imageExist =await users.find(filter).toArray().then((data)=> { return data[0].image})
+            if( imageExist === undefined){
+              const result = await users.updateOne(filter, updateDocImage)
+              console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`)
+            }else{
+              const result = await users.updateOne(filter, updateDoc)
+            }
+            
+            } finally {
+            }
+          }
+          run().catch(console.dir);
+        },
+        signOut: async (message) => {
+          async function run() {
+            try {
+              const { db } = await connectToDatabase();
+            const users = await db.collection("users");
+            const filter = { _id: message.userId};
+            const updateDoc = {
+              $set: {
+                online: false,
+              },
+            };
+            const result = await users.updateOne(filter, updateDoc)
+            } finally {
+            }
+          }
+          run().catch(console.dir);
+         },
         // createUser: async (message) => {console.log('event nextauth: ' + message)},
         // linkAccount: async (message) => {console.log('event nextauth: ' + message)},
         // session: async (message) => {console.log('event nextauth: ' + message)},
@@ -56,47 +103,18 @@ const options = {
       },
       pages:{
           // signIn: '/api/auth/signin',  // Displays signin buttons
-    // signOut: '/api/auth/signout', // Displays form with sign out button
-    // error: '/api/auth/error', // Error code passed in query string as ?error=
-    // verifyRequest: '/api/auth/verify-request', // Used for check email page
-    // newUser: null // If set, new users will be directed here on first sign in
+       // signOut: '/api/auth/signout', // Displays form with sign out button
+      // error: '/api/auth/error', // Error code passed in query string as ?error=
+      // verifyRequest: '/api/auth/verify-request', // Used for check email page
+        // newUser: null // If set, new users will be directed here on first sign in
       },
       callbacks: {
         async signIn(user, account, profile) {
           singInCallBack(user, account, profile)
-          // const { db } = await connectToDatabase();
-          // const users = await db.collection("users")
-          // console.log(user)
-          // users.updateOne({id: new ObjectID(user.id)},{$set: {
-          //   _id:  new ObjectID(user.id),
-          //   email: user.email,
-          //   name: "guest",
-          //   image: "https://source.unsplash.com/random",
-          //   emailVerified: user.emailVerified,
-          //   createdAt: user.createdAt,
-          // }})
           return true
         },
         async session(session, user) {
          await  sessionCallBack(session, user)
-          // if(user.name === null || user.image === null){
-          // session ={
-          //   user:{
-          //     name: "guest",
-          //     email: session.user.email,
-          //     image: "https://source.unsplash.com/random",
-          //   },
-          //   expires: session.expires
-          // }}
-          // if(user.name === null || user.picture === null){
-          // user ={
-          //   name: "guest",
-          //   email: user.email,
-          //   picture: "https://source.unsplash.com/random",
-          //   iat: user.iat,
-          //   exp: user.exp
-          // }}
-          // console.log(session)
           return session
         },
         async jwt(token, user, account, profile, isNewUser){

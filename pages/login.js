@@ -167,7 +167,7 @@ export default function SignInSide(props) {
     let isMount = true;
     if (isMount) {
       if (!isEmpty(router.query)) {
-        if(router.query.SendEmail === "true"){
+        if(router.query.SendEmail === "true" && isMount){
           setAlertDialogState({
             handleClose: onCloseDialog,
             CancellDialog: onCancellDialog,
@@ -178,7 +178,7 @@ export default function SignInSide(props) {
             cancelButton:"Close",
           })
         }
-        if(router.query.error === "OAuthAccountNotLinked" || router.query.error === "OAuthAccountNotLinked#"){
+        if(router.query.error === "OAuthAccountNotLinked" || router.query.error === "OAuthAccountNotLinked#" && isMount){
           setAlertDialogState({
             handleClose: onCloseDialog,
             CancellDialog: onCancellDialog,
@@ -189,7 +189,7 @@ export default function SignInSide(props) {
             cancelButton:"Close",
           })
         }
-        if(router.query.error === "Callback"){
+        if(router.query.error === "Callback" && isMount){
           setAlertDialogState({
             handleClose: onCloseDialog,
             CancellDialog: onCancellDialog,
@@ -200,12 +200,23 @@ export default function SignInSide(props) {
             cancelButton:"Close",
           })
         }
-        if(router.query.error === "OAuthCreateAccount"){
+        if(router.query.error === "OAuthCreateAccount" && isMount){
           setAlertDialogState({
             handleClose: onCloseDialog,
             CancellDialog: onCancellDialog,
             open: true,
             ContentText: `This is system ${router.query.error} Error please contact administrator.`,
+            ContentHeader:`Error: ${router.query.error}`,
+            closeButtom: "NotAgree",
+            cancelButton:"Close",
+          })
+        }
+        if(router.query.error === "Verification" && isMount){
+          setAlertDialogState({
+            handleClose: onCloseDialog,
+            CancellDialog: onCancellDialog,
+            open: true,
+            ContentText: `This link is expired please try new link.`,
             ContentHeader:`Error: ${router.query.error}`,
             closeButtom: "NotAgree",
             cancelButton:"Close",
@@ -216,6 +227,8 @@ export default function SignInSide(props) {
 
     return()=>{
       isMount = false;
+      router;
+      setAlertDialogState
     }
   },[router])
 

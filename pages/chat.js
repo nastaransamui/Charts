@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 import { csrfToken } from 'next-auth/client'
 import ChatPage from '../src/Chat/ChatPage';
 import { ownUser } from '../lib/ownUser';
-import {retriveMessages} from '../lib/retriveMessages'
+
 
 const useStyles = makeStyles(theme => ({
   containerWrap: {
@@ -30,13 +30,12 @@ const useStyles = makeStyles(theme => ({
 
 export default function Chat(props) {
   const classes = useStyles();
-  const theme = useTheme();
   const [session] = useSession()
   const router = useRouter()
   useEffect(()=>{
     let isMount = true;
-    if(isMount && session === null){
-      if(session === undefined){
+    if(isMount){
+      if(session === null){
         router.push("/");
       }
     }
@@ -48,18 +47,16 @@ export default function Chat(props) {
   return (
     <Fragment>
       <Head>
-    <title>
-      Chat Page
-    </title>
-  </Head>
-  <CssBaseline />
-  <div className={classes.mainWrap}>
-    <Header {...props} />
-    <main className={classes.containerWrap}>
-    <div className={classes.appBarSpacer} />
-        <ChatPage {...props}/>
-    </main>
-    </div>
+        <title>Chat Page</title>
+      </Head>
+      <CssBaseline />
+      <div className={classes.mainWrap}>
+        <Header {...props} />
+        <main className={classes.containerWrap}>
+          <div className={classes.appBarSpacer} />
+          <ChatPage {...props} />
+        </main>
+      </div>
     </Fragment>
   );
 }
@@ -81,7 +78,6 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   const isConnected = await client.isConnected();
   const session = await getSession(ctx);
   const profile = session !== null && await ownUser(session)
-  const ChatsMessages = profile !== null && await retriveMessages(profile)
   if(ctx.res && session === null ){
     return{
       redirect:{
@@ -90,13 +86,12 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
       }
     }
   }
-console.log(ChatsMessages)
+
   return {props: {
     cookies, isConnected,
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
     profile,
-    ChatsMessages,
     session
   }}
 })
