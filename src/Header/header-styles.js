@@ -91,6 +91,12 @@ const useStyles = makeStyles((theme) =>({
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
     },
+    flag:{
+      width: 20, height: 20
+    },
+    menuItemText:{
+      margin: 'auto', width: '50%', padding:10
+    }
   }))
 
   export default useStyles;

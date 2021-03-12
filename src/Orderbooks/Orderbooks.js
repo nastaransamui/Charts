@@ -11,11 +11,11 @@ import { getMarketTradeHuobi } from '../../lib/marketTrades';
 function Orderbooks(props){
     const classes = useStyles();
     const theme = useTheme();
-    const {coingeckoSymbol, cryptoCompareTsym, marketTradeSymbol,marketTrade} = useSelector(state => state)
+    const {"next-i18next": nextI18Next } = useSelector(state => state)
     const [alertOpen, setAlertOpen] = useState(false)
     const [ContentHeader, setContentHeader] = useState("")
     const [ContentText, setContentText] = useState("")
-    const {pairSymbolData} = props;
+    const {pairSymbolData,dashboardText} = props;
     const dispatch = useDispatch();
     const OpenCloseAlert =()=>{
         setAlertOpen(!alertOpen)
@@ -30,8 +30,8 @@ function Orderbooks(props){
 
         if(value.rowData.state === 'offline') {
         setAlertOpen(true)
-        setContentHeader(`Offline Traiding Pair`)
-        setContentText(`Unfortunatley ${BaseCurrency} as base coin Traiding with ${QuoteCurrency} is ofline for now. `)
+        setContentHeader(`${dashboardText[`${nextI18Next}_orderbooks_offline`]}`)
+        setContentText(`${dashboardText[`${nextI18Next}_orderbooks_unfortune`]} ${BaseCurrency} ${dashboardText[`${nextI18Next}_orderbooks_base`]} ${QuoteCurrency} ${dashboardText[`${nextI18Next}_orderbooks_ofline`]} `)
         }else{
             setCookies(null, 'marketTradeSymbol', value.rowData.symbol)
             dispatch({type: 'marketTradeSymbol', payload: value.rowData.symbol});
@@ -56,20 +56,21 @@ function Orderbooks(props){
                 classes={classes}
                 rowCount={pairSymbolData.length}
                 Data={pairSymbolData}
+                dashboardText={dashboardText}
                 onRowClick={(data) => { RowClicked(data) }}
                 columns={[
                     {
-                        label: "Base",
+                        label: dashboardText[`${nextI18Next}_orderbooks_label0`],
                         numeric: false,
                         dataKey: "base-currency"
                     },
                     {
-                        label: "Quote",
+                        label: dashboardText[`${nextI18Next}_orderbooks_label1`],
                         numeric: false,
                         dataKey: "quote-currency"
                     },
                     {
-                        label: "Status",
+                        label: dashboardText[`${nextI18Next}_orderbooks_label2`],
                         numeric: false,
                         dataKey: "state"
                     },

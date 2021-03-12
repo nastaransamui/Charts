@@ -40,26 +40,31 @@ const marks =[
 const ButtonValues = [
     {
         value: "Limit",
-        label: "Limit"
+        en_label: "Limit",
+        cn_label: "限制"
     },
     {
         value: "Market",
-        label: "Market"
+        en_label: "Market",
+        cn_label: "市场",
     },
     {
         value: "StopLimit",
-        label: "Stop-limit"
+        en_label: "Stop-limit",
+        cn_label: "止损限制",
     },
     {
         value: "TriggerOrder",
-        label: "Trigger Order"
+        en_label: "Trigger Order",
+        cn_label: "触发顺序",
     },
 ]
 
 function PurchaseForms(props){
     const classes = useStyles();
     const theme = useTheme();
-    const [session] = useSession()
+    const [session] = useSession();
+    const {dashboardText, header} = props;
     const [values, setValues]=useState({
         Price1: '',
         Price2: '',
@@ -87,7 +92,7 @@ function PurchaseForms(props){
     }
     const [SinglePareData, setSinglePareData] = useState(null)
     const [Login, SetLogin] = useState(session)
-    const {Exchange, coingeckoSymbol, cryptoCompareTsym} = useSelector(state => state)
+    const {Exchange, coingeckoSymbol, cryptoCompareTsym, "next-i18next": nextI18Next} = useSelector(state => state)
     const [AlertDialogState, setAlertDialogState] =useState({
         open: false,
       ContentText: "",
@@ -126,15 +131,13 @@ function PurchaseForms(props){
         setAlertDialogState({
             handleClose: onCloseDialog,
             open: true,
-            ContentText: `Are you sure, you want to logout from panel`,
-            ContentHeader: `Sing Out request`,
-            closeButtom: "Agree",
-            cancelButton:"Close",
+            ContentText: `${header[`${nextI18Next}_signout_text`]}`,
+            ContentHeader: `${header[`${nextI18Next}_signout_header`]}`,
+            closeButtom: `${header[`${nextI18Next}_agree`]}`,
+            cancelButton: `${header[`${nextI18Next}_close`]}`,
             CancellDialog: onCancellDialog
           })
     }
-
-
 
     return (
         <Fragment>
@@ -144,19 +147,19 @@ function PurchaseForms(props){
             <div className={classes.MainStyle}>
                 <span className={classes.SpanBuy}>
                     {ButtonValues.map((t,i)=>(<Button key={`${i}${t.value}`} variant="outlined" classes={{root: classes.buttonRoots}}>
-                        {t.label}
+                        {t[`${nextI18Next}_label`]}
                     </Button>))}
                     <FormControl fullWidth className={classes.marginFormBuy} variant="outlined"  size="small">
                         <TextField onChange={(e)=>{setValues({...values, Price1: e.target.value})}}
                         type="number"
                         id="Price1"
-                        label="Price"
+                        label={dashboardText[`${nextI18Next}_purchase_price`]}
                         disabled
                         value={values.Price1}
                         margin="dense"
                         variant="outlined"
                         InputProps={{
-                            startAdornment:<InputAdornment position="start">Price</InputAdornment>,
+                            startAdornment:<InputAdornment position="start">{dashboardText[`${nextI18Next}_purchase_price`]}</InputAdornment>,
                             endAdornment:<InputAdornment position="start">
                                 {coingeckoSymbol.toUpperCase()}
                             </InputAdornment>
@@ -166,18 +169,18 @@ function PurchaseForms(props){
                         <TextField onChange={(e) => {setValues({...values, Amount1: e.target.value}); if(e.target.value.length > 12) setValues({...values, Amount1: e.target.value.slice(0,12)}) }}
                         type="number"
                         id="Amount1"
-                        label="Amount"
+                        label={dashboardText[`${nextI18Next}_purchase_amount`]}
                         value={values.Amount1}
                         margin="dense"
                         variant="outlined"
                         InputProps={{
-                            startAdornment:<InputAdornment position="start">Amount</InputAdornment>,
+                            startAdornment:<InputAdornment position="start">{dashboardText[`${nextI18Next}_purchase_amount`]}</InputAdornment>,
                             endAdornment:<InputAdornment position="start">{SinglePareData.symbol.toUpperCase()}</InputAdornment>,
                         }} />
                     </FormControl>
                     <span className={classes.total}>
-                        <dt className={classes.dt}>Total:</dt>
-                        <dt className={classes.dt}>{((values.Amount1)* (values.Price1)).toFixed(8)} USD</dt>
+                        <dt className={classes.dt}>{dashboardText[`${nextI18Next}_purchase_total`]}:</dt>
+                        <dt className={classes.dt}>{((values.Amount1)* (values.Price1)).toFixed(8)} {dashboardText[`${nextI18Next}_purchase_usd`]}</dt>
                     </span>
                     <Slider className={classes.SliderBuy} disabled={!Login}
                     defaultValue={0} getAriaValueText={valuetext}  aria-labelledby="discrete-slider"
@@ -190,17 +193,17 @@ function PurchaseForms(props){
                            session!== null ?
                             <>
                             <span className={classes.Login} onClick={(e)=>{SubmitForm(SinglePareData)}} >
-                                Buy {SinglePareData.symbol.toUpperCase()}
+                            {dashboardText[`${nextI18Next}_purchase_buy`]} {SinglePareData.symbol.toUpperCase()}
                             </span>
-                           or 
+                            {dashboardText[`${nextI18Next}_purchase_or`]}
                            <span className={classes.Login} onClick={SingOut}>
-                               Sing Out
+                           {header[`${nextI18Next}_singout`]}
                            </span>
                             </>
                             :
                             <>
                             <span className={classes.Singup} onClick={(e)=>{setSingupDialogOpen(true)}} >
-                            Login
+                            {header[`${nextI18Next}_login`]}
                             </span>
                            </>
                         }
@@ -209,13 +212,13 @@ function PurchaseForms(props){
                 <Divider orientation="vertical" flexItem classes={{root: classes.divider}}  />
                 <span className={classes.SpanSale}>
                     {ButtonValues.map((t,i)=>(<Button key={`${i}${t.value}`} variant="outlined" classes={{root: classes.buttonRoots}}>
-                        {t.label}
+                        {t[`${nextI18Next}_label`]}
                     </Button>))}
                     <FormControl fullWidth className={classes.marginFormSale} variant="outlined" size="small">
-                        <TextField id="Price2" label="Price" onChange={(e)=>{setValues({...values, Price2: e.target.value})}}
+                        <TextField id="Price2" label={dashboardText[`${nextI18Next}_purchase_price`]} onChange={(e)=>{setValues({...values, Price2: e.target.value})}}
                         type="number" value={values.Price2} disabled margin="dense" variant="outlined"
                         InputProps={{
-                            startAdornment:<InputAdornment position="start">Price</InputAdornment>,
+                            startAdornment:<InputAdornment position="start">{dashboardText[`${nextI18Next}_purchase_price`]}</InputAdornment>,
                             endAdornment:<InputAdornment position="start">
                                 {coingeckoSymbol.toUpperCase()}
                             </InputAdornment>
@@ -224,21 +227,21 @@ function PurchaseForms(props){
                     <FormControl fullWidth className={classes.marginFormSale} variant="outlined" size="small">
                     <TextField
                         id="Amount2"
-                        label="Amount"
+                        label={dashboardText[`${nextI18Next}_purchase_amount`]}
                         onChange={(e) => {setValues({...values, Amount2: e.target.value}); if(e.target.value.length > 12) setValues({...values, Amount2: e.target.value.slice(0,12)}) }}
                         type="number"
                         value={values.Amount2}
                         margin="dense"
                         variant="outlined"
                         InputProps={{
-                        startAdornment:<InputAdornment position="start">Amount</InputAdornment>,
+                        startAdornment:<InputAdornment position="start">{dashboardText[`${nextI18Next}_purchase_amount`]}</InputAdornment>,
                         endAdornment:<InputAdornment position="start">{SinglePareData.symbol.toUpperCase()}</InputAdornment>
                         }}
                     />
                     </FormControl>
                     <span className={classes.total}>
-                        <dt className={classes.dt}>Total:</dt>
-                        <dt className={classes.dt}>{((values.Amount2)* (values.Price2)).toFixed(8)} USD</dt>
+                        <dt className={classes.dt}>{dashboardText[`${nextI18Next}_purchase_total`]}:</dt>
+                        <dt className={classes.dt}>{((values.Amount2)* (values.Price2)).toFixed(8)} {dashboardText[`${nextI18Next}_purchase_usd`]}</dt>
                     </span>
                     <Slider className={classes.SliderSale} disabled={!Login}
                     defaultValue={0} getAriaValueText={valuetext}  aria-labelledby="discrete-slider"
@@ -251,16 +254,16 @@ function PurchaseForms(props){
                             session!== null ?
                             <>
                             <span className={classes.Login} onClick={(e)=>{SubmitForm(SinglePareData)}} >
-                                Sale {SinglePareData.symbol.toUpperCase()}
+                            {dashboardText[`${nextI18Next}_purchase_sale`]} {SinglePareData.symbol.toUpperCase()}
                             </span>
-                           or 
+                           {dashboardText[`${nextI18Next}_purchase_or`]}
                            <span className={classes.Login} onClick={SingOut}>
-                               Sing Out
+                              {header[`${nextI18Next}_singout`]}
                            </span>
                             </>
                             :
                             <>
-                                <span className={classes.Singup} onClick={(e)=>{setSingupDialogOpen(true)}} >Login</span>
+                                <span className={classes.Singup} onClick={(e)=>{setSingupDialogOpen(true)}} >{header[`${nextI18Next}_login`]}</span>
                             </>
                         }
                     </Grid>

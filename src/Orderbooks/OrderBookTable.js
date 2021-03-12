@@ -4,19 +4,20 @@ import { TableSortLabel, TableHead, TableCell, Tooltip } from '@material-ui/core
 import PropTypes from "prop-types";
 import _ from "lodash";
 import clsx from 'clsx';
-
-function TooltipText(params){
+import {useSelector} from 'react-redux';
+function TooltipText(params,dashboardText, nextI18Next){
+    const Traiding = params.rowData[`api-trading`].toUpperCase() === dashboardText[`en_orderbooks_enable`] ? dashboardText[`${nextI18Next}_orderbooks_enable`] :params.rowData[`api-trading`].toUpperCase()
     return(
         `
-        Amount Precision: ${params.rowData[`amount-precision`]} \n
-        Price Precision: ${params.rowData[`price-precision`]}\n
-        Value Precision: ${params.rowData[`value-precision`]}\n
-        Trading: ${params.rowData[`api-trading`].toUpperCase()} \n
-        Max Order Value: ${params.rowData[`buy-market-max-order-value`]} \n
-        Leverage Ratio: ${params.rowData[`leverage-ratio`]} \n
-        Limit Max Order Amount: ${params.rowData[`limit-order-max-order-amt`]}\n
-        Limit Min Order Amount: ${params.rowData[`limit-order-min-order-amt`]}\n
-        Limit Min Order Value: ${params.rowData[`min-order-value`]}\n
+        ${dashboardText[`${nextI18Next}_orderbooks_tooltip0`]}: ${params.rowData[`amount-precision`]} \n
+        ${dashboardText[`${nextI18Next}_orderbooks_tooltip1`]}: ${params.rowData[`price-precision`]}\n
+        ${dashboardText[`${nextI18Next}_orderbooks_tooltip2`]}: ${params.rowData[`value-precision`]}\n
+        ${dashboardText[`${nextI18Next}_orderbooks_tooltip3`]}: ${Traiding} \n
+        ${dashboardText[`${nextI18Next}_orderbooks_tooltip4`]}: ${params.rowData[`buy-market-max-order-value`]} \n
+        ${dashboardText[`${nextI18Next}_orderbooks_tooltip5`]}: ${params.rowData[`leverage-ratio`]} \n
+        ${dashboardText[`${nextI18Next}_orderbooks_tooltip6`]}: ${params.rowData[`limit-order-max-order-amt`]}\n
+        ${dashboardText[`${nextI18Next}_orderbooks_tooltip7`]}: ${params.rowData[`limit-order-min-order-amt`]}\n
+        ${dashboardText[`${nextI18Next}_orderbooks_tooltip8`]}: ${params.rowData[`min-order-value`]}\n
         `
     )
 }
@@ -59,9 +60,17 @@ class MuiVirtualizedTable extends PureComponent {
     }
     }
     cellRenderer = (params) => {
+        const {dashboardText, nextI18Next} = this.props;
         const { classes, rowHeight, onRowClick,  theme } = this.props;
         const TooltipFirstCellOnly = params.columnIndex !== 0 ? true : false
-        const toolTipValue = TooltipText(params)
+        const toolTipValue = TooltipText(params,dashboardText, nextI18Next)
+        const TranslateCell = 
+        params.cellData.toUpperCase() === dashboardText[`en_orderbooks_data_online`] ? 
+        dashboardText[`${nextI18Next}_orderbooks_data_online`] : 
+        params.cellData.toUpperCase() === dashboardText[`en_orderbooks_data_offline`] ?
+        dashboardText[`${nextI18Next}_orderbooks_data_offline`] : 
+        params.cellData.toUpperCase() === dashboardText[`en_orderbooks_data_suspend`] ?
+        dashboardText[`${nextI18Next}_orderbooks_data_suspend`] : params.cellData.toUpperCase();
         return(
             <Tooltip title={toolTipValue}  disableHoverListener={TooltipFirstCellOnly}
             placement="left" arrow enterTouchDelay={0}
@@ -79,7 +88,7 @@ class MuiVirtualizedTable extends PureComponent {
                 `${theme.palette.info.light}` : null
             }}
             >
-                {params.cellData.toUpperCase()}
+                {TranslateCell}
             </TableCell>
             </Tooltip>
         )
@@ -171,14 +180,17 @@ MuiVirtualizedTable.propTypes = {
     rowHeight: PropTypes.number,
   };
 export default  function VirtualizedTable(props){
-    const {theme, classes, rowCount, Data, onRowClick,  columns} = props
+    const {theme, classes, rowCount, Data, onRowClick,  columns,dashboardText} = props
+    const {"next-i18next": nextI18Next }= useSelector(state => state)
     return <MuiVirtualizedTable
     theme={theme}
+    nextI18Next={nextI18Next}
     classes={classes}
     rowCount={rowCount}
     Data={Data}
     onRowClick={onRowClick}
     columns={columns}
+    dashboardText={dashboardText}
      />
 }
 

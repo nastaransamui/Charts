@@ -13,15 +13,18 @@ import ChartNormalize from './ChartNormalize';
 import getCandleChartData from '../../lib/candleChartData'
 const TabsValue =[
     {
-      value: 'Daily',
+      en_value: 'Daily',
+      cn_value: '日常',
       id: 'day'
     },
     {
-      value: 'Hourly',
+      en_value: 'Hourly',
+      cn_value: '每小时一次',
       id: 'hour'
     },
     {
-      value: 'Minutely',
+      en_value: 'Minutely',
+      cn_value: '每分钟',
       id: 'minute'
     },
   ]
@@ -35,13 +38,14 @@ function TickerNavbar(props){
     const classes = useStyles();
     const theme = useTheme();
     const dispatch = useDispatch();
-    const {SinglePareData, tabCoin, QouteCoin} = props
+    const {SinglePareData, tabCoin, QouteCoin, dashboardText} = props
     const {
         Exchange, 
         coingeckoSymbol, 
         cryptoCompareTsym, 
         PeriodicDataUpdate,
-        TraidingView
+        TraidingView,
+        "next-i18next": nextI18Next
     } = useSelector(state => state)
     const [Color, setColor] = useState('')
     const [value, setValue] = React.useState(0);
@@ -88,15 +92,15 @@ function TickerNavbar(props){
                     </span>
                 </div>
                 <dl className={classes.change}>
-                    <dt className={classes.dtClass}>24H High</dt>
+                    <dt className={classes.dtClass}>{dashboardText[`${nextI18Next}_24HHigh`]}</dt>
                     <dd>{(SinglePareData.high_24h).toLocaleString()}</dd>
                 </dl>
                 <dl className={classes.change}>
-                    <dt className={classes.dtClass}>24H Low</dt>
+                    <dt className={classes.dtClass}>{dashboardText[`${nextI18Next}_24HLow`]}</dt>
                     <dd>{(SinglePareData.low_24h).toLocaleString()}</dd>
                 </dl>
                 <dl className={classes.change}>
-                    <dt className={classes.dtClass}>Total Volume</dt>
+                    <dt className={classes.dtClass}>{dashboardText[`${nextI18Next}_TotalVolume`]}</dt>
                     <dd>{(SinglePareData.total_volume).toLocaleString()}</dd>
                 </dl>
                 <div className={classes.globalTheme}>
@@ -111,21 +115,21 @@ function TickerNavbar(props){
                         classes={{ root: classes.tabsRoot }} >
                             {
                                 TabsValue.map((t,i)=>(
-                                    <Tab label={t.value} key={i} {...a11yProps(i)} classes={{root: classes.tabsRoot }} onClick={()=>handleClickTab(t)}/>
+                                    <Tab label={t[`${nextI18Next}_value`]} key={i} {...a11yProps(i)} classes={{root: classes.tabsRoot }} onClick={()=>handleClickTab(t)}/>
                                 ))
                             }
                         </Tabs>
                         <div >
                             <Button disabled={!TraidingView} variant="outlined" classes={{root: classes.buttonRoots }} onClick={()=>{dispatch({type: 'TraidingView', payload: false});setCookies(null, 'TraidingView', false)}}>
-                                Normal View
+                                {dashboardText[`${nextI18Next}_exchange_Normal`]}
                             </Button>
                             <Button disabled={TraidingView} variant="outlined" classes={{root: classes.buttonRoots }} onClick={()=>{dispatch({type: 'TraidingView', payload: true});setCookies(null, 'TraidingView', true)}}>
-                                Traiding View
+                                {dashboardText[`${nextI18Next}_exchange_Traiding`]}
                             </Button>
                         </div>
                     </AppBar>
                 </div>
-                <ChartNormalize />
+                <ChartNormalize {...props}/>
             </div>
         </Fragment>
     )

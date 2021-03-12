@@ -63,7 +63,7 @@ function MarketTrade(props){
     return(
         <Fragment>
             <Paper style={{ height: 840, width: '100%'}}>
-                <MarketTradeTable marketTradeData={marketTradeData}/>
+                <MarketTradeTable {...props} marketTradeData={marketTradeData}/>
             </Paper>
         </Fragment>
     )

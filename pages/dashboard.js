@@ -13,6 +13,10 @@ import { csrfToken } from 'next-auth/client'
 import AlertDialog from '../src/components/AlertDialog'
 import { useRouter } from 'next/router'
 import { route } from 'next/dist/next-server/server/router';
+import header from '../public/locale/header.json'
+import dashboardText from '../public/locale/dashbord.json';
+import loginText from '../public/locale/login.json';
+import copyrightText from '../public/locale/copyright.json'
 export default function MainDashboard(props){
   const router = useRouter()
   const onCancellDialog = (e) =>{
@@ -159,7 +163,12 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx)=>{
       ctx.store.dispatch({type: 'marketTradeSymbolTitle', payload:  getCookies(ctx, 'marketTradeSymbolTitle')});
       ctx.store.dispatch( {type: 'isLoading', payload:  100})
     }
-
+    if (!checkCookies(ctx, `next-i18next`)) {
+      setCookies(ctx, `next-i18next`, 'en'); 
+      ctx.store.dispatch({type: `next-i18next`, payload: 'en'});
+    } else {
+      ctx.store.dispatch({type: `next-i18next`, payload: getCookies(ctx, `next-i18next`)})
+    }
     const Exchange = await getExchangeData(coingeckoSymbol)
     ctx.store.dispatch({type: 'Exchange', payload: Exchange});
     //Use cookies to fix XAxis format
@@ -175,5 +184,9 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx)=>{
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
     isLoading,
+    header,
+    dashboardText,
+    loginText,
+    copyrightText,
     session}}
 })

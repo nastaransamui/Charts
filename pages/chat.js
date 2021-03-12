@@ -11,7 +11,8 @@ import { useRouter } from 'next/router'
 import { csrfToken } from 'next-auth/client'
 import ChatPage from '../src/Chat/ChatPage';
 import { ownUser } from '../lib/ownUser';
-
+import header from '../public/locale/header.json';
+import chatText from '../public/locale/chat.json'
 
 const useStyles = makeStyles(theme => ({
   containerWrap: {
@@ -73,6 +74,12 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   } else {
     ctx.store.dispatch({type: 'themeName', payload: getCookies(ctx, 'themeName')})
   }
+  if (!checkCookies(ctx, `next-i18next`)) {
+    setCookies(ctx, `next-i18next`, 'en'); 
+    ctx.store.dispatch({type: `next-i18next`, payload: 'en'});
+  } else {
+    ctx.store.dispatch({type: `next-i18next`, payload: getCookies(ctx, `next-i18next`)})
+  }
   const cookies = getCookies(ctx);
   const { client } = await connectToDatabase();
   const isConnected = await client.isConnected();
@@ -88,10 +95,13 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   }
 
   return {props: {
-    cookies, isConnected,
+    cookies, 
+    isConnected,
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
     profile,
-    session
+    session,
+    header,
+    chatText
   }}
 })

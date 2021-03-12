@@ -6,15 +6,25 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { setCookies,getCookies, checkCookies } from 'cookies-next';
 import Header from '../src/Header/Header'
 import { wrapper } from '../redux/store'
-import { useTheme, makeStyles } from '@material-ui/core/styles';
+import {  makeStyles } from '@material-ui/core/styles';
 import { connectToDatabase } from '../lib/mongodb';
-import { useSession,getSession, providers } from 'next-auth/client'
-import { csrfToken } from 'next-auth/client'
+import { getSession, providers } from 'next-auth/client'
+import MainPage from '../src/MainPage'
+import banner from '../public/locale/banner.json';
+import header from '../public/locale/header.json';
+import footerText from '../public/locale/footer.json';
+import faqText from '../public/locale/faq.json';
+import testimocialText from '../public/locale/testimonial.json';
+import benefitText from '../public/locale/benefit.json';
+import featureText from '../public/locale/feature.json';
 
 const useStyles = makeStyles(theme => ({
   containerWrap: {
-    marginTop: theme.spacing(10),
-    minHeight: '100vh'
+    marginTop: theme.spacing(3),
+    minHeight: '100vh',
+    '& > section': {
+      position: 'relative'
+    }
   },
   appBarSpacer: theme.mixins.toolbar,
   mainWrap: {
@@ -28,8 +38,6 @@ const useStyles = makeStyles(theme => ({
 }));
 export default function Index(props) {
   const classes = useStyles();
-  const theme = useTheme();
-  const [ session, loading] = useSession()
   
   return (
     <React.Fragment>
@@ -43,7 +51,7 @@ export default function Index(props) {
         <Header {...props} />
         <main className={classes.containerWrap}>
               <div className={classes.appBarSpacer} />
-        <Typography variant="h4" component="h1" gutterBottom>Main Page will come here</Typography>
+        <MainPage {...props}/>
         </main>
         </div>
         <Copyright />
@@ -63,6 +71,12 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   } else {
     ctx.store.dispatch({type: 'themeName', payload: getCookies(ctx, 'themeName')})
   }
+  if (!checkCookies(ctx, `next-i18next`)) {
+    setCookies(ctx, `next-i18next`, 'en'); 
+    ctx.store.dispatch({type: `next-i18next`, payload: 'en'});
+  } else {
+    ctx.store.dispatch({type: `next-i18next`, payload: getCookies(ctx, `next-i18next`)})
+  }
   const cookies = getCookies(ctx);
   const { client } = await connectToDatabase();
   const isConnected = await client.isConnected();
@@ -70,6 +84,13 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   return {props: {
     cookies,
      isConnected,
-    session
+     header,
+     banner,
+    session,
+    footerText,
+    faqText,
+    testimocialText,
+    benefitText,
+    featureText,
   }}
 })

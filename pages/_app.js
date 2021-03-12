@@ -7,14 +7,19 @@ import appTheme from '../theme/appTheme';
 import { wrapper } from '../redux/store';
 import { setCookies } from 'cookies-next';
 import {useSelector, useDispatch} from 'react-redux';
+import '../node_modules/animate.css/animate.css';
 import '../styles/app.css'
 import "../styles/loading.css"
 import '../styles/hamburger-menu.css';
+import '../styles/animate-slider.css';
+import '../styles/animate-extends.css';
+import '../styles/slick/slick-theme.css';
+import '../styles/slick/slick.css';
+import 'react-animated-slider/build/horizontal.css';
 import { Provider } from 'next-auth/client'
 import { useRouter } from 'next/router'
 import Router from 'next/router'
 import Loading from '../theme/Loding';
-
 function MyApp(props) {
   const { Component, pageProps} = props;
   const {themeType, themeName, isLoading}= useSelector(state => state)

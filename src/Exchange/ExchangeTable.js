@@ -207,11 +207,12 @@ MuiVirtualizedTable.propTypes = {
 
 const VirtualizedTable = MuiVirtualizedTable;
 
-function ExchangeTable() {
-  const {Exchange,coingeckoSymbol, PeriodicDataUpdate} = useSelector(state => state);
+function ExchangeTable(props) {
+  const {Exchange,coingeckoSymbol, PeriodicDataUpdate,"next-i18next": nextI18Next} = useSelector(state => state);
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
+  const {dashboardText} = props;
   const RowClicked = (value)=>{
       dispatch({type: 'cryptoCompareTsym', payload: value.rowData.symbol})
       setCookies(null, 'cryptoCompareTsym', value.rowData.symbol) 
@@ -232,7 +233,7 @@ function ExchangeTable() {
       clearInterval(interval)
     }
   },[Exchange])
-  
+
   return (
     <Paper style={{ height: 840, width: '100%' }}>
       {Exchange !== null &&
@@ -250,17 +251,17 @@ function ExchangeTable() {
               dataKey: 'star',
             },
           {
-            label: 'Coin',
+            label: `${dashboardText[`${nextI18Next}_exchange_label1`]}`,
             numeric: false,
             dataKey: 'symbol',
           },
           {
-            label: 'LastPrice',
+            label: `${dashboardText[`${nextI18Next}_exchange_label2`]}`,
             numeric: true,
             dataKey: 'current_price',
           },
           {
-            label: 'Change',
+            label: `${dashboardText[`${nextI18Next}_exchange_label3`]}`,
             numeric: true,
             dataKey: 'price_change_percentage_24h',
           },

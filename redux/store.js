@@ -1,6 +1,6 @@
 import { createStore } from 'redux';
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
-
+import { setCookies,getCookies, checkCookies } from 'cookies-next';
 const reducer = (state = 
   {
     themeName: 'cloud',
@@ -16,7 +16,8 @@ const reducer = (state =
     marketTradeSymbolTitle: 'BTC-USDT',
     marketTrade: null,
     isLoading: 0,
-    chat: {}
+    chat: {},
+    [`next-i18next`]: 'en'
   },
    action) =>{
   switch (action.type) {
@@ -50,6 +51,8 @@ const reducer = (state =
       return {...state, isLoading: action.payload};
       case 'chat':
         return {...state, chat: action.payload};
+        case 'next-i18next':
+          return {...state,  [`next-i18next`]: action.payload};
     default:
       return state;
   }

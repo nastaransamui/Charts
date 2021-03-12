@@ -94,9 +94,17 @@ const useStyles = makeStyles((theme) => ({
         height: 42,
         width: 42
     },
-    emojiPicker:{
-      position: 'absolute', bottom: '19%', left: '26.2%'
-    }
+    // emojiPicker:{
+    //   position: 'absolute', bottom: 1000, left: 300,
+    // },
+    dialog:{
+      position: 'absolute',
+      left: leftwidth=> leftwidth,
+      top: theme.spacing(390),
+    },
+    dialogRoot:{
+      
+    },
   }));
 export default useStyles;  
 

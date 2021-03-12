@@ -5,17 +5,13 @@ import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import {useSelector, useDispatch} from 'react-redux';
-import Button from '@material-ui/core/Button';
+import {useSelector} from 'react-redux';
+import Icon from '@material-ui/core/Icon';
+import pageLinks from '../../public/text/pageLinks'
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -44,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ClippedDrawer(props) {
   const classes = useStyles();
-  const {openDrawer} = props
-
+  const {openDrawer, header} = props
+  const {"next-i18next": nextI18Next }= useSelector(state => state)
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -61,15 +57,20 @@ export default function ClippedDrawer(props) {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            {['Home', 'About', 'Dashboard'].map((text, index) => {
-              const url = text === "Home" ? '/' : `/${text.toLowerCase()}`
-              return(
-                <ListItem button component="a" href={url}  key={text}>
-                  <ListItemIcon >{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                  <ListItemText primary={text} />
+                <ListItem button component="a" href='/' >
+                  <ListItemIcon ><Icon>homeIcon</Icon></ListItemIcon>
+                  <ListItemText primary={header[`${nextI18Next}_Home`]}  />
                 </ListItem>
-              )
-            })}
+                  {
+                    pageLinks.map((t,i)=>{
+                      return(
+                        <ListItem button component="a" href={t.url} key={i.toString()}>
+                          <ListItemIcon><Icon>{t.Icon}</Icon></ListItemIcon>
+                          <ListItemText primary={header[`${nextI18Next}_${t.title}`]}  />
+                        </ListItem>
+                      )
+                    })
+                  }
           </List>
           <Divider />
           <List></List>

@@ -22,13 +22,18 @@ import AlertDialog from '../src/components/AlertDialog'
 import { useRouter } from 'next/router'
 import Fab from '@material-ui/core/Fab';
 import {  FaFacebookF, FaGoogle,FaTwitter } from  'react-icons/fa';
-
-function Copyright() {
+import header from '../public/locale/header.json'
+import loginText from '../public/locale/login.json';
+import copyrightText from '../public/locale/copyright.json'
+import {useSelector} from 'react-redux';
+function Copyright(props) {
+  const {"next-i18next": nextI18Next }= useSelector(state => state)
+  const {copyrightText} = props;
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      {`${copyrightText[`${nextI18Next}_copyright`]} © `}
+      <Link color="inherit" href={process.env.NEXTAUTH_URL}>
+      {`${copyrightText[`${nextI18Next}_website`]}`}
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -114,7 +119,12 @@ export default function SignInSide(props) {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter()
-  const {csrfToken} = props;
+  const {"next-i18next": nextI18Next }= useSelector(state => state)
+  const {csrfToken, loginText} = props;
+  const [ loading] = useSession();
+  const [email, SetEmail] = useState('')
+  const {Dialog} = props;
+  const [session] = useSession()
   const onCancellDialog = (e) =>{
     setAlertDialogState({
       ...AlertDialogState,
@@ -145,21 +155,17 @@ export default function SignInSide(props) {
   CancellDialog: onCancellDialog
   })
 
-  const [ loading] = useSession();
 
-  const [email, SetEmail] = useState('')
-  const {Dialog} = props;
-  const [session] = useSession()
   const submit = (e) =>{
     e.preventDefault()
     setAlertDialogState({
       handleClose: onCloseDialog,
       CancellDialog: onCancellDialog,
       open: true,
-      ContentText: `Verification Email was sent to ${email} Kindly recheck and click on link.`,
-      ContentHeader:`Email Login request`,
-      closeButtom: "Agree",
-      cancelButton:"Close",
+      ContentText: `${loginText[`${nextI18Next}_verification1`]} ${email} ${loginText[`${nextI18Next}_verification2`]} `,
+      ContentHeader:`${loginText[`${nextI18Next}_login_request`]}`,
+      closeButtom: `${loginText[`${nextI18Next}_agree`]}`,
+      cancelButton:`${loginText[`${nextI18Next}_close`]}`,
     })
   }
   
@@ -172,10 +178,10 @@ export default function SignInSide(props) {
             handleClose: onCloseDialog,
             CancellDialog: onCancellDialog,
             open: true,
-            ContentText: `Verification email was sent to ${email} with link kindly recheck your email and click on link to login.`,
-            ContentHeader:`Email sends`,
-            closeButtom: "NotAgree",
-            cancelButton:"Close",
+            ContentText: `${loginText[`${nextI18Next}_verification1`]} ${email} ${loginText[`${nextI18Next}_verification2`]} `,
+            ContentHeader:`${loginText[`${nextI18Next}_login_request`]}`,
+            closeButtom: `${loginText[`${nextI18Next}_notagree`]} `,
+            cancelButton:`${loginText[`${nextI18Next}_close`]}`,
           })
         }
         if(router.query.error === "OAuthAccountNotLinked" || router.query.error === "OAuthAccountNotLinked#" && isMount){
@@ -183,10 +189,10 @@ export default function SignInSide(props) {
             handleClose: onCloseDialog,
             CancellDialog: onCancellDialog,
             open: true,
-            ContentText: `This Social Platform "email" has registerd account with us please try another platform.`,
-            ContentHeader:`Error: ${router.query.error}`,
-            closeButtom: "NotAgree",
-            cancelButton:"Close",
+            ContentText: `${loginText[`${nextI18Next}_socialerror`]}`,
+            ContentHeader:`${loginText[`${nextI18Next}_error`]} ${router.query.error}`,
+            closeButtom: `${loginText[`${nextI18Next}_notagree`]} `,
+            cancelButton:`${loginText[`${nextI18Next}_close`]}`,
           })
         }
         if(router.query.error === "Callback" && isMount){
@@ -194,10 +200,10 @@ export default function SignInSide(props) {
             handleClose: onCloseDialog,
             CancellDialog: onCancellDialog,
             open: true,
-            ContentText: `This is system ${router.query.error} Error please contact administrator.`,
-            ContentHeader:`Error: ${router.query.error}`,
-            closeButtom: "NotAgree",
-            cancelButton:"Close",
+            ContentText: `${loginText[`${nextI18Next}_system`]} ${router.query.error} ${loginText[`${nextI18Next}_adminerror`]}`,
+            ContentHeader:`${loginText[`${nextI18Next}_error`]} ${router.query.error}`,
+            closeButtom: `${loginText[`${nextI18Next}_notagree`]} `,
+            cancelButton:`${loginText[`${nextI18Next}_close`]}`,
           })
         }
         if(router.query.error === "OAuthCreateAccount" && isMount){
@@ -205,10 +211,10 @@ export default function SignInSide(props) {
             handleClose: onCloseDialog,
             CancellDialog: onCancellDialog,
             open: true,
-            ContentText: `This is system ${router.query.error} Error please contact administrator.`,
-            ContentHeader:`Error: ${router.query.error}`,
-            closeButtom: "NotAgree",
-            cancelButton:"Close",
+            ContentText: `${loginText[`${nextI18Next}_system`]} ${router.query.error} ${loginText[`${nextI18Next}_adminerror`]}`,
+            ContentHeader:`${loginText[`${nextI18Next}_error`]} ${router.query.error}`,
+            closeButtom: `${loginText[`${nextI18Next}_notagree`]} `,
+            cancelButton:`${loginText[`${nextI18Next}_close`]}`,
           })
         }
         if(router.query.error === "Verification" && isMount){
@@ -216,10 +222,10 @@ export default function SignInSide(props) {
             handleClose: onCloseDialog,
             CancellDialog: onCancellDialog,
             open: true,
-            ContentText: `This link is expired please try new link.`,
-            ContentHeader:`Error: ${router.query.error}`,
-            closeButtom: "NotAgree",
-            cancelButton:"Close",
+            ContentText: `${loginText[`${nextI18Next}_expirelink`]}`,
+            ContentHeader:`${loginText[`${nextI18Next}_error`]} ${router.query.error}`,
+            closeButtom: `${loginText[`${nextI18Next}_notagree`]} `,
+            cancelButton:`${loginText[`${nextI18Next}_close`]}`,
           })
         }
       }
@@ -276,7 +282,7 @@ export default function SignInSide(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            {loginText[`${nextI18Next}_login_singIn`]}
           </Typography>
             <Grid container direction="row" justify="space-evenly" alignItems="center" style={{padding: 20}}>
           <>{Object.values(props.providers).filter((provide) => {return provide.id !== 'email'}).map(provider => {
@@ -302,12 +308,12 @@ export default function SignInSide(props) {
               value={email}
               onChange={(e)=>SetEmail(e.target.value)}
               id="email"
-              label="Email Address"
+              label={loginText[`${nextI18Next}_login_email_label`]}
               name="email"
               autoComplete="email"
               autoFocus
               validators={['required', 'isEmail']}
-              errorMessages={['this field is required', 'email is not valid']}
+              errorMessages={[`${loginText[`${nextI18Next}_email_error_required`]}`, `${loginText[`${nextI18Next}_email_error_isEmail`]}`]}
             />
             <Button
               fullWidth
@@ -316,10 +322,10 @@ export default function SignInSide(props) {
               type="submit"
               className={classes.submit}
             >
-              Sign In
+              {loginText[`${nextI18Next}_signin_button`]}
             </Button>
             <Box mt={5}>
-              <Copyright />
+              <Copyright {...props}/>
             </Box>
             </ValidatorForm>
         </div>
@@ -347,6 +353,12 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   } else {
     ctx.store.dispatch({type: 'themeName', payload: getCookies(ctx, 'themeName')})
   }
+  if (!checkCookies(ctx, `next-i18next`)) {
+    setCookies(ctx, `next-i18next`, 'en'); 
+    ctx.store.dispatch({type: `next-i18next`, payload: 'en'});
+  } else {
+    ctx.store.dispatch({type: `next-i18next`, payload: getCookies(ctx, `next-i18next`)})
+  }
   const cookies = getCookies(ctx);
   const session = await getSession(ctx);
   if(ctx.res && session !== null ){
@@ -362,6 +374,9 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
     cookies,
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
-    session
+    session,
+    header,
+    loginText,
+    copyrightText
   }}
 })

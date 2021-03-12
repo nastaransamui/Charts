@@ -9,7 +9,6 @@ import Autorenew from '@material-ui/icons/Autorenew'
 import Tooltip from '@material-ui/core/Tooltip';
 import { Button } from '@material-ui/core';
 import {connect} from "react-redux";
-import {wrapper} from '../../redux/store';
 import { setCookies } from 'cookies-next';
 import { useSelector, useDispatch } from 'react-redux';
 import CoinData from '../../public/data/coins'
@@ -52,10 +51,11 @@ const useStyles = makeStyles((theme) => ({
 
 function Exchange(props){
     const classes = useStyles();
-    const {cryptoCompareTsym, coingeckoSymbol, PeriodicDataUpdate,Exchange} = useSelector(state => state);
+    const {cryptoCompareTsym, coingeckoSymbol, PeriodicDataUpdate,"next-i18next": nextI18Next} = useSelector(state => state);
     const [buttonValue, setButtonValue] = useState(null)
-  const dispatch = useDispatch();
-  const FavbuttonClicked = (text) =>{
+    const dispatch = useDispatch();
+    const {dashboardText} = props;
+    const FavbuttonClicked = (text) =>{
     if (text.symbol !== 'Fav') {
     setButtonValue(text.symbol)
     setCookies(null, 'coingeckoSymbol', text.symbol)
@@ -84,7 +84,7 @@ function Exchange(props){
   return(
       <Fragment>
           <FormControl size="small" className={classes.margin} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-amount">Search</InputLabel>
+          <InputLabel htmlFor="outlined-adornment-amount">{dashboardText[`${nextI18Next}_search`]}</InputLabel>
           <OutlinedInput
             value=""
             endAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
@@ -99,12 +99,12 @@ function Exchange(props){
             </Button>
           )
         })}
-        <Tooltip title="Show last price in USD">
+        <Tooltip title={dashboardText[`${nextI18Next}_autorenew`]}>
         <Autorenew />
         </Tooltip>
       </div>
       <div>
-      {buttonValue === 'usd' ? <Tabs />: <ExchangeTable />}
+      {buttonValue === 'usd' ? <Tabs {...props}/>: <ExchangeTable {...props}/>}
       </div>
       </Fragment>
   )

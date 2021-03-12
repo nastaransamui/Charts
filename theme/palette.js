@@ -3,14 +3,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#e52165',
-        light: 'rgb(234, 77, 131)',
-        dark: 'rgb(160, 23, 70)',
+        light: '#EA4D83',
+        dark: '#A01746',
         contrastText: '#fff',
       },
       secondary: {
         main: '#00BCD4',
-        light: 'rgb(51, 201, 220)',
-        dark: 'rgb(0, 131, 148)',
+        light: '#33C9DC',
+        dark: '#008394',
         contrastText: '#fff',
       }
     }
@@ -19,14 +19,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#3f51b5',
-        light: 'rgb(101, 115, 195)',
-        dark: 'rgb(44, 56, 126)',
+        light: '#6573C3',
+        dark: '#2C387E',
         contrastText: '#fff',
       },
       secondary: {
         main: '#f50057',
-        light: 'rgb(247, 51, 120)',
-        dark: 'rgb(171, 0, 60)',
+        light: '#F73378',
+        dark: '#AB003C',
         contrastText: '#fff',
       },
     },
@@ -35,14 +35,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#4caf50',
-        light: 'rgb(111, 191, 115)',
-        dark: 'rgb(53, 122, 56)',
-        contrastText: 'rgba(0, 0, 0, 0.87)',
+        light: '#6FBF73',
+        dark: '#357A38',
+        contrastText: '#000000',
       },
       secondary: {
         main: '#607D8B',
-        light: 'rgb(127, 151, 162)',
-        dark: 'rgb(67, 87, 97)',
+        light: '#7F97A2',
+        dark: '#435761',
         contrastText: '#fff',
       },
     },
@@ -51,15 +51,15 @@ module.exports = {
     palette: {
       primary: {
         main: '#ffa000',
-        light: 'rgb(255, 179, 51)',
-        dark: 'rgb(178, 112, 0)',
-        contrastText: 'rgba(0, 0, 0, 0.87)',
+        light: '#FFB333',
+        dark: '#B27000',
+        contrastText: '#000000',
       },
       secondary: {
         main: '#4caf50',
-        light: 'rgb(111, 191, 115)',
-        dark: 'rgb(53, 122, 56)',
-        contrastText: 'rgba(0, 0, 0, 0.87)',
+        light: '#6FBF73',
+        dark: '#357A38',
+        contrastText: '#000000',
       },
     },
   },
@@ -67,15 +67,15 @@ module.exports = {
     palette: {
       primary: {
         main: '#546e7a',
-        light: 'rgb(118, 139, 148)',
-        dark: 'rgb(58, 77, 85)',
+        light: '#768B94',
+        dark: '#3A4D55',
         contrastText: '#fff',
       },
       secondary: {
         main: '#f5c200',
-        light: 'rgb(247, 206, 51)',
-        dark: 'rgb(171, 135, 0)',
-        contrastText: 'rgba(0, 0, 0, 0.87)',
+        light: '#F7CE33',
+        dark: '#AB8700',
+        contrastText: '#000000',
       },
     },
   },
@@ -83,14 +83,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#673AB7',
-        light: 'rgb(133, 97, 197)',
-        dark: 'rgb(72, 40, 128)',
+        light: '#8561C5',
+        dark: '#482880',
         contrastText: '#fff',
       },
       secondary: {
         main: '#ec407a',
-        light: 'rgb(239, 102, 148)',
-        dark: 'rgb(165, 44, 85)',
+        light: '#EF6694',
+        dark: '#A52C55',
         contrastText: '#fff',
       },
     },
@@ -99,15 +99,15 @@ module.exports = {
     palette: {
       primary: {
         main: '#9c27b0',
-        light: 'rgb(175, 82, 191)',
-        dark: 'rgb(109, 27, 123)',
+        light: '#AF52BF',
+        dark: '#6D1B7B',
         contrastText: '#fff',
       },
       secondary: {
         main: '#8bc34a',
-        light: 'rgb(162, 207, 110)',
-        dark: 'rgb(97, 136, 51)',
-        contrastText: 'rgba(0, 0, 0, 0.87)',
+        light: '#A2CF6E',
+        dark: '#618833',
+        contrastText: '#000000',
       },
     },
   },
@@ -115,14 +115,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#8bc34a',
-        light: 'rgb(162, 207, 110)',
-        dark: 'rgb(97, 136, 51)',
-        contrastText: 'rgba(0, 0, 0, 0.87)',
+        light: '#A2CF6E',
+        dark: '#618833',
+        contrastText: '#000000',
       },
       secondary: {
         main: '#9c27b0',
-        light: 'rgb(175, 82, 191)',
-        dark: 'rgb(109, 27, 123)',
+        light: '#AF52BF',
+        dark: '#6D1B7B',
         contrastText: '#fff',
       },
     },
@@ -131,15 +131,15 @@ module.exports = {
     palette: {
       primary: {
         main: '#03a9f4',
-        light: 'rgb(53, 186, 246)',
-        dark: 'rgb(2, 118, 170)',
-        contrastText: 'rgba(0, 0, 0, 0.87)',
+        light: '#35BAF6',
+        dark: '#0276AA',
+        contrastText: '#000000',
       },
       secondary: {
         main: '#3f51b5',
-        light: 'rgb(101, 115, 195)',
-        dark: 'rgb(44, 56, 126)',
-        contrastText: 'rgba(0, 0, 0, 0.87)',
+        light: '#6573C3',
+        dark: '#2C387E',
+        contrastText: '#000000',
       },
     },
   },
@@ -147,14 +147,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#EF6C00',
-        light: 'rgb(242, 137, 51)',
-        dark: 'rgb(167, 75, 0)',
+        light: '#F28933',
+        dark: '#A74B00',
         contrastText: '#fff',
       },
       secondary: {
         main: '#9C27B0',
-        light: 'rgb(175, 82, 191)',
-        dark: 'rgb(109, 27, 123)',
+        light: '#AF52BF',
+        dark: '#6D1B7B',
         contrastText: '#fff',
       },
     },
@@ -163,14 +163,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#009688',
-        light: 'rgb(51, 171, 159)',
-        dark: 'rgb(0, 105, 95)',
+        light: '#33AB9F',
+        dark: '#00695F',
         contrastText: '#fff',
       },
       secondary: {
         main: '#76ff02',
-        light: 'rgb(134, 178, 95)',
-        dark: 'rgb(72, 111, 39)',
+        light: '#86B25F',
+        dark: '#486F27',
         contrastText: '#fff',
       },
     },
@@ -179,14 +179,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#f44336',
-        light: 'rgb(246, 104, 94)',
-        dark: 'rgb(170, 46, 37)',
+        light: '#F6685E',
+        dark: '#AA2E25',
         contrastText: '#fff',
       },
       secondary: {
         main: '#607d8b',
-        light: 'rgb(127, 151, 162)',
-        dark: 'rgb(67, 87, 97)',
+        light: '#7F97A2',
+        dark: '#435761',
         contrastText: '#fff',
       },
     },
@@ -195,14 +195,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#FF9100',
-        light: 'rgb(255, 167, 51)',
-        dark: 'rgb(178, 101, 0)',
+        light: '#FFA733',
+        dark: '#B26500',
         contrastText: '#fff',
       },
       secondary: {
         main: '#8d6e63',
-        light: 'rgb(163, 139, 130)',
-        dark: 'rgb(98, 77, 69)',
+        light: '#A38B82',
+        dark: '#624D45',
         contrastText: '#fff',
       },
     },
@@ -211,14 +211,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#689F38',
-        light: 'rgb(134, 178, 95)',
-        dark: 'rgb(72, 111, 39)',
+        light: '#86B25F',
+        dark: '#486F27',
         contrastText: '#fff',
       },
       secondary: {
         main: '#F06292',
-        light: 'rgb(243, 129, 167)',
-        dark: 'rgb(168, 68, 102)',
+        light: '#F381A7',
+        dark: '#A84466',
         contrastText: '#fff',
       },
     },
@@ -227,14 +227,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#00BCD4',
-        light: 'rgb(51, 201, 220)',
-        dark: 'rgb(0, 131, 148)',
+        light: '#33C9DC',
+        dark: '#008394',
         contrastText: '#fff',
       },
       secondary: {
         main: '#F06292',
-        light: 'rgb(243, 129, 167)',
-        dark: 'rgb(168, 68, 102)',
+        light: '#F381A7',
+        dark: '#A84466',
         contrastText: '#fff',
       },
     },
@@ -243,14 +243,14 @@ module.exports = {
     palette: {
       primary: {
         main: '#795548',
-        light: 'rgb(147, 119, 108)',
-        dark: 'rgb(84, 59, 50)',
+        light: '#93776C',
+        dark: '#543B32',
         contrastText: '#fff',
       },
       secondary: {
         main: '#18ffff',
-        light: 'rgb(70, 255, 255)',
-        dark: 'rgb(16, 178, 178)',
+        light: '#46FFFF',
+        dark: '#10B2B2',
         contrastText: '#fff',
       },
     },
@@ -259,15 +259,15 @@ module.exports = {
     palette: {
       primary: {
         main: '#00f5ff',
-        light: 'rgb(51, 247, 255)',
-        dark: 'rgb(0, 171, 178)',
-        contrastText: 'rgba(0, 0, 0, 0.87)',
+        light: '#33F7FF',
+        dark: '#00ABB2',
+        contrastText: '#000000',
       },
       secondary: {
         main: '#e8ff18',
-        light: 'rgb(236, 255, 70)',
-        dark: 'rgb(162, 178, 16)',
-        contrastText: 'rgba(0, 0, 0, 0.87)',
+        light: '#ECFF46',
+        dark: '#A2B210',
+        contrastText: '#000000',
       },
     },
   },

@@ -11,7 +11,8 @@ function ChartNormalize(props){
         PeriodicDataUpdate,
         coingeckoSymbol, 
         cryptoCompareTsym,
-        candleChartData
+        candleChartData,
+        "next-i18next": nextI18Next 
     } = useSelector(state => state)
     const [intervalTimer, SetIntervalTimer] = useState(PeriodicDataUpdate === "day" ? 86400000 : PeriodicDataUpdate === "hour" ? 3600000 : 60000)
     // Update interval timer base on PeriodicDataUpdate
@@ -88,9 +89,11 @@ function ChartNormalize(props){
     return(
         <Fragment>
             {data !== null && <MainChart 
+            {...props}
             data={data} 
             height={450} 
             TraidingView={TraidingView}
+            nextI18Next={nextI18Next}
             PeriodicDataUpdate={PeriodicDataUpdate}/>}
         </Fragment>
     )

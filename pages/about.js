@@ -17,6 +17,9 @@ import { connectToDatabase } from '../lib/mongodb';
 import { signIn, signOut, useSession,getSession, providers } from 'next-auth/client';
 import { csrfToken } from 'next-auth/client'
 import AboutPage from '../src/About/AboutPage'
+import header from '../public/locale/header.json'
+
+
 const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(10),
@@ -46,7 +49,7 @@ export default function About(props) {
     <Header {...props} />
     <main className={classes.containerWrap}>
     <div className={classes.appBarSpacer} />
-        <AboutPage />
+        <AboutPage {...props}/>
     </main>
     </div>
     </Fragment>
@@ -65,6 +68,12 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   } else {
     ctx.store.dispatch({type: 'themeName', payload: getCookies(ctx, 'themeName')})
   }
+  if (!checkCookies(ctx, `next-i18next`)) {
+    setCookies(ctx, `next-i18next`, 'en'); 
+    ctx.store.dispatch({type: `next-i18next`, payload: 'en'});
+  } else {
+    ctx.store.dispatch({type: `next-i18next`, payload: getCookies(ctx, `next-i18next`)})
+  }
   const cookies = getCookies(ctx);
   const { client } = await connectToDatabase();
   const isConnected = await client.isConnected();
@@ -73,6 +82,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
     cookies, isConnected,
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
-    session
+    session,
+    header
   }}
 })

@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SimpleTabs() {
+export default function SimpleTabs(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -90,7 +90,7 @@ export default function SimpleTabs() {
       {
         TabsValue.map((t,i)=>{
           return (<TabPanel key={i} value={value} index={i}>
-            <ExchangeTable />
+            <ExchangeTable {...props}/>
           </TabPanel>)
         })
       }

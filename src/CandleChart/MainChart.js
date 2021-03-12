@@ -129,25 +129,25 @@ const minuteFormat = timeFormat("%H:%M:%S")
 const numberFormat = format(".6f");
 const formatNumber = (n,m)=>{return format(`.${m}f`)(n)}
 
-function tooltipContent(ys,displayDateFormat) {
+function tooltipContent(ys,displayDateFormat, dashboardText,nextI18Next) {
     return ({ currentItem, xAccessor }) => {
 		return {
 			x: displayDateFormat(xAccessor(currentItem)),
 			y: [
 				{
-					label: "open",
+					label: dashboardText[`${nextI18Next}_chart_open`],
 					value: currentItem.open && formatNumber(currentItem.open, currentItem.open.countDecimals())
 				},
 				{
-					label: "high",
+					label: dashboardText[`${nextI18Next}_chart_high`],
 					value: currentItem.high && formatNumber(currentItem.high, currentItem.high.countDecimals())
 				},
 				{
-					label: "low",
+					label: dashboardText[`${nextI18Next}_chart_low`],
 					value: currentItem.low && formatNumber(currentItem.low, currentItem.low.countDecimals())
 				},
 				{
-					label: "close",
+					label: dashboardText[`${nextI18Next}_chart_close`],
 					value: currentItem.close && formatNumber(currentItem.close, currentItem.close.countDecimals())
 				}
 			]
@@ -274,7 +274,9 @@ class CandleStickChart extends Component {
             ratio,
             classes,
             TraidingView,
-            PeriodicDataUpdate
+            PeriodicDataUpdate,
+            dashboardText,
+            nextI18Next
         } = this.props
         const {
             ShowTraid,
@@ -367,7 +369,7 @@ class CandleStickChart extends Component {
                                 <Tooltip arrow 
                                 placement="bottom" 
                                 key={i} 
-                                title={this.state[`${t.state}`] ? t.titleHide : t.titleShow}
+                                title={this.state[`${t.state}`] ? t[`${nextI18Next}_titleHide`] : t[`${nextI18Next}_titleShow`]}
                                 classes={{ tooltip: this.state[`${t.state}`] ? classes.toolTip : classes.toolTipOff, arrow: this.state[`${t.state}`] ? classes.toolTipArrow : classes.toolTipArrowOff}}>
                                     {
                                         !t.secondState  ? 
@@ -475,13 +477,13 @@ class CandleStickChart extends Component {
                             ohlcFormat={(d)=>{return formatNumber(d, decimalNumber)}}
                             xDisplayFormat={displayDateFormat}
                             displayTexts={{
-                                d: `${PeriodicDataUpdate.toUpperCase()}: `,
-                                o: " O: ",
-                                h: " H: ",
-                                l: " L: ",
-                                c: " C: ",
-                                v: " Vol: ",
-                                na: "n/a"
+                                d: `${dashboardText[`${nextI18Next}_chart_${PeriodicDataUpdate}`].toUpperCase()}: `,
+                                o:  ` ${dashboardText[`${nextI18Next}_chart_open`]} `,
+                                h: ` ${dashboardText[`${nextI18Next}_chart_high`]} `,
+                                l:` ${dashboardText[`${nextI18Next}_chart_low`]} `,
+                                c: ` ${dashboardText[`${nextI18Next}_chart_close`]} `,
+                                v: ` ${dashboardText[`${nextI18Next}_chart_vol`]} `,
+                                na: ` ${dashboardText[`${nextI18Next}_chart_na`]} `,
                             }}
 							accessor={(d)=>{
 									return {
@@ -509,7 +511,7 @@ class CandleStickChart extends Component {
                                         value: d => numberFormat(ema50.accessor()(d)),
                                         stroke: ema50.stroke()
                                     }
-                                ], displayDateFormat)}
+                                ], displayDateFormat, dashboardText,nextI18Next)}
                                 fontSize={12}
                                 fill= {theme.palette.primary.main}
                                 bgFill={theme.palette.primary.main}

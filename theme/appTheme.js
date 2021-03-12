@@ -18,6 +18,9 @@ import palette from '../theme/palette';
     },
     overrides: {
       MuiPaper:{
+        rounded:{
+          // borderRadius: 12
+        },
         root:{
           // backgroundColor: '#ffff00'
         },

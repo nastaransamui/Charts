@@ -108,7 +108,6 @@ const useStyles = makeStyles((theme) => ({
       const classes = useStyles();
       const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
       const fixedMiddleHeightPaper = clsx(classes.paper, classes.fixedMiddleHeight);
-
       return(
           <div className={classes.root}>
               <CssBaseline />
@@ -118,34 +117,34 @@ const useStyles = makeStyles((theme) => ({
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={6} lg={2}>
                       <Paper className={fixedHeightPaper}>
-                          <Exchange />
+                          <Exchange {...props}/>
                       </Paper>
                     </Grid>
                     <Grid item xs={12} md={6} lg={6}>
                       <div >
                         <Paper >
-                          <CandleChart />
+                          <CandleChart {...props}/>
                         </Paper>
                       </div>
                       <div >
-                        <Paper >
+                        <Paper style={{minHeight: 410}}>
                           <UserPurchase {...props}/>
                         </Paper>
                       </div>
                     </Grid>
                     <Grid item xs={12} md={6} lg={2}>
                       <Paper className={fixedHeightPaper}>
-                        <Orderbooks />
+                        <Orderbooks {...props}/>
                       </Paper>
                     </Grid>
                     <Grid item xs={12} md={6} lg={2}>
                       <Paper className={fixedHeightPaper}>
-                        <MarketTrades />
+                        <MarketTrades {...props}/>
                       </Paper>
                     </Grid>
                     <Grid item xs={12} md={12} lg={12}>
                       <Paper className={classes.paper}>
-                        <OrderReport />
+                        <OrderReport {...props}/>
                       </Paper>
                     </Grid>
                   </Grid>

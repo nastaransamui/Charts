@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import TickerNavbar from './TickerNavbar'
 
 
-function Index(){
+function Index(props){
     const {Exchange, coingeckoSymbol, cryptoCompareTsym} = useSelector(state => state)
     const [tabCoin, setTabCoin] = useState(null)
     const [QouteCoin, setQouteCoin] = useState(null)
@@ -33,6 +33,7 @@ function Index(){
                 SinglePareData !== null &&
                 <>
                 <TickerNavbar 
+                {...props}
                 tabCoin={tabCoin} 
                 QouteCoin={QouteCoin} 
                 SinglePareData={SinglePareData}/>

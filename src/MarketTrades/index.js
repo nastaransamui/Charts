@@ -28,7 +28,7 @@ const TabsValue =[
             {TabsValue.map((t,i)=>( <Tab label={marketTradeSymbolTitle} key={i} {...a11yProps(i)} classes={{root: classes.tabsRoot }} />))}
             </Tabs>
             </AppBar> 
-            <MarketTrade  />
+            <MarketTrade  {...props}/>
         </Fragment>
     )
   }

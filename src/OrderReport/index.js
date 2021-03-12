@@ -11,7 +11,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-
+import Moment from 'react-moment';
 import {useSelector, useDispatch} from 'react-redux';
 import { getCookies, setCookies, removeCookies } from 'cookies-next';
 import {connect} from "react-redux";
@@ -52,29 +52,44 @@ function a11yProps(index) {
   };
 }
 // Generate Order Data
-function createData(id, time, pair, type, side, price, amount, total, trigger, status, action) {
-  return { id, time, pair, type, side, price, amount, total, trigger, status, action };
+function createData(id, time, pair, en_type, cn_type, side, price, amount, total, en_trigger, cn_trigger, en_status, cn_status, en_action, cn_action) {
+  return { id, time, pair, en_type, cn_type, side, price, amount, total, en_trigger, cn_trigger, en_status, cn_status, en_action, cn_action };
 }
 
 const rows = [
-  createData(0, '2020-12-20T20:42:21.676Z', 'USD/BTC', 'Tupelo, MS', '3719', 312.44, 1.3444, 12, 'trigger', 'status', 'action'),
-  createData(1, '2020-12-20T20:42:21.676Z', 'USD/LTC', 'London, UK', '2574', 866.99, 1.3444, 12, 'trigger', 'status', 'action'),
-  createData(2, '2020-12-20T20:42:21.676Z', 'ETH/ADA', 'Boston, MA', '1253', 100.81, 1.3444, 12, 'trigger', 'status', 'action'),
-  createData(3, '2020-12-20T20:42:21.676Z', 'BCH/BSV', 'Gary, IN', '2000', 654.39, 1.3444, 12, 'trigger', 'status', 'action'),
-  createData(4, '2020-12-20T20:42:21.676Z', 'BNB/XMR', 'Long Branch, NJ', '5919', 212.79, 1.3444, 12, 'trigger', 'status', 'action'),
+  createData(0, '2020-12-20T20:42:21.676Z', 'USD/BTC', 'Tupelo, MS', '密西西比州图珀洛', '3719', 312.44, 1.3444, 12, 'trigger', '扳机', 'status', '状态', 'action','行动'),
+  createData(1, '2020-12-20T20:42:21.676Z', 'USD/LTC', 'London, UK', '英国伦敦', '2574', 866.99, 1.3444, 12, 'trigger', '扳机', 'status', '状态', 'action','行动'),
+  createData(2, '2020-12-20T20:42:21.676Z', 'ETH/ADA', 'Boston, MA', '马萨诸塞州波士顿', '1253', 100.81, 1.3444, 12, 'trigger', '扳机', 'status', '状态', 'action','行动'),
+  createData(3, '2020-12-20T20:42:21.676Z', 'BCH/BSV', 'Gary, IN',  '加里，印第安纳州', '2000', 654.39, 1.3444, 12, 'trigger', '扳机', 'status', '状态', 'action','行动'),
+  createData(4, '2020-12-20T20:42:21.676Z', 'BNB/XMR', 'Long Branch, NJ', '新泽西州长分公司', '5919', 212.79, 1.3444, 12, 'trigger', '扳机', 'status', '状态', 'action','行动'),
 ];
 
 function preventDefault(event) {
   event.preventDefault();
 }
 const TabsValue =[
-  'Open Orders',
-  'Order History',
+  {
+    en:  'Open Orders',
+    cn: "未结订单"
+  },
+  {
+    en: 'Order History',
+    cn: '订单历史'
+  }
 ]
 const ButtonValue = [
-  'Ordinary',
-  'Stop-Limit',
-  'TriggerOrder'
+  {
+    en:  'Ordinary',
+    cn: '普通的'
+  },
+  {
+    en: 'Stop-Limit',
+    cn: "停止限制"
+  },
+  {
+    en: 'Trigger Order',
+    cn: '触发顺序'
+  }
 ]
 const useStyles = makeStyles((theme) => ({
   MainStyle: {
@@ -141,9 +156,10 @@ function OrderReport(props){
     const classes = useStyles();
     const theme = useTheme();
     const cookies = getCookies(null)
+    const {dashboardText} = props;
     const [value, setValue] = useState(0);
     const [SinglePareData, setSinglePareData] = useState(null)
-    const {Exchange, coingeckoSymbol, cryptoCompareTsym}= useSelector(state => state)
+    const {Exchange, coingeckoSymbol, cryptoCompareTsym, "next-i18next": nextI18Next}= useSelector(state => state)
     useEffect(()=>{
       if(Exchange !== null){
         Exchange.forEach(element =>{
@@ -168,7 +184,7 @@ function OrderReport(props){
                     {
                       TabsValue.map((t,i)=>{
                         return(
-                          <Tab label={t} key={i} {...a11yProps(i)} classes={{root: classes.tabsRoot }} />
+                          <Tab label={t[`${nextI18Next}`]} key={i} {...a11yProps(i)} classes={{root: classes.tabsRoot }} />
                         )
                       })
                     }
@@ -193,7 +209,7 @@ function OrderReport(props){
                       ButtonValue.map((t,i)=>{
                         return(
                           <Button key={i} variant="outlined" classes={{root: classes.buttonRoots}}>
-                            {t}
+                            {t[`${nextI18Next}`]}
                           </Button>
                         )
                       })
@@ -201,38 +217,38 @@ function OrderReport(props){
                   </span>
                   </div>
                   {
-                    t === 'Open Orders' ? 
+                    t.en === 'Open Orders' ? 
                     <Fragment>
-                      <div>{t}</div>
+                      <div>{t[`${nextI18Next}`]}</div>
                     <Table size="small" className={classes.MainTable}>
                       <TableHead >
                         <TableRow >
-                          <TableCell  classes={{ root: classes.tablecell }}>Time</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Pair</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Type</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Side</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Price(USDT)</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Amount({SinglePareData.symbol.toUpperCase()})</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Total(USDT)</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Trigger condition</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Status</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Action</TableCell>
+                          <TableCell  classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table0`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table1`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table2`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table3`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table4`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table5`]}({SinglePareData.symbol.toUpperCase()})</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table6`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table7`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table8`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table9`]}</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         {rows.map((row)=>{
                           return(
                             <TableRow style={{height: "10px"}} key={row.id} >
-                              <TableCell style={{height: "10px"}}>{row.time}</TableCell>
+                              <TableCell style={{height: "10px"}}><Moment locale={nextI18Next === "cn" && "zh_cn"  }format="MMMM Do YYYY, h:mm a">{row.time}</Moment></TableCell>
                           <TableCell style={{height: "10px"}}>{row.pair}</TableCell>
-                          <TableCell style={{height: "10px"}}>{row.type}</TableCell>
+                          <TableCell style={{height: "10px"}}>{row[`${nextI18Next}_type`]}</TableCell>
                           <TableCell style={{height: "10px"}}>{row.side}</TableCell>
                           <TableCell style={{height: "10px"}}>{row.price}</TableCell>
                           <TableCell style={{height: "10px"}}>{row.amount}</TableCell>
                           <TableCell style={{height: "10px"}}>{row.total}</TableCell>
-                          <TableCell style={{height: "10px"}}>{row.trigger}</TableCell>
-                          <TableCell style={{height: "10px"}}>{row.status}</TableCell>
-                          <TableCell style={{height: "10px"}}>{row.action}</TableCell>
+                          <TableCell style={{height: "10px"}}>{row[`${nextI18Next}_trigger`]}</TableCell>
+                          <TableCell style={{height: "10px"}}>{row[`${nextI18Next}_status`]}</TableCell>
+                          <TableCell style={{height: "10px"}}>{row[`${nextI18Next}_action`]}</TableCell>
                             </TableRow>
                           )
                         })}
@@ -241,20 +257,20 @@ function OrderReport(props){
                     </Fragment>
                     :
                     <Fragment>
-                      <div>{t}</div>
+                      <div>{t[`${nextI18Next}`]}</div>
                     <Table size="small" className={classes.MainTable}>
                       <TableHead >
                         <TableRow >
-                          <TableCell  classes={{ root: classes.tablecell }}>Time</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Pair</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Type</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Side</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Price(USDT)</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Amount({SinglePareData.symbol.toUpperCase()})</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Total(USDT)</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Trigger condition</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Status</TableCell>
-                          <TableCell classes={{ root: classes.tablecell }}>Action</TableCell>
+                        <TableCell  classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table0`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table1`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table2`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table3`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table4`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table5`]}({SinglePareData.symbol.toUpperCase()})</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table6`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table7`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table8`]}</TableCell>
+                          <TableCell classes={{ root: classes.tablecell }}>{dashboardText[`${nextI18Next}_orderReport_table9`]}</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -263,14 +279,14 @@ function OrderReport(props){
                             <TableRow style={{height: "10px"}} key={row.id} >
                               <TableCell style={{height: "10px"}}>{row.time}</TableCell>
                           <TableCell style={{height: "10px"}}>{row.pair}</TableCell>
-                          <TableCell style={{height: "10px"}}>{row.type}</TableCell>
+                          <TableCell style={{height: "10px"}}>{row[`${nextI18Next}_type`]}</TableCell>
                           <TableCell style={{height: "10px"}}>{row.side}</TableCell>
                           <TableCell style={{height: "10px"}}>{row.price}</TableCell>
                           <TableCell style={{height: "10px"}}>{row.amount}</TableCell>
                           <TableCell style={{height: "10px"}}>{row.total}</TableCell>
-                          <TableCell style={{height: "10px"}}>{row.trigger}</TableCell>
-                          <TableCell style={{height: "10px"}}>{row.status}</TableCell>
-                          <TableCell style={{height: "10px"}}>{row.action}</TableCell>
+                          <TableCell style={{height: "10px"}}>{row[`${nextI18Next}_trigger`]}</TableCell>
+                          <TableCell style={{height: "10px"}}>{row[`${nextI18Next}_status`]}</TableCell>
+                          <TableCell style={{height: "10px"}}>{row[`${nextI18Next}_action`]}</TableCell>
                             </TableRow>
                           )
                         })}

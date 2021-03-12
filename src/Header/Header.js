@@ -20,29 +20,34 @@ import palette from '../../theme/palette'
 import PaletteIcon from '@material-ui/icons/Palette';
 import LogoSvg  from './logo';
 import {  useRouter } from 'next/router'
-import Router from 'next/router'
+import pageLinks from '../../public/text/pageLinks'
 import useStyles from './header-styles';
 import LeftDrawer from '../Drawer/Drawer';
-import { signIn, signOut, useSession,getSession, providers, signout } from 'next-auth/client'
+import { signOut, useSession} from 'next-auth/client'
 import AlertDialog from '../components/AlertDialog'
 import LoadingBar from 'react-top-loading-bar'
+import LangIcon from '@material-ui/icons/Language';
+import {langName} from '../../public/locale/langName'
+
 function Header(props){
   const classes = useStyles();
-  const {toggleDarkTheme} = props;
+  const {toggleDarkTheme,header} = props;
   const [session,loading] = useSession()
   const router = useRouter()
-  const {themeType, themeName, isLoading}= useSelector(state => state)
+  const {themeType, themeName, isLoading, "next-i18next": nextI18Next }= useSelector(state => state)
   const dispatch = useDispatch();
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorElTheme, setAnchorElTheme] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElTheme, setAnchorElTheme] = useState(null);
+  const [anchorElLang, setAnchorElLang] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isThemeOpen = Boolean(anchorElTheme);
+  const isLangOpen = Boolean(anchorElLang);
   const ThemeId = isThemeOpen ? 'theme-popover' : undefined;
   const menuId = 'account-menu';
+  const langId = 'lang-menu';
   const [Progress, SetProgress] = useState(isLoading)
-
   useEffect(()=>{
     let isMount = true
     if (isMount) {
@@ -100,6 +105,9 @@ function Header(props){
   const closeThemeName = () => {
     setAnchorElTheme(null);
   };
+  const closeLang = () => {
+    setAnchorElLang(null);
+  };
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -114,17 +122,26 @@ function Header(props){
 
   }
 
-  
+  const ChangeLang = (event) =>{
+    setAnchorElLang(event.currentTarget)
+  }
+
+  const LanguageClicked = (lang)=>{
+    setCookies(null, `next-i18next`,lang.LangCode);
+    dispatch({type: `next-i18next`, payload: lang.LangCode})
+    setAnchorElLang(null)
+  }
+
 function SingOut() {
     
       setAnchorEl(null);
       setAlertDialogState({
         handleClose: onCloseDialog,
         open: true,
-        ContentText: `Are you sure, you want to logout from panel`,
-        ContentHeader: `Sing Out request`,
-        closeButtom: "Agree",
-        cancelButton:"Close",
+        ContentText: `${header[`${nextI18Next}_signout_text`]}`,
+        ContentHeader: `${header[`${nextI18Next}_signout_header`]}`,
+        closeButtom: `${header[`${nextI18Next}_agree`]}`,
+        cancelButton: `${header[`${nextI18Next}_close`]}`,
         CancellDialog: onCancellDialog
       })
   }
@@ -140,15 +157,39 @@ function SingOut() {
       className={classes.menuItemMobile}
     >
       {session === null || session === undefined ? 
-      <MenuItem onClick={LoginClicked} >Login</MenuItem> :
+      <MenuItem onClick={LoginClicked} >{header[`${nextI18Next}_login`]}</MenuItem> :
         <span>
-        <MenuItem onClick={ChatClicked}>Chat Page</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={ChatClicked}>{header[`${nextI18Next}_chat`]}</MenuItem>
+      <MenuItem onClick={handleMenuClose}>{header[`${nextI18Next}_account`]}</MenuItem>
       <MenuItem component="a" 
-      onClick={() => {SingOut() }}>Sign Out</MenuItem>
+      onClick={() => {SingOut() }}>{header[`${nextI18Next}_singout`]}</MenuItem>
       </span>}
     </Menu>
   );
+  const renderLanguage = (
+    <Menu
+    anchorEl={anchorElLang}
+    anchorOrigin={{ vertical: 'top', horizontal: 'right'}}
+    id={langId}
+    keepMounted
+    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+    open={isLangOpen}
+    onClose={closeLang}
+    className={classes.menuItemMobile}>
+      {
+        langName.map((d,i)=>{
+          return(
+            <MenuItem 
+            key={i.toString()} 
+            onClick={()=>{LanguageClicked(d)}}>
+              <img src={`/lang/${d.Flag}`} alt={d.Lang} className={classes.flag} /> &nbsp;
+              <span className={classes.menuItemText}>{header[`${nextI18Next}_${d.title}`]}</span>
+            </MenuItem>
+          )
+        })
+      }
+    </Menu>
+  )
 
   return(
     <div className={classes.grow}>
@@ -158,7 +199,7 @@ function SingOut() {
       onLoaderFinished={() => SetProgress(0)}
       progress={Progress} />
       <AlertDialog {...AlertDialogState} />
-      <LeftDrawer openDrawer={openDrawer}/>
+      <LeftDrawer openDrawer={openDrawer} {...props}/>
         <>
           <AppBar  position="fixed" className={classes.appBar}>
             <Toolbar>
@@ -183,13 +224,28 @@ function SingOut() {
                     </Link>
                 </div>
                 <span className={classes.mobileMenu}>
-                <Button component="a" href="/dashboard"  onClick={()=>router.push('/dashboard', undefined, { shallow: true })}><Typography  className={classes.headerButtons}>Dashboard</Typography></Button>
-                <Button  component="a" href='/about' onClick={()=>router.push('/about', undefined, { shallow: true })}><Typography  className={classes.headerButtons}>About</Typography></Button>
-                </span>
+                  {
+                    pageLinks.map((t,i)=>{
+                      return(
+                        <Button key={i.toString()} component="a" href={t.url} onClick={()=>router.push(`${t.url}`, undefined, {shallow: t.shallow})}>
+                            <Typography  className={classes.headerButtons}>{header[`${nextI18Next}_${t.title}`]}</Typography>
+                        </Button>
+                      )
+                    })
+                  }
+                   </span>
               </div>
               <div className={classes.grow} />
               <div 
             className={classes.headerButtons}>
+              <IconButton
+              aria-label="show more"
+              aria-haspopup="true"
+              onClick={ChangeLang}
+              color="inherit"
+            >
+            <LangIcon />
+            </IconButton>
               <IconButton
               aria-label="show more"
               aria-haspopup="true"
@@ -231,6 +287,7 @@ function SingOut() {
             </Toolbar>
           </AppBar>
       {renderMenu}
+      {renderLanguage}
         <Popover 
           anchorReference="anchorPosition"
           id={ThemeId}

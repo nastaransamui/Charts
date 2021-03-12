@@ -20,6 +20,7 @@ const ChatPage = (props) => {
     const [Msg, setMsg] = useState([])
     const [ChatValue, setChatValue] = useState('')
     const [reciver, setReciver] = useState(null)
+    const [leftwidth, setLeftwidth] = useState(null)
     const socket = io();
     var key = process.env.SECRET;
     useEffect(()=>{
@@ -76,17 +77,16 @@ const ChatPage = (props) => {
         })
     }
 
-
     return(
         <div>
             <Grid container>
-                <ChatHeaderPage />
+                <ChatHeaderPage {...props}/>
                 <Grid container component={Paper} className={classes.chatSection}>
-                    <ChatLeftPanel users={users} UserClicked={UserClicked}/>
+                    <ChatLeftPanel users={users} UserClicked={UserClicked} {...props} leftwidth={leftwidth} setLeftwidth={setLeftwidth} />
                     <Grid item xs={9}>
-                        {reciver !== null && <ChatBody Msg={Msg} reciver={reciver} profile={profile} />}
+                        {reciver !== null && <ChatBody Msg={Msg} reciver={reciver} profile={profile} {...props}/>}
                         <Divider />
-                        {reciver !==null && <ChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue}/>}
+                        {reciver !==null && <ChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue} {...props}  leftwidth={leftwidth}/>}
                     </Grid>
                 </Grid>
             </Grid>

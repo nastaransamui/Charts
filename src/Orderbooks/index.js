@@ -8,12 +8,13 @@ import Tab from '@material-ui/core/Tab';
 import {a11yProps} from '../CandleChart/TickerNavbar'
 const TabsValue =[
     {
-      value: 'Pair coins',
+      en_value: 'Pair coins',
+      cn_value: '配对硬币',
       id: 1
     },
   ]
 function index(props){
-    const {pairSymbol} = useSelector(state => state)
+    const {pairSymbol, "next-i18next": nextI18Next} = useSelector(state => state)
     const [pairSymbolData, setpairSymbolData] = useState(pairSymbol.data);
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
@@ -37,12 +38,12 @@ function index(props){
                         classes={{ root: classes.tabsRoot }} >
                             {
                                 TabsValue.map((t,i)=>(
-                                    <Tab label={t.value} key={i} {...a11yProps(i)} classes={{root: classes.tabsRoot }} />
+                                    <Tab label={t[`${nextI18Next}_value`]} key={i} {...a11yProps(i)} classes={{root: classes.tabsRoot }} />
                                 ))
                             }
                         </Tabs>
                     </AppBar>
-            <Orderbooks pairSymbolData={pairSymbolData}/>
+            <Orderbooks {...props} pairSymbolData={pairSymbolData}/>
         </Fragment>
     )
 }
