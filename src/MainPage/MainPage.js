@@ -17,19 +17,19 @@ function MainPage(props){
                 <Banner {...props} />
             </section>
           <section id="promotions">
-            <Promotion {...props}/>
+//             <Promotion {...props}/>
           </section>
           <section id="feature" >
-            <Feature {...props}/>
+//             <Feature {...props}/>
           </section>
           <section id="feature" >
-            <Benefit {...props}/>
+//             <Benefit {...props}/>
           </section>
           <section id="testimonials" className={classes.spaceTop}>
-            <Testimonials {...props}/>
+//             <Testimonials {...props}/>
           </section>
           <section id="testimonials" className={classes.spaceTop}>
-            <Faq {...props}/>
+//             <Faq {...props}/>
           </section>
           <section id="testimonials" >
             <FooterWithCounter {...props}/>
