@@ -14,7 +14,7 @@ function MainPage(props){
     return(
         <Fragment>
             <section id="banner">
-//                 <Banner {...props} />
+              <Banner {...props} />
             </section>
           <section id="promotions">
             <Promotion {...props}/>
