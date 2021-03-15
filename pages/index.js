@@ -51,7 +51,8 @@ export default function Index(props) {
         <Header {...props} />
         <main className={classes.containerWrap}>
               <div className={classes.appBarSpacer} />
-        <MainPage {...props}/>
+    Main Page
+//         <MainPage {...props}/>
         </main>
         </div>
         <Copyright />
