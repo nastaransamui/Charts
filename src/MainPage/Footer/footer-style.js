@@ -11,7 +11,7 @@ const footerStyles = makeStyles(theme =>({
         position: 'relative',
         padding: theme.spacing(10, 0),
         '& p': {
-          color: theme.palette.common.white,
+          color: theme.palette.text.primary,
           [theme.breakpoints.down('xs')]: {
             textAlign: 'center'
           },
@@ -29,7 +29,7 @@ const footerStyles = makeStyles(theme =>({
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
-          color: theme.palette.common.white,
+          color: theme.palette.text.primary,
           [theme.breakpoints.down('xs')]: {
             width: '47%'
           },
@@ -37,7 +37,7 @@ const footerStyles = makeStyles(theme =>({
             fontSize: 14,
             textTransform: 'capitalize',
             textDecoration: 'none !important',
-            color: theme.palette.common.white,
+            color: theme.palette.text.primary,
             '&:hover': {
               color: theme.palette.secondary.light
             }
@@ -158,7 +158,7 @@ const footerStyles = makeStyles(theme =>({
             width: '90%'
         },
         margin: theme.spacing(20, 40, 40),
-        color: theme.palette.common.white,
+        color: theme.palette.text.primary,
         '& span $icon': {
           top: 29,
           color: theme.palette.primary.light,

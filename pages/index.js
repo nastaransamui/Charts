@@ -18,7 +18,7 @@ import testimocialText from '../public/locale/testimonial.json';
 import benefitText from '../public/locale/benefit.json';
 import featureText from '../public/locale/feature.json';
 
-const useStyles = makeStyles(theme => ({
+export const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(3),
     minHeight: '100vh',

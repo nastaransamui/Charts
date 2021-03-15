@@ -11,7 +11,6 @@ import FooterWithCounter from './Footer/FooterWithCounter'
 
 function MainPage(props){
     const classes = useStyles();
-    console.log(props)
     return(
         <Fragment>
             <section id="banner">
