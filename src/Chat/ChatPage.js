@@ -26,13 +26,14 @@ const ChatPage = (props) => {
     useEffect(()=>{
         let isMount = true;
         if (isMount) {
-            axios.get('/api/socketio')
+            axios.get(`${process.env.NEXTAUTH_URL}/api/socketio`)
             .then((data)=>{
                 socket.sendBuffer = [];
                 // subscribe a new user
                 socket.emit("login", session.user.name);
                 // list of connected users
                 socket.on("users", data => {
+                    console.log(data)
                     setUsers(data)
                 });
                 socket.on('singOut', (data) => {
