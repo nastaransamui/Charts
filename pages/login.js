@@ -143,7 +143,7 @@ export default function SignInSide(props) {
   handleClose: onCloseDialog,
   CancellDialog: onCancellDialog
     })
-    if(email !== "") signIn('email', { email, callbackUrl: `http://localhost:3000${router.pathname}` })
+    if(email !== "") signIn('email', { email, callbackUrl: `${process.env.NEXTAUTH_URL}${router.pathname}` })
   }
   const [AlertDialogState, setAlertDialogState] =useState({
     open: false,
@@ -289,7 +289,7 @@ export default function SignInSide(props) {
             return(
               <div key={provider.name}>
             {provider.id !== 'email' && <Grid container >
-            <Fab variant="round" onClick={() =>  signIn(provider.id, { callbackUrl: `http://localhost:3000${router.pathname}` }) }
+            <Fab variant="round" onClick={() =>  signIn(provider.id, { callbackUrl: `${process.env.NEXTAUTH_URL}${router.pathname}` }) }
                 className={classes[`${provider.id}`]}>
                 {renderSocialIcon(provider)}
             </Fab>
