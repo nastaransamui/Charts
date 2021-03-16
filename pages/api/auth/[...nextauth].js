@@ -40,8 +40,14 @@ export const options = {
     updateAge: 24 * 60 * 60,
     adapter: Adapters.TypeORM.Adapter({
       type: 'mongodb',
+      url: process.env.DATABASE_URL,
       database: 'charts',
-      synchronize: true
+      synchronize: true,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      retryWrites: false,
+      socketTimeoutMS: 30000,
+      keepAlive: true,
     }),
     jwt:{
         encryption: true,

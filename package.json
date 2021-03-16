@@ -60,6 +60,6 @@
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
   },
   "peerOptionalDependencies": {
-    "mongodb": "^3.6.4"
+    "mongodb": "^3.6.3"
   }
 }
