@@ -191,7 +191,7 @@ export default function SignInSide(props) {
             open: true,
             ContentText: `${loginText[`${nextI18Next}_socialerror`]}`,
             ContentHeader:`${loginText[`${nextI18Next}_error`]} ${router.query.error}`,
-            closeButtom: `${loginText[`${nextI18Next}_notagree`]} `,
+            closeButtom: `NotAgree`,
             cancelButton:`${loginText[`${nextI18Next}_close`]}`,
           })
         }
