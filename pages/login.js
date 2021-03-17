@@ -180,7 +180,7 @@ export default function SignInSide(props) {
             open: true,
             ContentText: `${loginText[`${nextI18Next}_verification1`]} ${email} ${loginText[`${nextI18Next}_verification2`]} `,
             ContentHeader:`${loginText[`${nextI18Next}_login_request`]}`,
-            closeButtom: `${loginText[`${nextI18Next}_notagree`]} `,
+            closeButtom: `NotAgree`,
             cancelButton:`${loginText[`${nextI18Next}_close`]}`,
           })
         }

@@ -13,6 +13,8 @@ import axios from 'axios';
 import io from 'socket.io-client'
 import moment from 'moment'
 import aes256 from 'aes256'
+var Ably = require('ably');
+
 const ChatPage = (props) => {
     const classes = useStyles();
     const {session, profile} = props
@@ -21,42 +23,54 @@ const ChatPage = (props) => {
     const [ChatValue, setChatValue] = useState('')
     const [reciver, setReciver] = useState(null)
     const [leftwidth, setLeftwidth] = useState(null)
-    const socket = io();
+    var ably = new Ably.Realtime('m2oVcw.3II4_w:u-1NYIH5tM5yrzqJ');
+    var channel = ably.channels.get('test');
+    // const socket = io();
+
+    //   console.log(channel.subscribe('greeting'))
     var key = process.env.SECRET;
     useEffect(()=>{
         let isMount = true;
         if (isMount) {
-            axios.get(`${process.env.NEXTAUTH_URL}/api/socketio`)
-            .then((data)=>{
-                socket.sendBuffer = [];
-                // subscribe a new user
-                socket.emit("login", session.user.name);
-                // list of connected users
-                socket.on("users", data => {
-                    console.log(data)
-                    setUsers(data)
-                });
-                socket.on('singOut', (data) => {
-                    socket.emit("logout", session.user.name);
-                    setUsers(data)
-                  });
+            axios.post(`${process.env.NEXTAUTH_URL}/api/createTokenRequest`,{
+                userName: session.user.name
             })
+            .then((data) =>{
+               data.data.forEach(element => {
+                setUsers(element.users)
+               });
+            })
+            // axios.get(`${process.env.NEXTAUTH_URL}/api/socketio`)
+            // .then((data)=>{
+            //     socket.sendBuffer = [];
+            //     // subscribe a new user
+            //     socket.emit("login", session.user.name);
+            //     // list of connected users
+            //     socket.on("users", data => {
+            //         console.log(data)
+            //         setUsers(data)
+            //     });
+            //     socket.on('singOut', (data) => {
+            //         socket.emit("logout", session.user.name);
+            //         setUsers(data)
+            //       });
+            // })
         }
         return()=>{
             isMount = false;
-            socket.off('login');
-            socket.off('users');
-            socket.off('singOut');
-            socket.disconnect()
+            // socket.off('login');
+            // socket.off('users');
+            // socket.off('singOut');
+            // socket.disconnect()
         }
     },[])
 
     const UserClicked =(d) =>{
-        socket.emit(`room`, profile[0]._id,d._id)
-        setReciver(d)
-        socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
-            setMsg(data[d._id])
-        })
+        // socket.emit(`room`, profile[0]._id,d._id)
+        // setReciver(d)
+        // socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
+        //     setMsg(data[d._id])
+        // })
     }
  
     const SendMessage =()=>{
@@ -70,12 +84,12 @@ const ChatPage = (props) => {
         body: aes256.encrypt(key, ChatValue),
         time: now
           }
-        socket.emit("sendMsg",NewMessage,profile[0]._id,reciver._id)
-        setChatValue('')
-        socket.on(`sendMsgReturn${profile[0]._id}${reciver._id}`, data =>{
-            if(data[reciver._id] === undefined) setMsg(data[profile[0]._id])
-            if(data[profile[0]._id] === undefined) setMsg(data[reciver._id])
-        })
+        // socket.emit("sendMsg",NewMessage,profile[0]._id,reciver._id)
+        // setChatValue('')
+        // socket.on(`sendMsgReturn${profile[0]._id}${reciver._id}`, data =>{
+        //     if(data[reciver._id] === undefined) setMsg(data[profile[0]._id])
+        //     if(data[profile[0]._id] === undefined) setMsg(data[reciver._id])
+        // })
     }
 
     return(
