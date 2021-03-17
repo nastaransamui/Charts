@@ -58,7 +58,7 @@ function ChatLeftPanel(props){
         if(session !== null && session !== undefined)
         setLeftwidth(widthofLeft.current.clientWidth)
         const sizeInterval = setInterval(() => {
-            if(isMount){
+            if(isMount && widthofLeft.current !== undefined){
                 setLeftwidth(widthofLeft.current.clientWidth)
             }
         }, 300);
