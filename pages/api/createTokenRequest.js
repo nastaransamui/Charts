@@ -7,10 +7,11 @@ export default async function handler(req, res) {
     const Users = await db.collection("users");
     const tokenRequestData = await client.auth.createTokenRequest({ clientId: req.body.userName});
     const All = await Users.find({}).toArray().then((data)=>{
-        res.status(200).json([{
-            token: tokenRequestData,
-            users: data 
-        }]);
+        return data
     })
-   
+    console.log(All)
+    res.status(200).json([{
+        token: tokenRequestData,
+        users: All 
+    }]);
 };
