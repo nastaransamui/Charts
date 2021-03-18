@@ -1,17 +1,23 @@
-import Ably from "ably/promises";
+
 import {connectToDatabase } from '../../lib/mongodb'
 
 export default async function handler(req, res) {
   const { db } = await connectToDatabase();
-    const client = new Ably.Realtime(process.env.ABLY_API_KEY);
     const Users = await db.collection("users");
-    const tokenRequestData = await client.auth.createTokenRequest({ clientId: req.body.userName});
-    const All = await Users.find({}).toArray().then((data)=>{
+    const Rooms = await db.collection("rooms");
+    const pipeline = [ { $match: { runtime: { $lt: 15 } } }];
+    const changeStream = Users.watch();
+    // changeStream.on("change", (changeEvent) => { 
+    //     console.log(changeEvent)
+    //  });
+    const AllUsers = await Users.find({}).toArray().then((data)=>{
         return data
     })
-    console.log(All)
+    const AllRooms = await Rooms.find({}).toArray().then((data)=>{
+        return data
+    })
     res.status(200).json([{
-        token: tokenRequestData,
-        users: All 
+        AllRooms: AllRooms,
+        users: AllUsers 
     }]);
 };

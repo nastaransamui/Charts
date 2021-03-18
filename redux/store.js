@@ -17,9 +17,11 @@ const reducer = (state =
     marketTrade: null,
     isLoading: 0,
     chat: {},
-    [`next-i18next`]: 'en'
+    [`next-i18next`]: 'en',
+    chatUsers: []
   },
    action) =>{
+     
   switch (action.type) {
     case HYDRATE:
       return {...state, ...action.payload};
@@ -49,10 +51,12 @@ const reducer = (state =
       return {...state, marketTradeSymbolTitle: action.payload};
     case 'isLoading':
       return {...state, isLoading: action.payload};
-      case 'chat':
-        return {...state, chat: action.payload};
-        case 'next-i18next':
-          return {...state,  [`next-i18next`]: action.payload};
+    case 'chat':
+      return {...state, chat: action.payload};
+    case 'next-i18next':
+      return {...state,  [`next-i18next`]: action.payload};
+    case 'chatUsers':
+      return {...state,  chatUsers: action.payload};
     default:
       return state;
   }
