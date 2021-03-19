@@ -59,6 +59,8 @@ const ChatPage = (props) => {
 
     const UserClicked =(d) =>{
         setChatBodyLoadingRoute(true)
+        setReciver(d)
+        setMsg([])
         // socket.emit(`room`, profile[0]._id,d._id)
         // setReciver(d)
         // socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
@@ -69,8 +71,7 @@ const ChatPage = (props) => {
             guestID: d._id
         })
         .then((data)=>{
-            setReciver(d)
-            console.log(data.data.value[d._id])
+            // console.log(data.data.value[d._id])
             setMsg(data.data.value[d._id])
             setChatBodyLoadingRoute(false)
         })
@@ -134,7 +135,7 @@ const ChatPage = (props) => {
                 Reciver: reciver._id
              })
              .then((data)=>{
-                 console.log(data.data)
+                //  console.log(data.data)
                 setMsg(data.data)
              })
           }

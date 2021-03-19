@@ -55,7 +55,7 @@ function ChatBody(props){
         });
         return listItems;
     }
-
+    console.log(Msg)
       return(
         <LoadingOverlay active={ChatBodyLoadingRoute} spinner text='Loading ...' >
         <List className={classes.messageArea}>
