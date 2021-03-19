@@ -126,13 +126,15 @@ const ChatPage = (props) => {
         // })
     }
 
+
     useEffect(()=>{
         let  isMount = true;
         var CountDown = setInterval(() => {
          if(isMount && reciver !== null){
              axios.post('api/chat/getMsg',{
                 Sender: profile[0]._id,
-                Reciver: reciver._id
+                Reciver: reciver._id,
+                Msg: Msg
              })
              .then((data)=>{
                 //  console.log(data.data)
@@ -144,7 +146,7 @@ const ChatPage = (props) => {
            isMount = false
            clearInterval(CountDown)
          }
-    },[reciver])
+    },[])
 
     return(
         <div>
