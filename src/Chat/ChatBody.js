@@ -1,15 +1,17 @@
-import React, {Fragment,useRef, useEffect} from 'react';
+import React, {Fragment,useRef, useEffect, useState} from 'react';
 import useStyles from './chat-styles';
 import {List} from '@material-ui/core'
 import { useSession } from 'next-auth/client';
 import PropTypes from 'prop-types';
 import moment from 'moment'
 import aes256 from 'aes256'
+import LoadingOverlay from 'react-loading-overlay';
 function ChatBody(props){
     const classes = useStyles();
     const [session] = useSession();
-    const {Msg, profile, reciver} = props
+    const {Msg, profile, reciver, ChatBodyLoadingRoute} = props
     const messagesEndRef = useRef(null);
+
     var key = process.env.SECRET;
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -55,19 +57,22 @@ function ChatBody(props){
     }
 
       return(
+        <LoadingOverlay active={ChatBodyLoadingRoute} spinner text='Loading ...' >
         <List className={classes.messageArea}>
             <div className={classes.MainMessages}>
                 {Msg !== undefined && getCoversation(Msg)}
             </div>
             <div ref={messagesEndRef} />
         </List>
+        </LoadingOverlay>
     )
 }
 
 ChatBody.propTypes = {
     Msg: PropTypes.array.isRequired,
     reciver: PropTypes.object.isRequired,
-    profile: PropTypes.array.isRequired
+    profile: PropTypes.array.isRequired,
+    ChatBodyLoadingRoute: PropTypes.bool.isRequired,
 }
 
 export default ChatBody

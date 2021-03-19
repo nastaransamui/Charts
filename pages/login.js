@@ -26,6 +26,7 @@ import header from '../public/locale/header.json'
 import loginText from '../public/locale/login.json';
 import copyrightText from '../public/locale/copyright.json'
 import {useSelector} from 'react-redux';
+import LoadingOverlay from 'react-loading-overlay';
 function Copyright(props) {
   const {"next-i18next": nextI18Next }= useSelector(state => state)
   const {copyrightText} = props;
@@ -125,6 +126,8 @@ export default function SignInSide(props) {
   const [email, SetEmail] = useState('')
   const {Dialog} = props;
   const [session] = useSession()
+  const [LoadingRoute, setLoadingRoute] = useState(false)
+
   const onCancellDialog = (e) =>{
     setAlertDialogState({
       ...AlertDialogState,
@@ -157,7 +160,8 @@ export default function SignInSide(props) {
 
 
   const submit = (e) =>{
-    e.preventDefault()
+    e.preventDefault();
+    setLoadingRoute(!LoadingRoute)
     setAlertDialogState({
       handleClose: onCloseDialog,
       CancellDialog: onCancellDialog,
@@ -262,12 +266,12 @@ export default function SignInSide(props) {
       break;
     }
   }
-
   return (
     <Fragment>
       <Head>
         <title>Login Page</title>
       </Head>
+      <LoadingOverlay active={LoadingRoute} spinner text='Loading ...' >
       <CssBaseline />
       <AlertDialog {...AlertDialogState} />
       <div className={classes.mainWrap} style={{marginTop: !Dialog && 68}}>
@@ -289,7 +293,10 @@ export default function SignInSide(props) {
             return(
               <div key={provider.name}>
             {provider.id !== 'email' && <Grid container >
-            <Fab variant="round" onClick={() =>  signIn(provider.id, { callbackUrl: `${process.env.NEXTAUTH_URL}${router.pathname}` }) }
+            <Fab variant="round" onClick={() => {
+             signIn(provider.id, { callbackUrl: `${process.env.NEXTAUTH_URL}${router.pathname}` }) 
+             setLoadingRoute(!LoadingRoute)
+            }}
                 className={classes[`${provider.id}`]}>
                 {renderSocialIcon(provider)}
             </Fab>
@@ -334,6 +341,7 @@ export default function SignInSide(props) {
   
         </main>
       </div>
+      </LoadingOverlay>
     </Fragment>
   );
 }

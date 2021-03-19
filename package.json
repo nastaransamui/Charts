@@ -33,6 +33,7 @@
     "react-dom": "^16.14.0",
     "react-icons": "^4.1.0",
     "react-ionicons": "^1.4.6",
+    "react-loading-overlay": "^1.0.1",
     "react-material-ui-form-validator": "^2.1.2",
     "react-moment": "^1.1.1",
     "react-parallax": "^3.2.1",

@@ -527,8 +527,8 @@ class CandleStickChart extends Component {
                                     type="RAY"
                                     snap={false}
                                     snapTo={d => [d.high, d.low]}
-                                    onStart={() => console.log("START")}
-                                    onSelect={()=>console.log("Select")}
+                                    onStart={() =>{}}
+                                    onSelect={()=>{}}
                                     onComplete={this.onDrawCompleteChart1}
                                     trends={this.state.trends_1}
                                     appearance={{
@@ -553,7 +553,7 @@ class CandleStickChart extends Component {
                                 options={bb.options()}/>}
                                 {showMovingAverageTooltip && TraidingView &&
                                 <MovingAverageTooltip
-                                onClick={e => console.log(e)}
+                                onClick={e => {}}
                                 textFill={theme.palette.action.active} 
                                 origin={[0, 15]}
                                 displayFormat={(d)=>{return formatNumber(d, decimalNumber)}}

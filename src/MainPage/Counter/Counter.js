@@ -12,7 +12,7 @@ function Counter(props){
     const [play, setPlay] = useState(false);
     const router = useRouter()
     const {"next-i18next": nextI18Next }= useSelector(state => state)
-    const {footerText} = props;
+    const {footerText, setLoadingRoute, LoadingRoute} = props;
 
 
     const countup = (val, isPlay) =>{
@@ -26,6 +26,7 @@ function Counter(props){
         }, 200);
     }
     const LoginClicked = ()=>{
+        setLoadingRoute(!LoadingRoute)
         router.push('/login')
       }
     return(

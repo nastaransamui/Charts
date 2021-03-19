@@ -87,7 +87,7 @@ class MuiVirtualizedTable extends React.PureComponent {
     cellRenderer = ({ cellData, columnIndex }) => {
         const { columns, classes, rowHeight, onRowClick, Data, theme } = this.props;
         const StarClick = () =>{
-            console.log('starclic')
+            
           }
         return(
             <TableCell 

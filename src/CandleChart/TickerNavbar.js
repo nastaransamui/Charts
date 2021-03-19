@@ -104,7 +104,7 @@ function TickerNavbar(props){
                     <dd>{(SinglePareData.total_volume).toLocaleString()}</dd>
                 </dl>
                 <div className={classes.globalTheme}>
-                    <StarBorderRoundedIcon onClick={()=>console.log('star')} style={{cursor: 'pointer', marginRight: 10}}/>
+                    <StarBorderRoundedIcon onClick={()=>{}} style={{cursor: 'pointer', marginRight: 10}}/>
                 </div>
             </div>
             <div className={classes.container}>

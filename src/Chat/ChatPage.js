@@ -14,7 +14,7 @@ import axios from 'axios';
 import moment from 'moment'
 import aes256 from 'aes256'
 import {useSelector, useDispatch} from 'react-redux';
-
+import LoadingOverlay from 'react-loading-overlay';
 
 const ChatPage = (props) => {
     const classes = useStyles();
@@ -27,6 +27,8 @@ const ChatPage = (props) => {
     const {chatUsers }= useSelector(state => state)
     // const socket = io();
     const dispatch = useDispatch();
+    const [LoadingRoute, setLoadingRoute] = useState(false)
+    const [ChatBodyLoadingRoute, setChatBodyLoadingRoute] = useState(true)
     var key = process.env.SECRET;
     useEffect(()=>{
         // let isMount = true;
@@ -56,6 +58,7 @@ const ChatPage = (props) => {
     },[])
 
     const UserClicked =(d) =>{
+        setChatBodyLoadingRoute(true)
         // socket.emit(`room`, profile[0]._id,d._id)
         // setReciver(d)
         // socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
@@ -66,19 +69,22 @@ const ChatPage = (props) => {
             guestID: d._id
         })
         .then((data)=>{
-            console.log(data.data.value)
             setReciver(d)
+            console.log(data.data.value[d._id])
             setMsg(data.data.value[d._id])
+            setChatBodyLoadingRoute(false)
         })
     }
     useEffect(()=>{
         let  isMount = true;
+        setLoadingRoute(true)
         var CountDown = setInterval(() => {
          if(isMount){
              axios.post('api/chat/getUsers',{
                  userId: profile[0]._id
              })
              .then((data)=>{
+                setLoadingRoute(false)
                 setUsers(data.data)
              })
           }
@@ -128,6 +134,7 @@ const ChatPage = (props) => {
                 Reciver: reciver._id
              })
              .then((data)=>{
+                 console.log(data.data)
                 setMsg(data.data)
              })
           }
@@ -140,17 +147,19 @@ const ChatPage = (props) => {
 
     return(
         <div>
+            <LoadingOverlay active={LoadingRoute} spinner text='Loading ...' >
             <Grid container>
                 <ChatHeaderPage {...props}/>
                 <Grid container component={Paper} className={classes.chatSection}>
                     <ChatLeftPanel users={users} UserClicked={UserClicked} {...props} leftwidth={leftwidth} setLeftwidth={setLeftwidth} />
                     <Grid item xs={9}>
-                        {reciver !== null && <ChatBody Msg={Msg} reciver={reciver} profile={profile} {...props}/>}
+                        {reciver !== null && <ChatBody Msg={Msg} reciver={reciver} profile={profile} {...props} ChatBodyLoadingRoute={ChatBodyLoadingRoute}/>}
                         <Divider />
                         {reciver !==null && <ChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue} {...props}  leftwidth={leftwidth}/>}
                     </Grid>
                 </Grid>
             </Grid>
+            </LoadingOverlay>
         </div>
     )
 }

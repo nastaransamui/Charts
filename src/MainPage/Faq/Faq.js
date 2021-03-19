@@ -50,7 +50,6 @@ function Faq(props){
     const handleChange = panel => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
       };
-      console.log()
     return(
         <div className={classes.root}>
             <div className={classes.parallax}>
