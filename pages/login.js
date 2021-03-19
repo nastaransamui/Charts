@@ -202,7 +202,7 @@ export default function SignInSide(props) {
             open: true,
             ContentText: `${loginText[`${nextI18Next}_system`]} ${router.query.error} ${loginText[`${nextI18Next}_adminerror`]}`,
             ContentHeader:`${loginText[`${nextI18Next}_error`]} ${router.query.error}`,
-            closeButtom: `${loginText[`${nextI18Next}_notagree`]} `,
+            closeButtom: `NotAgree`,
             cancelButton:`${loginText[`${nextI18Next}_close`]}`,
           })
         }
@@ -224,7 +224,7 @@ export default function SignInSide(props) {
             open: true,
             ContentText: `${loginText[`${nextI18Next}_expirelink`]}`,
             ContentHeader:`${loginText[`${nextI18Next}_error`]} ${router.query.error}`,
-            closeButtom: `${loginText[`${nextI18Next}_notagree`]} `,
+            closeButtom: `NotAgree`,
             cancelButton:`${loginText[`${nextI18Next}_close`]}`,
           })
         }

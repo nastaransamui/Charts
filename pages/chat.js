@@ -13,7 +13,8 @@ import ChatPage from '../src/Chat/ChatPage';
 import { ownUser } from '../lib/ownUser';
 import header from '../public/locale/header.json';
 import chatText from '../public/locale/chat.json'
-import { dbLivedata }  from '../lib/dbLivedata'
+
+
 const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(10),
@@ -84,7 +85,6 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   const isConnected = await client.isConnected();
   const session = await getSession(ctx);
   const profile = session !== null && await ownUser(session)
-  const chatLiveData = await dbLivedata(ctx.store)
 
   if(ctx.res && session === null ){
     return{
@@ -100,7 +100,6 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
     isConnected,
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
-    chatLiveData,
     profile,
     session,
     header,

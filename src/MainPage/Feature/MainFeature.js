@@ -47,7 +47,7 @@ function MainFeature(props){
         rel: 0,
         showinfo: 1,
         mute: 0,
-        origin: 'https://localhost:3008'
+        origin: process.env.NEXTAUTH_URL
       }
     };
     

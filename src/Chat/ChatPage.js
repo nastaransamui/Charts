@@ -56,46 +56,87 @@ const ChatPage = (props) => {
     },[])
 
     const UserClicked =(d) =>{
-        dispatch({type: 'chatUsers', payload: 'pallet'})
-        socket.emit(`room`, profile[0]._id,d._id)
-        setReciver(d)
-        socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
-            setMsg(data[d._id])
+        // socket.emit(`room`, profile[0]._id,d._id)
+        // setReciver(d)
+        // socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
+        //     setMsg(data[d._id])
+        // })
+        axios.post('api/chat/getRooms',{
+            roomID: profile[0]._id,
+            guestID: d._id
+        })
+        .then((data)=>{
+            console.log(data.data.value)
+            setReciver(d)
+            setMsg(data.data.value[d._id])
         })
     }
     useEffect(()=>{
         let  isMount = true;
         var CountDown = setInterval(() => {
          if(isMount){
-             axios.get('/api/createTokenRequest')
+             axios.post('api/chat/getUsers',{
+                 userId: profile[0]._id
+             })
              .then((data)=>{
-                setUsers(data.data[0].users)
+                setUsers(data.data)
              })
           }
         }, 1000);
          return() =>{
-           isMount = false,
+           isMount = false
            clearInterval(CountDown)
          }
        },[])
+       
     const SendMessage =()=>{
         const now = moment().format()
         const senderId = profile[0]._id
         const reciverId = reciver._id
         const NewMessage = {
-        name: session.user.name,
+        name: session.user._id,
         senderId: senderId,
         reciverId: reciverId,
         body: aes256.encrypt(key, ChatValue),
         time: now
           }
-        socket.emit("sendMsg",NewMessage,profile[0]._id,reciver._id)
-        setChatValue('')
-        socket.on(`sendMsgReturn${profile[0]._id}${reciver._id}`, data =>{
-            if(data[reciver._id] === undefined) setMsg(data[profile[0]._id])
-            if(data[profile[0]._id] === undefined) setMsg(data[reciver._id])
+          axios.post('api/chat/sendMsg',{
+            NewMessage: NewMessage,
+            Sender: profile[0]._id,
+            Reciver: reciver._id
         })
+        .then((data)=>{
+            if(data.data.value[reciver._id] === undefined) setMsg(data.data.value[profile[0]._id])
+            if(data.data.value[profile[0]._id] === undefined) setMsg(data.data.value[reciver._id])
+            
+        })
+
+        // socket.emit("sendMsg",NewMessage,profile[0]._id,reciver._id)
+        setChatValue('')
+        // socket.on(`sendMsgReturn${profile[0]._id}${reciver._id}`, data =>{
+        //     if(data[reciver._id] === undefined) setMsg(data[profile[0]._id])
+        //     if(data[profile[0]._id] === undefined) setMsg(data[reciver._id])
+        // })
     }
+
+    useEffect(()=>{
+        let  isMount = true;
+        var CountDown = setInterval(() => {
+         if(isMount && reciver !== null){
+             axios.post('api/chat/getMsg',{
+                Sender: profile[0]._id,
+                Reciver: reciver._id
+             })
+             .then((data)=>{
+                setMsg(data.data)
+             })
+          }
+        }, 1000);
+         return() =>{
+           isMount = false
+           clearInterval(CountDown)
+         }
+    },[reciver])
 
     return(
         <div>
