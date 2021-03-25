@@ -17,12 +17,12 @@ import {useSelector, useDispatch} from 'react-redux';
 import LoadingOverlay from 'react-loading-overlay';
 import Pusher from 'pusher-js';
 let pusher ;
-if(process.env.NEXTAUTH_URL.includes("vercel")){
+// if(process.env.NEXTAUTH_URL.includes("vercel")){
  pusher = new Pusher(process.env.PUSHER_APP_KEY, {
      cluster: process.env.PUSHER_APP_CLUSTER,
      encrypted: true
     });
-}
+// }
 const ChatPage = (props) => {
     const classes = useStyles();
     const {session, profile, ChatUsersProps, chatText} = props
