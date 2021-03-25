@@ -20,5 +20,7 @@
     "en_show_emoji": "Show Emoji",
     "cn_show_emoji": "显示表情符号",
     "en_hide_emoji": "Hide Emoji",
-    "cn_hide_emoji": "隐藏表情符号"
+    "cn_hide_emoji": "隐藏表情符号",
+    "en_users_empty": "Click users to start chat",
+    "cn_users_empty": "点击用户开始聊天"
 }

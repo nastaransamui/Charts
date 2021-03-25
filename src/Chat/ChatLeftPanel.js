@@ -24,9 +24,10 @@ function ChatLeftPanel(props){
     const {chatText, setLeftwidth} = props;
     const widthofLeft = useRef()
     const [screenWidth, setWidth]   = useState(window.innerWidth);
-    
     const Users =() =>{
-        const wholeUsers = users.map((d,i)=>{
+        const wholeUsers = users
+        .filter((d)=>{return d.email !== session.user.email})
+        .map((d,i)=>{
             return(
                 <ListItem button key={`${d._id}${i}`} onClick={()=>{UserClicked(d)}}>
                     <ListItemIcon>

@@ -13,7 +13,7 @@ import ChatPage from '../src/Chat/ChatPage';
 import { ownUser } from '../lib/ownUser';
 import header from '../public/locale/header.json';
 import chatText from '../public/locale/chat.json'
-
+import {getUsersLive} from '../lib/chat/getUsers'
 
 const useStyles = makeStyles(theme => ({
   containerWrap: {
@@ -85,7 +85,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   const isConnected = await client.isConnected();
   const session = await getSession(ctx);
   const profile = session !== null && await ownUser(session)
-
+  let ChatUsersProps = session !== null && await getUsersLive(profile[0]._id)
   if(ctx.res && session === null ){
     return{
       redirect:{
@@ -100,6 +100,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
     isConnected,
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
+    ChatUsersProps,
     profile,
     session,
     header,

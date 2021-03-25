@@ -10,143 +10,205 @@ import {
     Grid, Paper
 } from '@material-ui/core';
 import axios from 'axios';
-// import io from 'socket.io-client'
+import io from 'socket.io-client'
 import moment from 'moment'
 import aes256 from 'aes256'
 import {useSelector, useDispatch} from 'react-redux';
 import LoadingOverlay from 'react-loading-overlay';
-
+import Pusher from 'pusher-js';
+let pusher ;
+if(process.env.NEXTAUTH_URL.includes("vercel")){
+ pusher = new Pusher(process.env.PUSHER_APP_KEY, {
+     cluster: process.env.PUSHER_APP_CLUSTER,
+     encrypted: true
+    });
+}
 const ChatPage = (props) => {
     const classes = useStyles();
-    const {session, profile, chatLiveData, ChatUsersProps} = props
+    const {session, profile, ChatUsersProps, chatText} = props
     const [users, setUsers] = useState([])
+    const [newUserFromPush, setNewUserFromPush] = useState(null)
+    const [newChatFromPush, setNewChatFromPush] = useState(null)
     const [Msg, setMsg] = useState([])
     const [ChatValue, setChatValue] = useState('')
     const [reciver, setReciver] = useState(null)
     const [leftwidth, setLeftwidth] = useState(null)
-    const {chatUsers }= useSelector(state => state)
-    // const socket = io();
+    const {"next-i18next": nextI18Next }= useSelector(state => state)
     const dispatch = useDispatch();
     const [LoadingRoute, setLoadingRoute] = useState(false)
     const [ChatBodyLoadingRoute, setChatBodyLoadingRoute] = useState(true)
     var key = process.env.SECRET;
     useEffect(()=>{
-        // let isMount = true;
-        // if (isMount) {
-        //     axios.get('/api/socketio')
-        //     .then((data)=>{
-        //         socket.sendBuffer = [];
-        //         // subscribe a new user
-        //         socket.emit("login", session.user.name);
-        //         // list of connected users
-        //         socket.on("users", data => {
-        //             setUsers(data)
-        //         });
-        //         socket.on('singOut', (data) => {
-        //             socket.emit("logout", session.user.name);
-        //             setUsers(data)
-        //           });
-        //     })
-        // }
-        // return()=>{
-        //     isMount = false;
-        //     socket.off('login');
-        //     socket.off('users');
-        //     socket.off('singOut');
-        //     socket.disconnect()
-        // }
+        let  isMount = true;
+        if (pusher === undefined) {
+            const socket = io();
+            if (isMount) {
+            axios.get('/api/socketio')
+            .then((data)=>{
+                socket.sendBuffer = [];
+                socket.emit("login", profile[0]._id);
+                socket.on("users", data => {
+                    setUsers(data)
+                });
+                socket.on('singOut', (data) => {
+                    socket.emit("logout", profile[0]._id);
+                    setUsers(data)
+                  });
+            })
+        }
+        return()=>{
+            isMount = false;
+            socket.off('login');
+            socket.off('users');
+            socket.off('singOut');
+            socket.disconnect()
+        }
+        } else {
+             const channel = pusher.subscribe('Chat-development')
+                channel.bind('user-login', function(data) {
+                setNewUserFromPush(data.value)
+              });
+            setLoadingRoute(true)
+            setUsers(ChatUsersProps)
+            setLoadingRoute(false)
+            return() =>{
+                isMount = false
+                pusher.unsubscribe('Chat-development')
+              }
+        }
     },[])
 
-    const UserClicked =(d) =>{
-        setChatBodyLoadingRoute(true)
-        setReciver(d)
-        setMsg([])
-        // socket.emit(`room`, profile[0]._id,d._id)
-        // setReciver(d)
-        // socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
-        //     setMsg(data[d._id])
-        // })
-        axios.post('api/chat/getRooms',{
-            roomID: profile[0]._id,
-            guestID: d._id
-        })
-        .then((data)=>{
-            // console.log(data.data.value[d._id])
-            setMsg(data.data.value[d._id])
-            setChatBodyLoadingRoute(false)
-        })
-    }
+ 
     useEffect(()=>{
-        let  isMount = true;
-        setLoadingRoute(true)
-        var CountDown = setInterval(() => {
-         if(isMount){
-             axios.post('api/chat/getUsers',{
-                 userId: profile[0]._id
-             })
-             .then((data)=>{
+        let isMount = true
+        if(isMount && pusher !== undefined){
+            const channel = pusher.subscribe('Chat-development')
+            channel.bind('chat', function(data) {
+                setNewChatFromPush(data.value)
+              });
+        }
+        return() =>{
+          isMount = false
+        }
+    },[])
+
+    useEffect(() =>{
+        let isMount = true
+        if(isMount && newUserFromPush !== null){
+            var foundIndex = users.findIndex(x => x._id == newUserFromPush._id);
+            users[foundIndex] = newUserFromPush;
+            if (foundIndex === -1) {
                 setLoadingRoute(false)
-                setUsers(data.data)
-             })
-          }
-        }, 1000);
-         return() =>{
-           isMount = false
-           clearInterval(CountDown)
-         }
-       },[])
-       
+                setUsers(oldusers =>[...oldusers, newUserFromPush])
+            } else if(foundIndex === 0){
+                users[foundIndex] = newUserFromPush;
+                setLoadingRoute(false)
+                setUsers(oldusers=>[...oldusers])
+            } else {
+                setLoadingRoute(false)
+                setUsers(oldusers=>[...oldusers])
+            }
+        }
+        return() =>{
+            isMount = false;
+        }
+    }, [newUserFromPush])
+
+    useEffect(() =>{
+        let isMount = true
+        if(isMount && newChatFromPush !== null){
+            if (reciver === null) {
+            } else {
+                if(newChatFromPush[reciver._id] === undefined && newChatFromPush[profile[0]._id][0].reciverId === reciver._id){
+                    setMsg(newChatFromPush[profile[0]._id])
+                }
+            }
+        }
+        return() =>{
+            isMount = false;
+        }
+    }, [newChatFromPush])
+
     const SendMessage =()=>{
         const now = moment().format()
         const senderId = profile[0]._id
         const reciverId = reciver._id
         const NewMessage = {
-        name: session.user._id,
+        name: session.user.name,
         senderId: senderId,
         reciverId: reciverId,
         body: aes256.encrypt(key, ChatValue),
         time: now
           }
-          axios.post('api/chat/sendMsg',{
-            NewMessage: NewMessage,
-            Sender: profile[0]._id,
-            Reciver: reciver._id
-        })
-        .then((data)=>{
-            if(data.data.value[reciver._id] === undefined) setMsg(data.data.value[profile[0]._id])
-            if(data.data.value[profile[0]._id] === undefined) setMsg(data.data.value[reciver._id])
-            
-        })
-
-        // socket.emit("sendMsg",NewMessage,profile[0]._id,reciver._id)
-        setChatValue('')
-        // socket.on(`sendMsgReturn${profile[0]._id}${reciver._id}`, data =>{
-        //     if(data[reciver._id] === undefined) setMsg(data[profile[0]._id])
-        //     if(data[profile[0]._id] === undefined) setMsg(data[reciver._id])
-        // })
+        if (pusher === undefined) {
+            const socket = io();
+            socket.emit("sendMsg",NewMessage,profile[0]._id,reciver._id)
+            setChatValue('')
+            setMsg(oldMsg=>[
+                ...oldMsg,NewMessage
+            ])
+            socket.on(`sendMsgReturn${profile[0]._id}${reciver._id}`, data =>{
+                if(data[reciver._id] === undefined) setMsg(data[profile[0]._id])
+                if(data[profile[0]._id] === undefined) setMsg(data[reciver._id])
+            })
+        } else {
+            setChatValue('')
+            setMsg(oldMsg=>[
+                ...oldMsg,NewMessage
+            ])
+            axios.post('api/chat/sendMsg',{
+                NewMessage: NewMessage,
+                Sender: profile[0]._id,
+                Reciver: reciver._id
+            })
+        }
     }
 
-
-    useEffect(()=>{
-        let  isMount = true;
-        var CountDown = setInterval(() => {
-         if(isMount && reciver !== null){
-             axios.post('api/chat/getMsg',{
-                Sender: profile[0]._id,
-                Reciver: reciver._id,
-                Msg: Msg
-             })
-             .then((data)=>{
-                //  console.log(data.data)
-                setMsg(data.data)
-             })
-          }
-        }, 1000);
-         return() =>{
-           isMount = false
-           clearInterval(CountDown)
-         }
-    },[])
+    const UserClicked =(d) =>{
+        if (pusher === undefined) {
+            const socket = io();
+            if(reciver !==null && reciver._id !==d._id ){
+                setChatBodyLoadingRoute(true)
+                setReciver(d)
+                setMsg([])
+                socket.emit(`room`, profile[0]._id,d._id)
+                setReciver(d)
+                socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
+                    setChatBodyLoadingRoute(false)
+                    setMsg(data[d._id])
+                })
+            }else{
+                socket.emit(`room`, profile[0]._id,d._id)
+                setReciver(d)
+                socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
+                    setChatBodyLoadingRoute(false)
+                    setMsg(data[d._id])
+                })
+            }
+        } else {
+            if(reciver !==null && reciver._id !==d._id ){
+                setChatBodyLoadingRoute(true)
+                setReciver(olddata => d)
+                setMsg(olddata => [])
+                axios.post('api/chat/getRooms',{
+                    roomID: profile[0]._id,
+                    guestID: d._id
+                }).then((data)=>{
+                    setChatBodyLoadingRoute(false)
+                    setMsg(data.data.value[d._id])
+                })
+            }else{
+                setReciver(d)
+                axios.post('api/chat/getRooms',{
+                    roomID: profile[0]._id,
+                    guestID: d._id
+                }).then((data)=>{
+                    setChatBodyLoadingRoute(false)
+                    setMsg(data.data.value[d._id])
+                })
+            }
+        }
+    }
 
     return(
         <div>
@@ -156,7 +218,10 @@ const ChatPage = (props) => {
                 <Grid container component={Paper} className={classes.chatSection}>
                     <ChatLeftPanel users={users} UserClicked={UserClicked} {...props} leftwidth={leftwidth} setLeftwidth={setLeftwidth} />
                     <Grid item xs={9}>
-                        {reciver !== null && <ChatBody Msg={Msg} reciver={reciver} profile={profile} {...props} ChatBodyLoadingRoute={ChatBodyLoadingRoute}/>}
+                        {reciver !== null ? <ChatBody Msg={Msg} reciver={reciver} profile={profile} {...props} ChatBodyLoadingRoute={ChatBodyLoadingRoute}/> : 
+                        <div className={classes.messageAreaReplacement}>
+                            {chatText[`${nextI18Next}_users_empty`]}    
+                        </div>}
                         <Divider />
                         {reciver !==null && <ChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue} {...props}  leftwidth={leftwidth}/>}
                     </Grid>

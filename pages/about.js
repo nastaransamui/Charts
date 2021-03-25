@@ -18,12 +18,15 @@ import { signIn, signOut, useSession,getSession, providers } from 'next-auth/cli
 import { csrfToken } from 'next-auth/client'
 import AboutPage from '../src/About/AboutPage'
 import header from '../public/locale/header.json'
+import Footer from '../src/MainPage/Footer/Footer';
+import footerText from '../public/locale/footer.json'
+
 
 
 const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(10),
-    minHeight: '100vh'
+    minHeight: '70vh'
   },
   mainWrap: {
     position: 'relative',
@@ -51,7 +54,9 @@ export default function About(props) {
     <div className={classes.appBarSpacer} />
         <AboutPage {...props}/>
     </main>
+    <Footer {...props} />
     </div>
+        <Copyright />
     </Fragment>
   );
 }
@@ -83,6 +88,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
     session,
-    header
+    header,
+    footerText
   }}
 })

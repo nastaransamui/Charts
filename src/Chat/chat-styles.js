@@ -23,6 +23,17 @@ const useStyles = makeStyles((theme) => ({
       overflowY: 'auto',
       border: `1px solid ${theme.palette.primary.main}`,
     },
+    messageAreaReplacement: {
+      height: '77vh',
+      overflowY: 'auto',
+      alignItems: 'center',
+      display: 'flex',
+      justifyContent: 'center',
+      fontWeight: 500,
+      fontSize: 25,
+      textTransform: 'capitalize',
+      border: `1px solid ${theme.palette.primary.main}`,
+    },
     SendMain:{
         border: `1px solid ${theme.palette.primary.main}`,
     },

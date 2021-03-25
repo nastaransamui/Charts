@@ -4,6 +4,7 @@ import { setMsgLive } from '../../../lib/chat/sendMsg'
 export default async (req, res) =>{
     const session = await getSession({ req });
     const {NewMessage, Sender, Reciver} = req.body;
+ 
     if (session) {
         res.json(await setMsgLive(NewMessage, Sender, Reciver));
     } else {

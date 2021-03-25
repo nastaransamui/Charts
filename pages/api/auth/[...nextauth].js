@@ -8,7 +8,14 @@ import {
   jwtCallBack
 } from '../../../lib/authCallBacks';
 import Adapters from 'next-auth/adapters'
-
+const Pusher = require("pusher");
+export const pusher = new Pusher({
+  appId: process.env.PUSHER_APP_ID,
+  key: process.env.PUSHER_APP_KEY,
+  secret: process.env.PUSHER_APP_SECRET,
+  cluster: process.env.PUSHER_APP_CLUSTER,
+  useTLS: true,
+});
 
 export const options = {
     providers: [
@@ -36,7 +43,7 @@ export const options = {
     secret: process.env.SECRET,
     debug: false,
     session:{jwt: false},
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: 10 * 24 * 60 * 60,
     updateAge: 24 * 60 * 60,
     adapter: Adapters.TypeORM.Adapter({
       type: 'mongodb',
@@ -55,6 +62,8 @@ export const options = {
     },
     events: {
         signIn: async (message) => {
+          const newEmailUser = message.isNewUser && message.account.id === 'email' && message.account.type === 'email'
+          console.log("singin")
           async function run() {
             try {
               const { db } = await connectToDatabase();
@@ -72,20 +81,43 @@ export const options = {
                 image: 'https://source.unsplash.com/random'
               },
             };
-            const imageExist =await users.find(filter).toArray().then((data)=> { return data[0].image})
-            if( imageExist === undefined){
-              const result = await users.updateOne(filter, updateDocImage)
-              console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`)
+            const options = { upsert: true, returnOriginal: false, setDefaultsOnInsert: true }
+            if(newEmailUser){
+              console.log("newemail user update photo and status")
+              const result =users.findOneAndUpdate(filter, updateDocImage, options, (err,res) =>{
+                if(err) return err;
+                pusher.trigger("Chat-development", "user-login", {
+                  value: res.value
+                });
+              })
+              // pusher.trigger("Chat-development", "user-login", {
+              //   result
+              // });
             }else{
-              const result = await users.updateOne(filter, updateDoc)
+              console.log("newuser update  status")
+              const result = await users.findOneAndUpdate(filter, updateDoc, options, (err,res) =>{
+                if(err) return err;
+                pusher.trigger("Chat-development", "user-login", {
+                  value: res.value
+                });
+              })
             }
+            // const result = await users.updateOne(filter, updateDoc)
+            // const imageExist =await users.find(filter).toArray().then((data)=> { return data[0].image})
+            // if( imageExist === undefined){
+            //   const result = await users.updateOne(filter, updateDocImage)
+            //   const update = await users.updateOne(filter, updateDoc)
+            //   console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`)
+            // }else{
+            //   const result = await users.updateOne(filter, updateDoc)
+            // }
             
-            } finally {
-            }
+            } finally { }
           }
           run().catch(console.dir);
         },
         signOut: async (message) => {
+          console.log("singout")
           async function run() {
             try {
               const { db } = await connectToDatabase();
@@ -96,7 +128,14 @@ export const options = {
                 online: false,
               },
             };
-            const result = await users.updateOne(filter, updateDoc)
+            const options = { upsert: true, returnOriginal: false, setDefaultsOnInsert: true }
+            const result = await users.findOneAndUpdate(filter, updateDoc, options, (err,res) =>{
+              if(err) return err;
+              pusher.trigger("Chat-development", "user-login", {
+                value: res.value
+              });
+            })
+            console.log("newuser update  status")
             } finally {
             }
           }
