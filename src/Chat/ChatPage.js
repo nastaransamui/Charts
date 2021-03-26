@@ -79,7 +79,7 @@ const ChatPage = (props) => {
         }
     },[])
 
- 
+ console.log(session)
     useEffect(()=>{
         let isMount = true
         if(isMount && pusher !== undefined){
@@ -92,7 +92,7 @@ const ChatPage = (props) => {
           isMount = false
         }
     },[pusherMassage])
-console.log(pusherMassage)
+
     useEffect(() =>{
         let isMount = true
         if(isMount && newUserFromPush !== null){
@@ -140,7 +140,7 @@ console.log(pusherMassage)
         const senderId = profile[0]._id
         const reciverId = reciver._id
         const NewMessage = {
-        name: session.user._id,
+        name: profile[0].name,
         senderId: senderId,
         reciverId: reciverId,
         body: aes256.encrypt(key, ChatValue),
