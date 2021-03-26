@@ -29,6 +29,7 @@ const ChatPage = (props) => {
     const [users, setUsers] = useState([])
     const [newUserFromPush, setNewUserFromPush] = useState(null)
     const [newChatFromPush, setNewChatFromPush] = useState(null)
+    const [pusherMassage, setPusherMassage] = useState(null)
     const [Msg, setMsg] = useState([])
     const [ChatValue, setChatValue] = useState('')
     const [reciver, setReciver] = useState(null)
@@ -90,8 +91,8 @@ const ChatPage = (props) => {
         return() =>{
           isMount = false
         }
-    },[])
-
+    },[pusherMassage])
+console.log(pusherMassage)
     useEffect(() =>{
         let isMount = true
         if(isMount && newUserFromPush !== null){
@@ -161,6 +162,7 @@ const ChatPage = (props) => {
             setMsg(oldMsg=>[
                 ...oldMsg,NewMessage
             ])
+            setPusherMassage(NewMessage)
             axios.post('api/chat/sendMsg',{
                 NewMessage: NewMessage,
                 Sender: profile[0]._id,
