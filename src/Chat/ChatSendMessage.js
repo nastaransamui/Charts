@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
   function ChatSendMessage(props){
     const {SendMessage, ChatValue, setChatValue, chatText, leftwidth} = props;
-    const classes = useStyles(leftwidth);
+    const classes = useStyles({leftwidth});
     const theme = useTheme();
     const [keysPressed, setKeysPressed] = useState({})
     const [ShowEmoji, SetShowEmoji] = useState(false)

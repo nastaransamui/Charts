@@ -70,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
     },
     you:{
         backgroundColor: theme.palette.primary.main,
+        color: ({themeName}) => themeName === "oceanBlue" && 'black',
         whiteSpace: 'pre-wrap',
         marginLeft: 18,
         marginRight: 60,
@@ -81,6 +82,7 @@ const useStyles = makeStyles((theme) => ({
     },
     me:{
         backgroundColor: theme.palette.secondary.main,
+        color: ({themeName}) => themeName === "oceanBlue" && 'black',
         whiteSpace: 'pre-wrap',
         marginLeft: 60,
         marginRight: 18,

@@ -6,8 +6,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment'
 import aes256 from 'aes256'
 import LoadingOverlay from 'react-loading-overlay';
+import {useSelector} from 'react-redux';
 function ChatBody(props){
-    const classes = useStyles();
+    const {themeName }= useSelector(state => state)
+    const classes = useStyles({themeName});
     const [session] = useSession();
     const {Msg, profile, reciver, ChatBodyLoadingRoute} = props
     const messagesEndRef = useRef(null);
