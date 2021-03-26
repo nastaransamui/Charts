@@ -22,7 +22,7 @@ export default class MyDocument extends Document {
           <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r75/three.min.js"></script>
           <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
           <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/175711/bas2.js"></script>
-          <script src="https://cdn.ably.io/lib/ably.min-1.js"></script>
+          <script src="https://js.pusher.com/5.0/pusher.min.js"></script>
         </Head>
         <body>
           <div
