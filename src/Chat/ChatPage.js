@@ -40,6 +40,7 @@ const ChatPage = (props) => {
     var key = process.env.SECRET;
     useEffect(()=>{
         let  isMount = true;
+        console.log(pusher)
         if (pusher === undefined) {
             const socket = io();
             if (isMount) {
@@ -117,10 +118,11 @@ const ChatPage = (props) => {
     useEffect(() =>{
         let isMount = true
         if(isMount && newChatFromPush !== null){
-            if (reciver === null) {
-            } else {
-                if(newChatFromPush[reciver._id] === undefined && newChatFromPush[profile[0]._id][0].reciverId === reciver._id){
-                    setMsg(newChatFromPush[profile[0]._id])
+            if (reciver !== null) {
+                if(newChatFromPush.senderId !== profile[0]._id){
+                    if(profile[0]._id ===newChatFromPush.reciverId && reciver._id === newChatFromPush.senderId){
+                        setMsg(oldMsg=>[...oldMsg, newChatFromPush])
+                    }
                 }
             }
         }
@@ -134,7 +136,7 @@ const ChatPage = (props) => {
         const senderId = profile[0]._id
         const reciverId = reciver._id
         const NewMessage = {
-        name: session.user.name,
+        name: session.user._id,
         senderId: senderId,
         reciverId: reciverId,
         body: aes256.encrypt(key, ChatValue),
