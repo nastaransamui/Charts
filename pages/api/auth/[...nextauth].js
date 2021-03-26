@@ -84,23 +84,23 @@ export const options = {
             const options = { upsert: true, returnOriginal: false, setDefaultsOnInsert: true }
             if(newEmailUser){
               console.log("newemail user update photo and status")
-              const result =users.findOneAndUpdate(filter, updateDocImage, options, (err,res) =>{
-                if(err) return err;
-                pusher.trigger("Chat-development", "user-login", {
-                  value: res.value
-                });
-              })
+              pusher.trigger("Chat-development", "user-login", {
+                value: {...message.user, 
+                online: true,
+                name : "Guest",
+                image: 'https://source.unsplash.com/random'
+              }
+              });
+              const result =users.findOneAndUpdate(filter, updateDocImage, options)
               // pusher.trigger("Chat-development", "user-login", {
               //   result
               // });
             }else{
               console.log("newuser update  status")
-              const result = await users.findOneAndUpdate(filter, updateDoc, options, (err,res) =>{
-                if(err) return err;
-                pusher.trigger("Chat-development", "user-login", {
-                  value: res.value
-                });
-              })
+              pusher.trigger("Chat-development", "user-login", {
+                value: {...message.user, online: true}
+              });
+              const result = await users.findOneAndUpdate(filter, updateDoc, options)
             }
             // const result = await users.updateOne(filter, updateDoc)
             // const imageExist =await users.find(filter).toArray().then((data)=> { return data[0].image})
@@ -128,13 +128,11 @@ export const options = {
                 online: false,
               },
             };
+            pusher.trigger("Chat-development", "user-login", {
+              value: {...message, online: false}
+            });
             const options = { upsert: true, returnOriginal: false, setDefaultsOnInsert: true }
-            const result = await users.findOneAndUpdate(filter, updateDoc, options, (err,res) =>{
-              if(err) return err;
-              pusher.trigger("Chat-development", "user-login", {
-                value: res.value
-              });
-            })
+            const result = await users.findOneAndUpdate(filter, updateDoc, options)
             console.log("newuser update  status")
             } finally {
             }

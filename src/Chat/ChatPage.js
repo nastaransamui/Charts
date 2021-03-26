@@ -40,7 +40,6 @@ const ChatPage = (props) => {
     var key = process.env.SECRET;
     useEffect(()=>{
         let  isMount = true;
-        console.log(pusher)
         if (pusher === undefined) {
             const socket = io();
             if (isMount) {
@@ -96,18 +95,22 @@ const ChatPage = (props) => {
     useEffect(() =>{
         let isMount = true
         if(isMount && newUserFromPush !== null){
-            var foundIndex = users.findIndex(x => x._id == newUserFromPush._id);
-            users[foundIndex] = newUserFromPush;
-            if (foundIndex === -1) {
-                setLoadingRoute(false)
-                setUsers(oldusers =>[...oldusers, newUserFromPush])
-            } else if(foundIndex === 0){
-                users[foundIndex] = newUserFromPush;
-                setLoadingRoute(false)
+            if(newUserFromPush.online){
+                let userIdLogin = newUserFromPush.id;
+                var foundIndex = users.findIndex(x => x._id == userIdLogin);
+                if(foundIndex === -1){
+                    setUsers(oldusers =>[...oldusers, {...newUserFromPush, _id: newUserFromPush.id}])
+                }else{
+                    setLoadingRoute(false)
+                    users[foundIndex] = {...users[foundIndex],online: newUserFromPush.online};
+                    setUsers(oldusers =>[...oldusers])
+                }
+            }else{
+                let userIdLogout = newUserFromPush.userId
+                var foundIndex = users.findIndex(x => x._id == userIdLogout);
+                users[foundIndex] = {...users[foundIndex],online: newUserFromPush.online};
                 setUsers(oldusers=>[...oldusers])
-            } else {
                 setLoadingRoute(false)
-                setUsers(oldusers=>[...oldusers])
             }
         }
         return() =>{
