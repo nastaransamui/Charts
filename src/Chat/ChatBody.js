@@ -32,10 +32,10 @@ function ChatBody(props){
 
       const getCoversation =(Messages) =>{
             const listItems = Messages.map((message, index)=>{
-            const profilePicture = message.senderId === profile[0].name ? session.user.image : reciver.image
+            const profilePicture = message.senderId === profile[0]._id ? session.user.image : reciver.image
             let bubbleClass = 'you';
             let bubbleDirection = '';
-            if (message.senderId === profile[0].name) {
+            if (message.senderId === profile[0]._id) {
                 bubbleClass = 'me';
                 bubbleDirection = classes.bubbleDirectionReverse;
             }
@@ -48,7 +48,7 @@ function ChatBody(props){
                         </div>
                     </div>
                     <br/>
-                    <dd style={{float:message.senderId === profile[0].name ? 'right' : 'left'}}>
+                    <dd style={{float:message.senderId === profile[0]._id ? 'right' : 'left'}}>
                         {moment(message.time).format('HH:mm')}
                     </dd>
                     <br/>
