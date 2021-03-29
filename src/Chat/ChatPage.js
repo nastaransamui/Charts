@@ -98,7 +98,7 @@ const ChatPage = (props) => {
         let isMount = true
         if(isMount && newUserFromPush !== null){
             if(newUserFromPush.online){
-                let userIdLogin = newUserFromPush.id;
+                let userIdLogin = newUserFromPush.name;
                 var foundIndex = users.findIndex(x => x.name == userIdLogin);
                 if(foundIndex === -1){
                     setUsers(oldusers =>[...oldusers, {...newUserFromPush, _id: newUserFromPush.id}])
@@ -160,10 +160,10 @@ const ChatPage = (props) => {
             })
         } else {
             setChatValue('')
-            setMsg(oldMsg=>[
-                ...oldMsg,NewMessage
-            ])
-            setPusherMassage(NewMessage)
+            // setMsg(oldMsg=>[
+            //     ...oldMsg,NewMessage
+            // ])
+            // setPusherMassage(NewMessage)
             axios.post('api/chat/sendMsg',{
                 NewMessage: NewMessage,
                 Sender: profile[0].name,
