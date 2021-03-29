@@ -1,10 +1,19 @@
 import { getSession } from 'next-auth/client'
 import { setMsgLive } from '../../../lib/chat/sendMsg'
-import {pusher} from '../auth/[...nextauth]'
+const Pusher = require("pusher");
+export const pusher = new Pusher({
+  appId: process.env.PUSHER_APP_ID,
+  key: process.env.PUSHER_APP_KEY,
+  secret: process.env.PUSHER_APP_SECRET,
+  cluster: process.env.PUSHER_APP_CLUSTER,
+  useTLS: true,
+});
+
 export default async (req, res) =>{
     const session = await getSession({ req });
-
     const {NewMessage, Sender, Reciver} = req.body;
+    console.log(pusher)
+    console.log(NewMessage)
         pusher.trigger("Chat-development", "chat", {
           value: {...NewMessage}
         });
