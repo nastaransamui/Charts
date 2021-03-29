@@ -47,12 +47,12 @@ const ChatPage = (props) => {
             axios.get('/api/socketio')
             .then((data)=>{
                 socket.sendBuffer = [];
-                socket.emit("login", profile[0]._id);
+                socket.emit("login", profile[0].name);
                 socket.on("users", data => {
                     setUsers(data)
                 });
                 socket.on('singOut', (data) => {
-                    socket.emit("logout", profile[0]._id);
+                    socket.emit("logout", profile[0].name);
                     setUsers(data)
                   });
             })
@@ -79,12 +79,13 @@ const ChatPage = (props) => {
         }
     },[])
 
- console.log(session)
+ 
     useEffect(()=>{
         let isMount = true
         if(isMount && pusher !== undefined){
             const channel = pusher.subscribe('Chat-development')
             channel.bind('chat', function(data) {
+                console.log(data.value)
                 setNewChatFromPush(data.value)
               });
         }
@@ -98,7 +99,7 @@ const ChatPage = (props) => {
         if(isMount && newUserFromPush !== null){
             if(newUserFromPush.online){
                 let userIdLogin = newUserFromPush.id;
-                var foundIndex = users.findIndex(x => x._id == userIdLogin);
+                var foundIndex = users.findIndex(x => x.name == userIdLogin);
                 if(foundIndex === -1){
                     setUsers(oldusers =>[...oldusers, {...newUserFromPush, _id: newUserFromPush.id}])
                 }else{
@@ -108,7 +109,7 @@ const ChatPage = (props) => {
                 }
             }else{
                 let userIdLogout = newUserFromPush.userId
-                var foundIndex = users.findIndex(x => x._id == userIdLogout);
+                var foundIndex = users.findIndex(x => x.name == userIdLogout);
                 users[foundIndex] = {...users[foundIndex],online: newUserFromPush.online};
                 setUsers(oldusers=>[...oldusers])
                 setLoadingRoute(false)
@@ -123,8 +124,8 @@ const ChatPage = (props) => {
         let isMount = true
         if(isMount && newChatFromPush !== null){
             if (reciver !== null) {
-                if(newChatFromPush.senderId !== profile[0]._id){
-                    if(profile[0]._id ===newChatFromPush.reciverId && reciver._id === newChatFromPush.senderId){
+                if(newChatFromPush.senderId !== profile[0].name){
+                    if(profile[0].name ===newChatFromPush.reciverId && reciver.name === newChatFromPush.senderId){
                         setMsg(oldMsg=>[...oldMsg, newChatFromPush])
                     }
                 }
@@ -137,8 +138,8 @@ const ChatPage = (props) => {
 
     const SendMessage =()=>{
         const now = moment().format()
-        const senderId = profile[0]._id
-        const reciverId = reciver._id
+        const senderId = profile[0].name
+        const reciverId = reciver.name
         const NewMessage = {
         name: profile[0].name,
         senderId: senderId,
@@ -148,14 +149,14 @@ const ChatPage = (props) => {
           }
         if (pusher === undefined) {
             const socket = io();
-            socket.emit("sendMsg",NewMessage,profile[0]._id,reciver._id)
+            socket.emit("sendMsg",NewMessage,profile[0].name,reciver.name)
             setChatValue('')
             setMsg(oldMsg=>[
                 ...oldMsg,NewMessage
             ])
-            socket.on(`sendMsgReturn${profile[0]._id}${reciver._id}`, data =>{
-                if(data[reciver._id] === undefined) setMsg(data[profile[0]._id])
-                if(data[profile[0]._id] === undefined) setMsg(data[reciver._id])
+            socket.on(`sendMsgReturn${profile[0].name}${reciver.name}`, data =>{
+                if(data[reciver.name] === undefined) setMsg(data[profile[0].name])
+                if(data[profile[0].name] === undefined) setMsg(data[reciver.name])
             })
         } else {
             setChatValue('')
@@ -165,53 +166,53 @@ const ChatPage = (props) => {
             setPusherMassage(NewMessage)
             axios.post('api/chat/sendMsg',{
                 NewMessage: NewMessage,
-                Sender: profile[0]._id,
-                Reciver: reciver._id
+                Sender: profile[0].name,
+                Reciver: reciver.name
             })
         }
     }
-
+console.log(Msg)
     const UserClicked =(d) =>{
         if (pusher === undefined) {
             const socket = io();
-            if(reciver !==null && reciver._id !==d._id ){
+            if(reciver !==null && reciver.name !==d.name ){
                 setChatBodyLoadingRoute(true)
                 setReciver(d)
                 setMsg([])
-                socket.emit(`room`, profile[0]._id,d._id)
+                socket.emit(`room`, profile[0].name,d.name)
                 setReciver(d)
-                socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
+                socket.on(`roomReturn${profile[0].name}${d.name}`, data =>{
                     setChatBodyLoadingRoute(false)
-                    setMsg(data[d._id])
+                    setMsg(data[d.name])
                 })
             }else{
-                socket.emit(`room`, profile[0]._id,d._id)
+                socket.emit(`room`, profile[0].name,d.name)
                 setReciver(d)
-                socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
+                socket.on(`roomReturn${profile[0].name}${d.name}`, data =>{
                     setChatBodyLoadingRoute(false)
-                    setMsg(data[d._id])
+                    setMsg(data[d.name])
                 })
             }
         } else {
-            if(reciver !==null && reciver._id !==d._id ){
+            if(reciver !==null && reciver.name !==d.name ){
                 setChatBodyLoadingRoute(true)
                 setReciver(olddata => d)
                 setMsg(olddata => [])
                 axios.post('api/chat/getRooms',{
-                    roomID: profile[0]._id,
-                    guestID: d._id
+                    roomID: profile[0].name,
+                    guestID: d.name
                 }).then((data)=>{
                     setChatBodyLoadingRoute(false)
-                    setMsg(data.data.value[d._id])
+                    setMsg(data.data.value[d.name])
                 })
             }else{
                 setReciver(d)
                 axios.post('api/chat/getRooms',{
-                    roomID: profile[0]._id,
-                    guestID: d._id
+                    roomID: profile[0].name,
+                    guestID: d.name
                 }).then((data)=>{
                     setChatBodyLoadingRoute(false)
-                    setMsg(data.data.value[d._id])
+                    setMsg(data.data.value[d.name])
                 })
             }
         }
