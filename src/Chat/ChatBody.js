@@ -44,7 +44,8 @@ function ChatBody(props){
                     <div className={`${classes.bubbleContainer} ${bubbleDirection}`}>
                         <img className={`${classes.imgCircle}`} src={profilePicture} />
                         <div className={`${classes.bubble} ${classes[`${bubbleClass}`]}`}>
-                            {aes256.decrypt(key, message.body)}
+                            {/* {aes256.decrypt(key, message.body)} */}
+                            {message.body}
                         </div>
                     </div>
                     <br/>

@@ -85,7 +85,7 @@ const ChatPage = (props) => {
         if(isMount && pusher !== undefined){
             const channel = pusher.subscribe('Chat-development')
             channel.bind('chat', function(data) {
-                console.log(data.value)
+                console.log(data)
                 setNewChatFromPush(data.value)
               });
         }
@@ -144,7 +144,8 @@ const ChatPage = (props) => {
         name: profile[0].name,
         senderId: senderId,
         reciverId: reciverId,
-        body: aes256.encrypt(key, ChatValue),
+        // body: aes256.encrypt(key, ChatValue),
+        body: ChatValue,
         time: now
           }
         if (pusher === undefined) {
@@ -164,6 +165,11 @@ const ChatPage = (props) => {
                 ...oldMsg,NewMessage
             ])
             setPusherMassage(NewMessage)
+            const channel = pusher.subscribe('Chat-development')
+            channel.bind('chat', function(data) {
+                console.log(data)
+                setNewChatFromPush(data.value)
+              });
             axios.post('api/chat/sendMsg',{
                 NewMessage: NewMessage,
                 Sender: profile[0]._id,
