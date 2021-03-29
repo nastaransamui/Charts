@@ -85,6 +85,7 @@ const ChatPage = (props) => {
         if(isMount && pusher !== undefined){
             const channel = pusher.subscribe('Chat-development')
             channel.bind('chat', function(data) {
+                console.log(data.value)
                 setNewChatFromPush(data.value)
               });
         }
