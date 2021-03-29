@@ -8,6 +8,10 @@ export default async (req, res) =>{
         pusher.trigger("Chat-development", "chat", {
           value: {...NewMessage}
         });
+        console.log('sendMsg:')
+        console.log(await pusher.trigger("Chat-development", "chat", {
+            value: {...NewMessage}
+          }))
     if (session) {
         res.json(await setMsgLive(NewMessage, Sender, Reciver));
     } else {
