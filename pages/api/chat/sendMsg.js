@@ -8,12 +8,9 @@ export default async (req, res) =>{
         pusher.trigger("Chat-development", "chat", {
           value: {...NewMessage}
         });
-        console.log('sendMsg:')
-        console.log(await pusher.trigger("Chat-development", "chat", {
-            value: {...NewMessage}
-          }))
+        setMsgLive(NewMessage, Sender, Reciver)
     if (session) {
-        res.json(await setMsgLive(NewMessage, Sender, Reciver));
+        res.json("done");
     } else {
         res.json({ error: 'You must be sign in to view the protected content on this page.' })
     }

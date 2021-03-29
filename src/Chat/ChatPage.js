@@ -85,7 +85,6 @@ const ChatPage = (props) => {
         if(isMount && pusher !== undefined){
             const channel = pusher.subscribe('Chat-development')
             channel.bind('chat', function(data) {
-                console.log(data.value)
                 setNewChatFromPush(data.value)
               });
         }
@@ -126,8 +125,6 @@ const ChatPage = (props) => {
             if (reciver !== null) {
                 if(newChatFromPush.senderId !== profile[0]._id){
                     if(profile[0]._id ===newChatFromPush.reciverId && reciver._id === newChatFromPush.senderId){
-                        console.log("Msgin line 129:")
-                        console.log(Msg)
                         setMsg(oldMsg=>[...oldMsg, newChatFromPush])
                     }
                 }
@@ -137,8 +134,7 @@ const ChatPage = (props) => {
             isMount = false;
         }
     }, [newChatFromPush])
-    console.log("Msgin line 140:")
-    console.log(Msg)
+
     const SendMessage =()=>{
         const now = moment().format()
         const senderId = profile[0]._id
@@ -171,7 +167,7 @@ const ChatPage = (props) => {
                 NewMessage: NewMessage,
                 Sender: profile[0]._id,
                 Reciver: reciver._id
-            })
+            }).then((data)=>{console.log(data.data)})
         }
     }
 
