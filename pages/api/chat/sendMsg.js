@@ -14,9 +14,7 @@ export default async (req, res) =>{
     
     const {NewMessage, Sender, Reciver} = req.body;
     console.log(NewMessage)
-    console.log(await pusher.trigger("Chat-development", "chat", {
-        value: {...NewMessage}
-      }))
+
         pusher.trigger("Chat-development", "chat", {
           value: {...NewMessage}
         });
