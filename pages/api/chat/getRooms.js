@@ -1,4 +1,4 @@
-import { getSession } from 'next-auth/client'
+
 import { getRoomsLive } from '../../../lib/chat/getRooms';
 
 export default async(req, res) =>{

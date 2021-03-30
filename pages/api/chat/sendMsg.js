@@ -1,4 +1,4 @@
-import { getSession } from 'next-auth/client'
+
 import { setMsgLive } from '../../../lib/chat/sendMsg'
 const Pusher = require("pusher");
 export const pusher = new Pusher({
