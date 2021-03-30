@@ -13,7 +13,10 @@ export default async (req, res) =>{
     // const session = await getSession({ req });
     
     const {NewMessage, Sender, Reciver} = req.body;
-    console.log(pusher)
+    console.log(NewMessage)
+    console.log(await pusher.trigger("Chat-development", "chat", {
+        value: {...NewMessage}
+      }))
         pusher.trigger("Chat-development", "chat", {
           value: {...NewMessage}
         });
