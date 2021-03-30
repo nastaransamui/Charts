@@ -20,7 +20,8 @@ let pusher ;
 // if(process.env.NEXTAUTH_URL.includes("vercel")){
  pusher = new Pusher(process.env.PUSHER_APP_KEY, {
      cluster: process.env.PUSHER_APP_CLUSTER,
-     encrypted: true
+     encrypted: true,
+     activityTimeout: 50000,
     });
 // }
 const ChatPage = (props) => {
@@ -69,12 +70,13 @@ const ChatPage = (props) => {
                 channel.bind('user-login', function(data) {
                 setNewUserFromPush(data.value)
               });
+              
             setLoadingRoute(true)
             setUsers(ChatUsersProps)
             setLoadingRoute(false)
             return() =>{
                 isMount = false
-                pusher.unsubscribe('Chat-development')
+                pusher.disconnect();
               }
         }
     },[])
@@ -85,14 +87,14 @@ const ChatPage = (props) => {
         if(isMount && pusher !== undefined){
             const channel = pusher.subscribe('Chat-development')
             channel.bind('chat', function(data) {
-                console.log(data)
+                // console.log(data)
                 setNewChatFromPush(data.value)
               });
         }
         return() =>{
           isMount = false
         }
-    },[pusherMassage])
+    },[newChatFromPush])
 
     useEffect(() =>{
         let isMount = true
