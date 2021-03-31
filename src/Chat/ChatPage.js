@@ -26,7 +26,7 @@ let pusher ;
 // }
 const ChatPage = (props) => {
     const classes = useStyles();
-    const {session, profile, ChatUsersProps, chatText} = props
+    const {profile, ChatUsersProps, chatText} = props
     const [users, setUsers] = useState([])
     const [newUserFromPush, setNewUserFromPush] = useState(null)
     const [newChatFromPush, setNewChatFromPush] = useState(null)
@@ -248,7 +248,6 @@ const ChatPage = (props) => {
     )
 }
 ChatPage.propTypes = {
-    session: PropTypes.object.isRequired,
     profile: PropTypes.array.isRequired,
 }
 export default ChatPage;
