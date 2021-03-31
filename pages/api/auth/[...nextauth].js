@@ -152,18 +152,18 @@ export const options = {
         // newUser: null // If set, new users will be directed here on first sign in
       },
       callbacks: {
-        async signIn(user, account, profile) {
-          singInCallBack(user, account, profile)
-          return true
-        },
-        async session(session, user) {
-         await  sessionCallBack(session, user)
-          return session
-        },
-        async jwt(token, user, account, profile, isNewUser){
-          await jwtCallBack(token, user, account, profile, isNewUser)
-          return token
-        }
+        // async signIn(user, account, profile) {
+        //   singInCallBack(user, account, profile)
+        //   return true
+        // },
+        // async session(session, user) {
+        //  await  sessionCallBack(session, user)
+        //   return session
+        // },
+        // async jwt(token, user, account, profile, isNewUser){
+        //   await jwtCallBack(token, user, account, profile, isNewUser)
+        //   return token
+        // }
       }
 }
 
