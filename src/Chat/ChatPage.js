@@ -81,7 +81,6 @@ const ChatPage = (props) => {
         }
     },[])
 
- 
     useEffect(()=>{
         let isMount = true
         if(isMount && pusher !== undefined){

@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from '../src/Header/Header'
 import Head from 'next/head';
-import { useSession,getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router'
 import ChatPage from '../src/Chat/ChatPage';
 import { ownUser } from '../lib/ownUser';
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Chat(props) {
   const classes = useStyles();
-  const [session] = useSession()
+  // const [session] = useSession()
   const router = useRouter()
   // useEffect(()=>{
   //   let isMount = true;
@@ -79,6 +79,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
     ctx.store.dispatch({type: `next-i18next`, payload: getCookies(ctx, `next-i18next`)})
   }
   const session = await getSession(ctx);
+
   const profile = session !== null && await ownUser(session)
   let ChatUsersProps = session !== null && await getUsersLive(profile[0]._id)
   if(ctx.res && session === null ){

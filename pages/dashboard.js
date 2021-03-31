@@ -8,7 +8,7 @@ import getExchangeData from '../lib/exchange'
 import getCandleChartData from '../lib/candleChartData'
 import { getPairSymbolHuobi } from '../lib/orderBook';
 import { getMarketTradeHuobi } from '../lib/marketTrades';
-import { signIn, signOut, useSession,getSession, providers } from 'next-auth/client'
+import { getSession, providers } from 'next-auth/client'
 import { csrfToken } from 'next-auth/client'
 import AlertDialog from '../src/components/AlertDialog'
 import { useRouter } from 'next/router'
@@ -17,6 +17,8 @@ import header from '../public/locale/header.json'
 import dashboardText from '../public/locale/dashbord.json';
 import loginText from '../public/locale/login.json';
 import copyrightText from '../public/locale/copyright.json'
+import { ownUser } from '../lib/ownUser';
+
 export default function MainDashboard(props){
   const router = useRouter()
   const onCancellDialog = (e) =>{
@@ -179,6 +181,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx)=>{
     const getMarketTrade = await getMarketTradeHuobi(marketTradeSymbol)
     ctx.store.dispatch({type: 'marketTrade', payload: getMarketTrade})
     const session = await getSession(ctx);
+    const profile = session !== null && await ownUser(session)
     return {props: {
       cookies,
     providers: await providers(ctx),
@@ -188,5 +191,5 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx)=>{
     dashboardText,
     loginText,
     copyrightText,
-    session}}
+    profile}}
 })

@@ -27,6 +27,8 @@ import loginText from '../public/locale/login.json';
 import copyrightText from '../public/locale/copyright.json'
 import {useSelector} from 'react-redux';
 import LoadingOverlay from 'react-loading-overlay';
+
+import { ownUser } from '../lib/ownUser';
 function Copyright(props) {
   const {"next-i18next": nextI18Next }= useSelector(state => state)
   const {copyrightText} = props;
@@ -121,11 +123,11 @@ export default function SignInSide(props) {
   const theme = useTheme();
   const router = useRouter()
   const {"next-i18next": nextI18Next }= useSelector(state => state)
-  const {csrfToken, loginText} = props;
-  const [ loading] = useSession();
+  const {csrfToken, loginText, profile, Dialog} = props;
+
   const [email, SetEmail] = useState('')
-  const {Dialog} = props;
-  const [session] = useSession()
+
+
   const [LoadingRoute, setLoadingRoute] = useState(false)
 
   const onCancellDialog = (e) =>{
@@ -245,15 +247,15 @@ export default function SignInSide(props) {
   
   useEffect(()=>{
     let isMount = true;
-    if(isMount && session !== null){
-      if(session !== undefined){
+    if(isMount && profile){
+      if(profile){
         router.push("/");
       }
     }
     return() =>{
       isMount = false;
     }
-  },[session])
+  },[profile])
 
   const renderSocialIcon = (provider) =>{
     switch (provider.id) {
@@ -369,7 +371,8 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   }
   const cookies = getCookies(ctx);
   const session = await getSession(ctx);
-  if(ctx.res && session !== null ){
+  const profile = session !== null && await ownUser(session)
+  if(profile){
     return{
       redirect:{
         permanent: false,
@@ -382,7 +385,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
     cookies,
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
-    session,
+    profile,
     header,
     loginText,
     copyrightText

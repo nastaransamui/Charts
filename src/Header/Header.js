@@ -31,8 +31,8 @@ import {langName} from '../../public/locale/langName'
 
 function Header(props){
   const classes = useStyles();
-  const {toggleDarkTheme,header} = props;
-  const [session,loading] = useSession()
+  const {toggleDarkTheme,header, profile} = props;
+  const [loading] = useSession()
   const router = useRouter()
   const {themeType, themeName, isLoading, "next-i18next": nextI18Next }= useSelector(state => state)
   const dispatch = useDispatch();
@@ -48,6 +48,7 @@ function Header(props){
   const menuId = 'account-menu';
   const langId = 'lang-menu';
   const [Progress, SetProgress] = useState(isLoading)
+  console.log(profile)
   useEffect(()=>{
     let isMount = true
     if (isMount) {
@@ -156,7 +157,7 @@ function SingOut() {
       onClose={handleMenuClose}
       className={classes.menuItemMobile}
     >
-      {session === null || session === undefined ? 
+      {!profile ? 
       <MenuItem onClick={LoginClicked} >{header[`${nextI18Next}_login`]}</MenuItem> :
         <span>
         <MenuItem onClick={ChatClicked}>{header[`${nextI18Next}_chat`]}</MenuItem>
@@ -264,12 +265,12 @@ function SingOut() {
               disableRipple
               color="inherit"
             >{
-              session === null || session === undefined  ? 
+              !profile  ? 
               <AccountCircle />
               :
               <>
                 {
-                  session.user.image !== null ? <img alt="image" src={session.user.image} style={{width:30, height:30, borderRadius: '50%'}} /> : <AccountCircle />
+                  profile[0].image !== null ? <img alt="image" src={profile[0].image} style={{width:30, height:30, borderRadius: '50%'}} /> : <AccountCircle />
                 }
               </>
             }

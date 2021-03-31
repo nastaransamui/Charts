@@ -17,7 +17,7 @@ import faqText from '../public/locale/faq.json';
 import testimocialText from '../public/locale/testimonial.json';
 import benefitText from '../public/locale/benefit.json';
 import featureText from '../public/locale/feature.json';
-
+import { ownUser } from '../lib/ownUser';
 export const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(3),
@@ -81,12 +81,14 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   const { client } = await connectToDatabase();
   const isConnected = await client.isConnected();
   const session = await getSession(ctx);
+  const profile = session !== null && await ownUser(session)
+
   return {props: {
     cookies,
      isConnected,
      header,
      banner,
-    session,
+     profile,
     footerText,
     faqText,
     testimocialText,

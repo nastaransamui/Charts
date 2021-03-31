@@ -20,6 +20,7 @@ import AboutPage from '../src/About/AboutPage'
 import header from '../public/locale/header.json'
 import Footer from '../src/MainPage/Footer/Footer';
 import footerText from '../public/locale/footer.json'
+import { ownUser } from '../lib/ownUser';
 
 
 
@@ -83,12 +84,13 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
   const { client } = await connectToDatabase();
   const isConnected = await client.isConnected();
   const session = await getSession(ctx);
+  const profile = session !== null && await ownUser(session)
   return {props: {
     cookies, isConnected,
     providers: await providers(ctx),
     csrfToken: await csrfToken(ctx),
-    session,
     header,
-    footerText
+    footerText,
+    profile
   }}
 })

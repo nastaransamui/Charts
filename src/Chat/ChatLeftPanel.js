@@ -24,7 +24,7 @@ function ChatLeftPanel(props){
     const {chatText, setLeftwidth} = props;
     const widthofLeft = useRef()
     const [screenWidth, setWidth]   = useState(window.innerWidth);
-    console.log(props)
+ 
     const Users =() =>{
         const wholeUsers = users
         .filter((d)=>{return d.email !== profile[0].email})
