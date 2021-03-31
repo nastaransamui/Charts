@@ -1,7 +1,6 @@
 import React, {Fragment,useRef, useEffect, useState} from 'react';
 import useStyles from './chat-styles';
 import {List} from '@material-ui/core'
-import { useSession } from 'next-auth/client';
 import PropTypes from 'prop-types';
 import moment from 'moment'
 import aes256 from 'aes256'
@@ -10,7 +9,6 @@ import {useSelector} from 'react-redux';
 function ChatBody(props){
     const {themeName }= useSelector(state => state)
     const classes = useStyles({themeName});
-    const [session] = useSession();
     const {Msg, profile, reciver, ChatBodyLoadingRoute} = props
     const messagesEndRef = useRef(null);
 
@@ -29,10 +27,9 @@ function ChatBody(props){
         }
     },[Msg])
 
-
       const getCoversation =(Messages) =>{
             const listItems = Messages.map((message, index)=>{
-            const profilePicture = message.senderId === profile[0]._id ? session.user.image : reciver.image
+            const profilePicture = message.senderId === profile[0]._id ? profile[0].image : reciver.image
             let bubbleClass = 'you';
             let bubbleDirection = '';
             if (message.senderId === profile[0]._id) {

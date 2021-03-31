@@ -11,22 +11,23 @@ import {
     Paper
 } from '@material-ui/core'
 import useStyles, { AvatarOnline, AvatarOfline }  from './chat-styles';
-import { useSession } from 'next-auth/client';
+// import { useSession } from 'next-auth/client';
 import PropTypes from 'prop-types';
 import {useSelector} from 'react-redux';
 
 function ChatLeftPanel(props){
     const classes = useStyles();
-    const [session] = useSession();
+    // const [session] = useSession();
     const Search = (e) =>{}
-    const {users, UserClicked} = props
+    const {users, UserClicked, profile} = props
     const {"next-i18next": nextI18Next }= useSelector(state => state)
     const {chatText, setLeftwidth} = props;
     const widthofLeft = useRef()
     const [screenWidth, setWidth]   = useState(window.innerWidth);
+    console.log(props)
     const Users =() =>{
         const wholeUsers = users
-        .filter((d)=>{return d.email !== session.user.email})
+        .filter((d)=>{return d.email !== profile[0].email})
         .map((d,i)=>{
             return(
                 <ListItem button key={`${d._id}${i}`} onClick={()=>{UserClicked(d)}}>
@@ -56,7 +57,7 @@ function ChatLeftPanel(props){
     }, []);
     useEffect(()=>{
         let isMount = true;
-        if(session !== null && session !== undefined)
+        // if(session !== null && session !== undefined)
         setLeftwidth(widthofLeft.current.clientWidth)
         const sizeInterval = setInterval(() => {
             if(isMount && widthofLeft.current !== undefined){
@@ -68,17 +69,17 @@ function ChatLeftPanel(props){
     
     return(
         <Fragment>
-            {(session !== null && session !== undefined) &&
+            {/* {(session !== null && session !== undefined) && */}
             <Grid item xs={3} className={classes.borderRight500} ref={widthofLeft}>
                 <Paper>
                     <List component="nav">
-                        <ListItem button key={session.user.name}>
+                        <ListItem button key={profile[0].name}>
                             <ListItemIcon>
                                 <AvatarOnline style={{ float: 'right' }} overlap="circle" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
-                                    <Avatar alt={session.user.name} src={session.user.image} />
+                                    <Avatar alt={profile[0].name} src={profile[0].image} />
                                 </AvatarOnline>
                             </ListItemIcon>
-                            <ListItemText primary={session.user.name}></ListItemText>
+                            <ListItemText primary={profile[0].name}></ListItemText>
                         </ListItem>
                     </List>
                     <Divider classes={{root: classes.divider}}/>
@@ -91,7 +92,7 @@ function ChatLeftPanel(props){
                     {Users()}
                 </List>
             </Grid>
-            }
+            {/* } */}
         </Fragment>
     )
 }
