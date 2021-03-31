@@ -48,7 +48,7 @@ function Header(props){
   const menuId = 'account-menu';
   const langId = 'lang-menu';
   const [Progress, SetProgress] = useState(isLoading)
-  console.log(profile)
+
   useEffect(()=>{
     let isMount = true
     if (isMount) {

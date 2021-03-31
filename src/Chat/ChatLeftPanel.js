@@ -19,9 +19,9 @@ function ChatLeftPanel(props){
     const classes = useStyles();
     // const [session] = useSession();
     const Search = (e) =>{}
-    const {users, UserClicked, profile} = props
+    const {users, UserClicked, profile, chatText, setLeftwidth} = props
     const {"next-i18next": nextI18Next }= useSelector(state => state)
-    const {chatText, setLeftwidth} = props;
+    
     const widthofLeft = useRef()
     const [screenWidth, setWidth]   = useState(window.innerWidth);
  

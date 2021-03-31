@@ -16,6 +16,11 @@ import aes256 from 'aes256'
 import {useSelector, useDispatch} from 'react-redux';
 import LoadingOverlay from 'react-loading-overlay';
 import Pusher from 'pusher-js';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import MobilePanel from './MobilePanel';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import MobileChatBody from './MobileChatBody'
+import Copyright from '../Copyright';
 let pusher ;
 // if(process.env.NEXTAUTH_URL.includes("vercel")){
  pusher = new Pusher(process.env.PUSHER_APP_KEY, {
@@ -40,6 +45,9 @@ const ChatPage = (props) => {
     const [LoadingRoute, setLoadingRoute] = useState(false)
     const [ChatBodyLoadingRoute, setChatBodyLoadingRoute] = useState(true)
     var key = process.env.SECRET;
+    const [componentToMount, setComponentToMount] = useState('');
+    const isMobile = useMediaQuery('(max-width:800px)');
+    console.log(isMobile)
     useEffect(()=>{
         let  isMount = true;
         if (pusher === undefined) {
@@ -86,7 +94,6 @@ const ChatPage = (props) => {
         if(isMount && pusher !== undefined){
             const channel = pusher.subscribe('Chat-development')
             channel.bind('chat', function(data) {
-                // console.log(data)
                 setNewChatFromPush(data.value)
               });
         }
@@ -145,8 +152,7 @@ const ChatPage = (props) => {
         name: profile[0].name,
         senderId: senderId,
         reciverId: reciverId,
-        // body: aes256.encrypt(key, ChatValue),
-        body: ChatValue,
+        body: aes256.encrypt(key, ChatValue),
         time: now
           }
         if (pusher === undefined) {
@@ -168,7 +174,6 @@ const ChatPage = (props) => {
             setPusherMassage(NewMessage)
             const channel = pusher.subscribe('Chat-development')
             channel.bind('chat', function(data) {
-                console.log(data)
                 setNewChatFromPush(data.value)
               });
             axios.post('api/chat/sendMsg',{
@@ -178,8 +183,54 @@ const ChatPage = (props) => {
             }).then((data)=>{console.log(data.data)})
         }
     }
-
+ 
     const UserClicked =(d) =>{
+        if (pusher === undefined) {
+            const socket = io();
+            if(reciver !==null && reciver._id !==d._id ){
+                setChatBodyLoadingRoute(true)
+                setReciver(d)
+                setMsg([])
+                socket.emit(`room`, profile[0]._id,d._id)
+                setReciver(d)
+                socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
+                    setChatBodyLoadingRoute(false)
+                    setMsg(data[d._id])
+                })
+            }else{
+                socket.emit(`room`, profile[0]._id,d._id)
+                setReciver(d)
+                socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
+                    setChatBodyLoadingRoute(false)
+                    setMsg(data[d._id])
+                })
+            }
+        } else {
+            if(reciver !==null && reciver._id !==d._id ){
+                setChatBodyLoadingRoute(true)
+                setReciver(olddata => d)
+                setMsg(olddata => [])
+                axios.post('api/chat/getRooms',{
+                    roomID: profile[0]._id,
+                    guestID: d._id
+                }).then((data)=>{
+                    setChatBodyLoadingRoute(false)
+                    setMsg(data.data.value[d._id])
+                })
+            }else{
+                setReciver(d)
+                axios.post('api/chat/getRooms',{
+                    roomID: profile[0]._id,
+                    guestID: d._id
+                }).then((data)=>{
+                    setChatBodyLoadingRoute(false)
+                    setMsg(data.data.value[d._id])
+                })
+            }
+        }
+    }
+
+    const UserMobileClicked = (d)=>{
         if (pusher === undefined) {
             const socket = io();
             if(reciver !==null && reciver._id !==d._id ){
@@ -228,20 +279,39 @@ const ChatPage = (props) => {
     return(
         <div>
             <LoadingOverlay active={LoadingRoute} spinner text='Loading ...' >
-            <Grid container>
-                <ChatHeaderPage {...props}/>
-                <Grid container component={Paper} className={classes.chatSection}>
-                    <ChatLeftPanel users={users} UserClicked={UserClicked} {...props} leftwidth={leftwidth} setLeftwidth={setLeftwidth} />
-                    <Grid item xs={9}>
-                        {reciver !== null ? <ChatBody Msg={Msg} reciver={reciver} profile={profile} {...props} ChatBodyLoadingRoute={ChatBodyLoadingRoute}/> : 
-                        <div className={classes.messageAreaReplacement}>
-                            {chatText[`${nextI18Next}_users_empty`]}    
-                        </div>}
-                        <Divider />
-                        {reciver !==null && <ChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue} {...props}  leftwidth={leftwidth}/>}
+                {
+                    !isMobile ? 
+                    <Grid style={{minHeight: '95vh'}}>
+                    <ChatHeaderPage {...props}/>
+                    <Grid container component={Paper} className={classes.chatSection}>
+                        <ChatLeftPanel users={users} UserClicked={UserClicked} {...props} leftwidth={leftwidth} setLeftwidth={setLeftwidth} />
+                        <Grid item xs={9}>
+                            {reciver !== null ? <ChatBody Msg={Msg} reciver={reciver} profile={profile} {...props} ChatBodyLoadingRoute={ChatBodyLoadingRoute}/> : 
+                            <div className={classes.messageAreaReplacement}>
+                                {chatText[`${nextI18Next}_users_empty`]}    
+                            </div>}
+                            <Divider />
+                            {reciver !==null && <ChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue} {...props}  leftwidth={leftwidth}/>}
+                            <Copyright />
+                        </Grid>
                     </Grid>
+                </Grid>:
+                <Grid >
+                    <ChatHeaderPage {...props}/>
+                    {reciver ===null  ?
+                    <MobilePanel users={users} UserMobileClicked={UserMobileClicked} {...props} leftwidth={leftwidth} setLeftwidth={setLeftwidth} />:
+                    <MobileChatBody 
+                    Msg={Msg} 
+                    reciver={reciver} 
+                    profile={profile} 
+                    {...props} 
+                    setChatValue={setChatValue} 
+                    setReciver={setReciver}
+                    ChatValue={ChatValue}
+                    SendMessage={SendMessage}
+                    ChatBodyLoadingRoute={ChatBodyLoadingRoute}/>}
                 </Grid>
-            </Grid>
+                }
             </LoadingOverlay>
         </div>
     )

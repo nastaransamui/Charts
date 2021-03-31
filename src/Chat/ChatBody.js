@@ -1,4 +1,4 @@
-import React, {Fragment,useRef, useEffect, useState} from 'react';
+import React, {Fragment,useRef, useEffect} from 'react';
 import useStyles from './chat-styles';
 import {List} from '@material-ui/core'
 import PropTypes from 'prop-types';
@@ -41,8 +41,8 @@ function ChatBody(props){
                     <div className={`${classes.bubbleContainer} ${bubbleDirection}`}>
                         <img className={`${classes.imgCircle}`} src={profilePicture} />
                         <div className={`${classes.bubble} ${classes[`${bubbleClass}`]}`}>
-                            {/* {aes256.decrypt(key, message.body)} */}
-                            {message.body}
+                            {aes256.decrypt(key, message.body)}
+                            {/* {message.body} */}
                         </div>
                     </div>
                     <br/>

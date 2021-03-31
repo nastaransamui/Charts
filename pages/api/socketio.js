@@ -1,5 +1,4 @@
 import { Server } from 'socket.io'
-import { getSession } from 'next-auth/client'
 import {connectToDatabase } from '../../lib/mongodb'
 const ObjectID = require('mongodb').ObjectID;
 

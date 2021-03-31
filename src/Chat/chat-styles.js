@@ -7,6 +7,10 @@ const useStyles = makeStyles((theme) => ({
     divider: {
       background: theme.palette.primary.main,
   },
+  mobileDivider:{
+    background: theme.palette.primary.main,
+
+  },
     chatSection: {
       width: '100%',
       height: '80vh'
@@ -23,8 +27,16 @@ const useStyles = makeStyles((theme) => ({
       overflowY: 'auto',
       border: `1px solid ${theme.palette.primary.main}`,
     },
+    MobilmessageArea:{
+      height: 'clac(100% - 3rem)',
+      overflowY: 'scroll',
+      padding: '1rem',
+      paddingBottom: '0.5rem',
+      // borderRight: `1px solid ${theme.palette.primary.main}`,
+      // borderLeft: `1px solid ${theme.palette.primary.main}`,
+    },
     messageAreaReplacement: {
-      height: '77vh',
+      height: '80vh',
       overflowY: 'auto',
       alignItems: 'center',
       display: 'flex',

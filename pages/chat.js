@@ -16,7 +16,7 @@ import {getUsersLive} from '../lib/chat/getUsers'
 const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(10),
-    minHeight: '100vh'
+    // minHeight: '100vh'
   },
   mainWrap: {
     position: 'relative',
