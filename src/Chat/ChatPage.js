@@ -47,7 +47,7 @@ const ChatPage = (props) => {
     var key = process.env.SECRET;
     const [componentToMount, setComponentToMount] = useState('');
     const isMobile = useMediaQuery('(max-width:800px)');
-    console.log(isMobile)
+
     useEffect(()=>{
         let  isMount = true;
         if (pusher === undefined) {
@@ -276,6 +276,23 @@ const ChatPage = (props) => {
         }
     }
 
+    useEffect(()=>{
+        let isMount = true;
+        if(isMount && newUserFromPush !== null && reciver !== null){
+            if(newUserFromPush.online){
+                let userIdLogin = newUserFromPush.id;
+                if(userIdLogin === reciver._id){
+                    setReciver(olddata => ({...olddata, online: newUserFromPush.online}))
+                }
+            }else{
+                let userIdLogout = newUserFromPush.userId
+                if(userIdLogout === reciver._id){
+                    setReciver(olddata => ({...olddata, online: newUserFromPush.online}))
+                }
+            }
+        }
+        return () =>{isMount = false}
+    },[newUserFromPush])
     return(
         <div>
             <LoadingOverlay active={LoadingRoute} spinner text='Loading ...' >
@@ -297,7 +314,6 @@ const ChatPage = (props) => {
                     </Grid>
                 </Grid>:
                 <Grid >
-                    <ChatHeaderPage {...props}/>
                     {reciver ===null  ?
                     <MobilePanel users={users} UserMobileClicked={UserMobileClicked} {...props} leftwidth={leftwidth} setLeftwidth={setLeftwidth} />:
                     <MobileChatBody 

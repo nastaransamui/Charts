@@ -1,5 +1,5 @@
 import React, {Fragment,useRef, useEffect} from 'react';
-import useStyles, { AvatarOnline }  from './chat-styles';
+import useStyles, { AvatarOnline, AvatarOfline }  from './chat-styles';
 import {
     Grid, 
     Paper,
@@ -71,9 +71,14 @@ function MobileChatBody(props){
                      <List component="nav">
                     <ListItem button key={reciver.name}>
                         <ListItemIcon>
-                        <AvatarOnline style={{ float: 'right' }} overlap="circle" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
-                            <Avatar alt={reciver.name} src={reciver.image} />
-                        </AvatarOnline>
+                        {reciver.online ?
+                    <AvatarOnline style={{float: 'right'}} overlap="circle" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
+                        <Avatar alt={reciver.name} src={reciver.image} />
+                    </AvatarOnline>:
+                    <AvatarOfline style={{ float: 'right' }} overlap="circle" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
+                        <Avatar alt={reciver.name} src={reciver.image} />
+                    </AvatarOfline>
+                    }
                         </ListItemIcon>
                         <ListItemText primary={reciver.name}></ListItemText>
                     </ListItem>

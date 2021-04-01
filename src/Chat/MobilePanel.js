@@ -66,7 +66,7 @@ function MobilePanel(props){
                         <ListItemText primary={profile[0].name}></ListItemText>
                     </ListItem>
                 </List> :
-                <Box style={{padding: 10, width: "90%"}}>
+                <Box style={{padding: 10, width: "80%"}}>
                 <TextField   id="outlined-basic-email" label={chatText[`${nextI18Next}_search`]} variant="outlined" fullWidth  onChange={(e)=>Search(e)} />
                 </Box>}
                 
