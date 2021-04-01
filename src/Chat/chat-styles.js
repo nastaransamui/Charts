@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
       overflowY: 'scroll',
       padding: '1rem',
       paddingBottom: '0.5rem',
-      // borderRight: `1px solid ${theme.palette.primary.main}`,
+      border: `1px solid ${theme.palette.primary.main}`,
       // borderLeft: `1px solid ${theme.palette.primary.main}`,
     },
     messageAreaReplacement: {
@@ -125,7 +125,7 @@ const useStyles = makeStyles((theme) => ({
     dialog:{
       position: 'absolute',
       left: leftwidth=> leftwidth,
-      top: theme.spacing(390),
+      // top: theme.spacing(390),
     },
     dialogRoot:{
       

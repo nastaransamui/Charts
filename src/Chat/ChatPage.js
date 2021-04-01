@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import useStyles from './chat-styles';
 import PropTypes from 'prop-types';
 import ChatBody from './ChatBody'
@@ -31,7 +31,7 @@ let pusher ;
 // }
 const ChatPage = (props) => {
     const classes = useStyles();
-    const {profile, ChatUsersProps, chatText} = props
+    const {profile, ChatUsersProps, chatText, SetShowToolbar, showToolbar} = props
     const [users, setUsers] = useState([])
     const [newUserFromPush, setNewUserFromPush] = useState(null)
     const [newChatFromPush, setNewChatFromPush] = useState(null)
@@ -45,8 +45,19 @@ const ChatPage = (props) => {
     const [LoadingRoute, setLoadingRoute] = useState(false)
     const [ChatBodyLoadingRoute, setChatBodyLoadingRoute] = useState(true)
     var key = process.env.SECRET;
-    const [componentToMount, setComponentToMount] = useState('');
+
     const isMobile = useMediaQuery('(max-width:800px)');
+
+    useEffect(()=>{
+        let isMount = true;
+        if(isMount && isMobile && reciver===null){
+            window.scrollTo(0, 0)
+        }
+        return()=>{
+            isMount = false
+        }
+    })
+    
 
     useEffect(()=>{
         let  isMount = true;
@@ -234,9 +245,10 @@ const ChatPage = (props) => {
         if (pusher === undefined) {
             const socket = io();
             if(reciver !==null && reciver._id !==d._id ){
+                SetShowToolbar(false)
                 setChatBodyLoadingRoute(true)
-                setReciver(d)
-                setMsg([])
+                setReciver(olddata => d)
+                setMsg(olddata => [])
                 socket.emit(`room`, profile[0]._id,d._id)
                 setReciver(d)
                 socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
@@ -244,6 +256,7 @@ const ChatPage = (props) => {
                     setMsg(data[d._id])
                 })
             }else{
+                SetShowToolbar(false)
                 socket.emit(`room`, profile[0]._id,d._id)
                 setReciver(d)
                 socket.on(`roomReturn${profile[0]._id}${d._id}`, data =>{
@@ -254,8 +267,10 @@ const ChatPage = (props) => {
         } else {
             if(reciver !==null && reciver._id !==d._id ){
                 setChatBodyLoadingRoute(true)
+                SetShowToolbar(false)
                 setReciver(olddata => d)
                 setMsg(olddata => [])
+                console.log("if")
                 axios.post('api/chat/getRooms',{
                     roomID: profile[0]._id,
                     guestID: d._id
@@ -265,6 +280,7 @@ const ChatPage = (props) => {
                 })
             }else{
                 setReciver(d)
+                SetShowToolbar(false)
                 axios.post('api/chat/getRooms',{
                     roomID: profile[0]._id,
                     guestID: d._id
@@ -315,7 +331,11 @@ const ChatPage = (props) => {
                 </Grid>:
                 <Grid >
                     {reciver ===null  ?
-                    <MobilePanel users={users} UserMobileClicked={UserMobileClicked} {...props} leftwidth={leftwidth} setLeftwidth={setLeftwidth} />:
+                    <>
+                    <MobilePanel users={users} UserMobileClicked={UserMobileClicked} {...props} leftwidth={leftwidth} setLeftwidth={setLeftwidth} />
+                    </>
+                    :
+                    
                     <MobileChatBody 
                     Msg={Msg} 
                     reciver={reciver} 
@@ -325,7 +345,10 @@ const ChatPage = (props) => {
                     setReciver={setReciver}
                     ChatValue={ChatValue}
                     SendMessage={SendMessage}
-                    ChatBodyLoadingRoute={ChatBodyLoadingRoute}/>}
+                    SetShowToolbar={SetShowToolbar}
+                    showToolbar={showToolbar}
+                    ChatBodyLoadingRoute={ChatBodyLoadingRoute}/>
+                    }
                 </Grid>
                 }
             </LoadingOverlay>

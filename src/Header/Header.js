@@ -31,8 +31,8 @@ import {langName} from '../../public/locale/langName'
 
 function Header(props){
   const classes = useStyles();
-  const {toggleDarkTheme,header, profile} = props;
-  const [loading] = useSession()
+  const {toggleDarkTheme,header, profile, showToolbar} = props;
+  const [session,loading] = useSession()
   const router = useRouter()
   const {themeType, themeName, isLoading, "next-i18next": nextI18Next }= useSelector(state => state)
   const dispatch = useDispatch();
@@ -51,7 +51,7 @@ function Header(props){
 
   useEffect(()=>{
     let isMount = true
-    if (isMount) {
+    if (isMount && showToolbar === undefined) {
       if(loading) SetProgress(100)
     }
     return() =>{
@@ -198,7 +198,8 @@ function SingOut() {
       <LoadingBar 
       color={theme.palette.secondary.main} 
       onLoaderFinished={() => SetProgress(0)}
-      progress={Progress} />
+      progress={showToolbar === undefined && Progress}
+       />
       <AlertDialog {...AlertDialogState} />
       <LeftDrawer openDrawer={openDrawer} {...props}/>
         <>

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { setCookies,getCookies, checkCookies } from 'cookies-next';
 import { wrapper } from '../redux/store'
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,12 +16,13 @@ import {getUsersLive} from '../lib/chat/getUsers'
 const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(10),
+    // height: "100vh",
     // minHeight: '100vh'
   },
   mainWrap: {
     position: 'relative',
     width: '100%',
-    overflow: 'hidden',
+    // overflow: 'hidden',
     background: theme.palette.background.paper,
     color: theme.palette.text.primary,
   },
@@ -30,19 +31,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function Chat(props) {
   const classes = useStyles();
-  // const [session] = useSession()
   const router = useRouter()
-  // useEffect(()=>{
-  //   let isMount = true;
-  //   if(isMount){
-  //     if(session === null){
-  //       router.push("/");
-  //     }
-  //   }
-  //   return() =>{
-  //     isMount = false;
-  //   }
-  // },[session])
+  const [showToolbar, SetShowToolbar] = useState(true)
+
   return (
     <Fragment>
       <Head>
@@ -50,10 +41,10 @@ export default function Chat(props) {
       </Head>
       <CssBaseline />
       <div className={classes.mainWrap}>
-        <Header {...props} />
+        {showToolbar && <Header {...props} showToolbar={showToolbar}/>}
         <main className={classes.containerWrap}>
-          <div className={classes.appBarSpacer} />
-          <ChatPage {...props} />
+          {showToolbar && <div className={classes.appBarSpacer} />}
+          <ChatPage {...props} showToolbar={showToolbar} SetShowToolbar={SetShowToolbar}/>
         </main>
       </div>
     </Fragment>

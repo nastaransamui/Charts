@@ -9,18 +9,21 @@ import {
     Avatar,
     ListItemText,
     IconButton,
-    Divider,} from '@material-ui/core'
+    Divider,
+    useTheme
+} from '@material-ui/core'
 import PropTypes from 'prop-types';
 import moment from 'moment'
 import aes256 from 'aes256'
 import LoadingOverlay from 'react-loading-overlay';
 import {useSelector} from 'react-redux';
-import ChatSendMessage from './ChatSendMessage'
+import MobileChatSendMessage from './MobileChatSendMessage'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 function MobileChatBody(props){
     const {themeName }= useSelector(state => state)
+    const theme = useTheme();
     const classes = useStyles({themeName});
-    const {Msg, profile, reciver,setReciver, ChatBodyLoadingRoute, setChatValue, ChatValue, SendMessage} = props
+    const {Msg, profile, reciver,setReciver, ChatBodyLoadingRoute, setChatValue, ChatValue, SendMessage, SetShowToolbar,  showToolbar} = props
     const messagesEndRef = useRef(null);
     var key = process.env.SECRET;
     const scrollToBottom = () => {
@@ -67,7 +70,9 @@ function MobileChatBody(props){
   return(
     <LoadingOverlay active={ChatBodyLoadingRoute} spinner text='Loading ...' >
          <Paper style={{width: "100%"}}>
-         <Grid container direction="row-reverse" justify="space-between" alignItems="center">
+         <Grid container direction="row-reverse" justify="space-between" alignItems="center" 
+         style={{background: theme.palette.secondary.light,marginTop:-10,  position: 'fixed',  width: '100%', zIndex: 100,}}
+         >
                      <List component="nav">
                     <ListItem button key={reciver.name}>
                         <ListItemIcon>
@@ -83,15 +88,15 @@ function MobileChatBody(props){
                         <ListItemText primary={reciver.name}></ListItemText>
                     </ListItem>
                 </List>
-                <IconButton onClick={()=>{setReciver(null)}} >
+                <IconButton onClick={()=>{setReciver(null);SetShowToolbar(true)}} >
                     <ArrowBackIcon />
                 </IconButton>
                 </Grid>
                 <Divider classes={{root: classes.mobileDivider}}/>
                 </Paper>
-        <Grid container direction="column" >
+            <Grid container direction="column" style={{marginTop: 50,}}>
             <Grid item 
-            style={{minHeight: "80%", height: 'auto',width: '100%',height: '70vh',overflowY: 'auto',}}
+            style={{ height: "100%",width: '100%'}}
             >
             <List >
         <div className={classes.MobilmessageArea}>
@@ -100,12 +105,9 @@ function MobileChatBody(props){
         <div ref={messagesEndRef} />
     </List>
             </Grid>
-            <Grid item 
-            style={{minHeight: "10%", height: 'auto',width: '100%',height: '10vh',}}
-            >
-            <ChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue} {...props} /> 
-            </Grid>
+            <MobileChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue} {...props} />
         </Grid>
+            {/* <MobileChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue} {...props} /> */}
         </LoadingOverlay>
 )
 }
