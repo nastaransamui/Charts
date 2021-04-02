@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "title": "New Business Strategy",
+    "excerpt": "Simply dummy text ofthe aana the printing oter think  industry dummy texat thhke tex ate are ofthe anadthe after that.",
+    "thumb": "blog_1.jpg",
+    "tag": "office",
+    "content": "Lorem Ipsum is simply dummy text ofthe anadthe printing of typesetting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of typesetting  texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of Lorem Ipsum is simply dummy text ofthe anadthe printing of type setting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of type",
+    "blockQuote": "Simply dummy text ofthe aana the printing oter think  industry dummy texat thhke tex ate are ofthe anadthe after that ofthe aana the printing oter think  industry dummy texat thhke tex. ",
+    "blockQuoteImg": "blog_1.jpg",
+    "contentSecondPart": " Lorem Ipsum is simply dummy text ofthe anadthe printing of type setting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of type setting industry",
+    "publishDate": "June 01",
+    "commentCount": "3",
+    "comments": {
+      "name": "John Doe",
+      "date": "27 Jan 2020",
+      "proPic": "tes1.jpg",
+      "text": "Lorem ipsum dolor sit amet, in urna molestie tristique. A fermentum sed at facilisis lacinia aliquam fusce wisi porta ligula   nibh vel congue diam. Sed ligula erat molestie cras morbi in facilisis eu elit"
+    }
+  },
+  {
+    "id": 2,
+    "title": "How to grow your business",
+    "excerpt": "Simply dummy text ofthe aana the printing oter think  industry dummy texat thhke tex ate are ofthe anadthe after that.",
+    "thumb": "blog_2.jpg",
+    "tag": "house",
+    "content": "Lorem Ipsum is simply dummy text ofthe anadthe printing of typesetting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of typesetting  texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of Lorem Ipsum is simply dummy text ofthe anadthe printing of type setting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of type",
+    "blockQuote": "Simply dummy text ofthe aana the printing oter think  industry dummy texat thhke tex ate are ofthe anadthe after that ofthe aana the printing oter think  industry dummy texat thhke tex. ",
+    "blockQuoteImg": "blog_1.jpg",
+    "contentSecondPart": " Lorem Ipsum is simply dummy text ofthe anadthe printing of type setting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of type setting industry",
+    "publishDate": "June 02",
+    "commentCount": "3",
+    "comments": {
+      "name": "Juli Doe",
+      "date": "12 Jan 2020",
+      "proPic": "tes1.jpg",
+      "text": "Lorem ipsum dolor sit amet, in urna molestie tristique. A fermentum sed at facilisis lacinia aliquam fusce wisi porta ligula   nibh vel congue diam. Sed ligula erat molestie cras morbi in facilisis eu elit"
+    }
+  },
+  {
+    "id": 3,
+    "title": "How to increase sales",
+    "excerpt": "Simply dummy text ofthe aana the printing oter think  industry dummy texat thhke tex ate are ofthe anadthe after that.",
+    "thumb": "blog_3.jpg",
+    "tag": "restaurants",
+    "content": "Lorem Ipsum is simply dummy text ofthe anadthe printing of typesetting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of typesetting  texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of Lorem Ipsum is simply dummy text ofthe anadthe printing of type setting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of type",
+    "blockQuote": "Simply dummy text ofthe aana the printing oter think  industry dummy texat thhke tex ate are ofthe anadthe after that ofthe aana the printing oter think  industry dummy texat thhke tex. ",
+    "blockQuoteImg": "blog_1.jpg",
+    "contentSecondPart": " Lorem Ipsum is simply dummy text ofthe anadthe printing of type setting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of type setting industry",
+    "publishDate": "June 05",
+    "commentCount": "3",
+    "comments": {
+      "name": "Adam Doe",
+      "date": "15 Jan 2020",
+      "proPic": "tes1.jpg",
+      "text": "Lorem ipsum dolor sit amet, in urna molestie tristique. A fermentum sed at facilisis lacinia aliquam fusce wisi porta ligula   nibh vel congue diam. Sed ligula erat molestie cras morbi in facilisis eu elit"
+    }
+  },
+  {
+    "id": 4,
+    "title": "How to manage clients",
+    "excerpt": "Simply dummy text ofthe aana the printing oter think  industry dummy texat thhke tex ate are ofthe anadthe after that.",
+    "thumb": "blog_2.jpg",
+    "tag": "office",
+    "content": "Lorem Ipsum is simply dummy text ofthe anadthe printing of typesetting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of typesetting  texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of Lorem Ipsum is simply dummy text ofthe anadthe printing of type setting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of type",
+    "blockQuote": "Simply dummy text ofthe aana the printing oter think  industry dummy texat thhke tex ate are ofthe anadthe after that ofthe aana the printing oter think  industry dummy texat thhke tex. ",
+    "blockQuoteImg": "blog_1.jpg",
+    "contentSecondPart": " Lorem Ipsum is simply dummy text ofthe anadthe printing of type setting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of type setting industry",
+    "publishDate": "June 09",
+    "commentCount": "3",
+    "comments": {
+      "name": "Adam Doe",
+      "date": "15 Jan 2020",
+      "proPic": "tes2.jpg",
+      "text": "Lorem ipsum dolor sit amet, in urna molestie tristique. A fermentum sed at facilisis lacinia aliquam fusce wisi porta ligula   nibh vel congue diam. Sed ligula erat molestie cras morbi in facilisis eu elit"
+    }
+  },
+  {
+    "id": 5,
+    "title": "Don’t spend cleaning",
+    "excerpt": "Simply dummy text ofthe aana the printing oter think  industry dummy texat thhke tex ate are ofthe anadthe after that.",
+    "thumb": "blog_1.jpg",
+    "tag": "house",
+    "content": "Lorem Ipsum is simply dummy text ofthe anadthe printing of typesetting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of typesetting  texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of Lorem Ipsum is simply dummy text ofthe anadthe printing of type setting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of type",
+    "blockQuote": "Simply dummy text ofthe aana the printing oter think  industry dummy texat thhke tex ate are ofthe anadthe after that ofthe aana the printing oter think  industry dummy texat thhke tex. ",
+    "blockQuoteImg": "blog_1.jpg",
+    "contentSecondPart": " Lorem Ipsum is simply dummy text ofthe anadthe printing of type setting industry dummy texat the dummy text ofthe anadthe printing dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of dummy text ofthe anadthe printing of type setting industry",
+    "publishDate": "June 07",
+    "commentCount": "3",
+    "comments": {
+      "name": "Jone Doe",
+      "date": "15 Jan 2020",
+      "proPic": "tes1.jpg",
+      "text": "Lorem ipsum dolor sit amet, in urna molestie tristique. A fermentum sed at facilisis lacinia aliquam fusce wisi porta ligula   nibh vel congue diam. Sed ligula erat molestie cras morbi in facilisis eu elit"
+    }
+  }
+ 
+]

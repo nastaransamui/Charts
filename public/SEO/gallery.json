@@ -1,0 +1,139 @@
+[
+  {
+    "id": 1,
+    "title": "Graphic Design", 
+    "thumb": "work_1.jpg",
+    "tag": "business",
+    "previewImages": [
+      "blog_1.jpg",  
+      "blog_2.jpg" 
+    ],
+    "content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Invidunt ut labore et dolore magna stet clita kasd gubergrenLorem ipsum dolor sit amet, consetetur sadipscing elitr. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren accusam et justo duo",
+    "clientName": "David Jon ",
+    "companyName": "Market ",
+    "workType": "Clean, House",
+    "projectDate": "07 Jan 2017",
+    "Budget": "$2357",
+    "Location": "California, USA"
+  },
+  {
+    "id": 2,
+    "title": "Creative Strategy", 
+    "thumb": "work_2.jpg",
+    "tag": "marketing",
+    "previewImages": [
+      "blog_1.jpg",  
+      "blog_2.jpg" 
+    ],
+    "content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Invidunt ut labore et dolore magna stet clita kasd gubergrenLorem ipsum dolor sit amet, consetetur sadipscing elitr. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren accusam et justo duo",
+    "clientName": "David Jon ",
+    "companyName": "Market ",
+    "workType": "Clean, House",
+    "projectDate": "07 Jan 2017",
+    "Budget": "$2357",
+    "Location": "California, USA"
+  },
+  {
+    "id": 3,
+    "title": "Marketing Policy", 
+    "thumb": "work_3.jpg",
+    "tag": "creative",
+    "previewImages": [
+      "blog_1.jpg",  
+      "blog_2.jpg" 
+    ],
+    "content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Invidunt ut labore et dolore magna stet clita kasd gubergrenLorem ipsum dolor sit amet, consetetur sadipscing elitr. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren accusam et justo duo",
+    "clientName": "David Jon ",
+    "companyName": "Market ",
+    "workType": "Clean, House",
+    "projectDate": "07 Jan 2017",
+    "Budget": "$2357",
+    "Location": "California, USA"
+  },
+  {
+    "id": 4,
+    "title": "Campaign & PR", 
+    "thumb": "work_4.jpg",
+    "tag": "design",
+    "previewImages": [
+      "blog_1.jpg",  
+      "blog_2.jpg" 
+    ],
+    "content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Invidunt ut labore et dolore magna stet clita kasd gubergrenLorem ipsum dolor sit amet, consetetur sadipscing elitr. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren accusam et justo duo",
+    "clientName": "David Jon ",
+    "companyName": "Market ",
+    "workType": "Clean, House", 
+    "projectDate": "07 Jan 2017",
+    "Budget": "$2357",
+    "Location": "California, USA"
+  },
+  {
+    "id": 5,
+    "title": "Creative Ideas", 
+    "thumb": "work_5.jpg",
+    "tag": "development",
+    "previewImages": [
+      "blog_1.jpg",  
+      "blog_2.jpg" 
+    ],
+    "content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Invidunt ut labore et dolore magna stet clita kasd gubergrenLorem ipsum dolor sit amet, consetetur sadipscing elitr. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren accusam et justo duo",
+    "clientName": "David Jon ",
+    "companyName": "Market ",
+    "workType": "Clean, House",
+    "projectDate": "07 Jan 2017",
+    "Budget": "$2357",
+    "Location": "California, USA"
+  },
+  {
+    "id": 6,
+    "title": "Digital Solutions", 
+    "thumb": "work_6.jpg",
+    "tag": "strategy",
+    "previewImages": [
+      "blog_1.jpg",  
+      "blog_2.jpg" 
+    ],
+    "content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Invidunt ut labore et dolore magna stet clita kasd gubergrenLorem ipsum dolor sit amet, consetetur sadipscing elitr. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren accusam et justo duo",
+    "clientName": "David Jon ",
+    "companyName": "Market ",
+    "workType": "Clean, House",
+    "projectDate": "07 Jan 2017",
+    "Budget": "$2357",
+    "Location": "California, USA"
+  },
+  {
+    "id": 7,
+    "title": "Marketing Strategy", 
+    "thumb": "work_7.jpg",
+    "tag": "social",
+    "previewImages": [
+      "blog_1.jpg",  
+      "blog_2.jpg" 
+    ],
+    "content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Invidunt ut labore et dolore magna stet clita kasd gubergrenLorem ipsum dolor sit amet, consetetur sadipscing elitr. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren accusam et justo duo",
+    "clientName": "David Jon ",
+    "companyName": "Market ",
+    "workType": "Clean, House",
+    "projectDate": "07 Jan 2017",
+    "Budget": "$2357",
+    "Location": "California, USA"
+  },
+  {
+    "id": 8,
+    "title": "Digital Service", 
+    "thumb": "work_8.jpg",
+    "tag": "media",
+    "previewImages": [
+      "blog_1.jpg",  
+      "blog_2.jpg" 
+    ],
+    "content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Invidunt ut labore et dolore magna stet clita kasd gubergrenLorem ipsum dolor sit amet, consetetur sadipscing elitr. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren accusam et justo duo",
+    "clientName": "David Jon ",
+    "companyName": "Market ",
+    "workType": "Clean, House", 
+    "projectDate": "07 Jan 2017",
+    "Budget": "$2357",
+    "Location": "California, USA"
+  }
+ 
+]
