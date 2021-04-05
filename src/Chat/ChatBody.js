@@ -9,7 +9,7 @@ import {useSelector} from 'react-redux';
 function ChatBody(props){
     const {themeName }= useSelector(state => state)
     const classes = useStyles({themeName});
-    const {Msg, profile, reciver, ChatBodyLoadingRoute} = props
+    const {Msg, profile, reciver, ChatBodyLoadingRoute, isTyping} = props
     const messagesEndRef = useRef(null);
 
     var key = process.env.SECRET;
@@ -25,7 +25,7 @@ function ChatBody(props){
         return()=>{
             isMount = false
         }
-    },[Msg])
+    },[Msg,isTyping])
 
       const getCoversation =(Messages) =>{
             const listItems = Messages.map((message, index)=>{
@@ -55,12 +55,13 @@ function ChatBody(props){
         });
         return listItems;
     }
-
+   
       return(
         <LoadingOverlay active={ChatBodyLoadingRoute} spinner text='Loading ...' >
         <List className={classes.messageArea}>
             <div className={classes.MainMessages}>
                 {Msg !== undefined && getCoversation(Msg)}
+                {getCoversation(isTyping)}
             </div>
             <div ref={messagesEndRef} />
         </List>

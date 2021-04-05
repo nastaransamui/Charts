@@ -36,7 +36,10 @@ const ChatPage = (props) => {
     const [newUserFromPush, setNewUserFromPush] = useState(null)
     const [newChatFromPush, setNewChatFromPush] = useState(null)
     const [pusherMassage, setPusherMassage] = useState(null)
+    const [socketMassage, setSocketMassage] = useState(null)
+    const [socketTyping, setSocketTyping] = useState(null)
     const [Msg, setMsg] = useState([])
+    const [isTyping, setIsTyping] = useState([])
     const [ChatValue, setChatValue] = useState('')
     const [reciver, setReciver] = useState(null)
     const [leftwidth, setLeftwidth] = useState(null)
@@ -59,6 +62,7 @@ const ChatPage = (props) => {
     })
     
 
+    
     useEffect(()=>{
         let  isMount = true;
         if (pusher === undefined) {
@@ -75,6 +79,12 @@ const ChatPage = (props) => {
                     socket.emit("logout", profile[0]._id);
                     setUsers(data)
                   });
+                  socket.on("getMsg", data => {
+                    setSocketMassage(data)
+                  })
+                  socket.on("returnTyping", data => {
+                    setSocketTyping(data)
+                  })
             })
         }
         return()=>{
@@ -89,7 +99,9 @@ const ChatPage = (props) => {
                 channel.bind('user-login', function(data) {
                 setNewUserFromPush(data.value)
               });
-              
+              channel.bind('isTyping', function(data) {
+                  setSocketTyping(data.value)
+                });
             setLoadingRoute(true)
             setUsers(ChatUsersProps)
             setLoadingRoute(false)
@@ -155,6 +167,87 @@ const ChatPage = (props) => {
         }
     }, [newChatFromPush])
 
+    useEffect(()=>{
+        let isMount = true;
+        if (pusher === undefined) {
+            if(isMount){
+                const socket = io();
+                if(ChatValue !== ""){
+                    const now = moment().format()
+                    const senderId = profile[0]._id
+                    const reciverId = reciver._id
+                    let isTyping = {
+                        name: senderId.name,
+                        senderId: senderId,
+                        reciverId: reciverId,
+                        body: aes256.encrypt(key, "...is Typing"),
+                        time: now
+                      }
+                    socket.emit("typing", isTyping);
+                }else{
+                    let isTyping =[]
+                    socket.emit("typing", isTyping);
+                }
+            }
+        }else{
+            if(isMount){
+                if(ChatValue !== ""){
+                    const now = moment().format()
+                    const senderId = profile[0]._id
+                    const reciverId = reciver._id
+                    let isTyping = {
+                        name: senderId.name,
+                        senderId: senderId,
+                        reciverId: reciverId,
+                        body: aes256.encrypt(key, "...is Typing"),
+                        time: now
+                      }
+                      axios.post('api/chat/isTyping',{
+                        isTyping: isTyping
+                    })
+                }else{
+                    let isTyping =[]
+                    axios.post('api/chat/isTyping',{
+                      isTyping: isTyping
+                  })
+                }
+            }
+        }
+        
+        return()=>{
+            isMount = false
+        }
+    },[ChatValue])
+
+    useEffect(()=>{
+        let isMount = true;
+        if (isMount) {
+            if(reciver!== null && socketMassage!== null){
+                if(socketMassage.reciverId === profile[0]._id){
+
+            setMsg(oldMsg=>[
+                ...oldMsg,socketMassage
+            ])
+                }
+            }
+        }
+        return()=>{isMount}
+    },[socketMassage])
+
+    useEffect(()=>{
+        let isMount = true;
+        if (isMount) {
+            if(reciver!== null && socketTyping!== null){
+                if(socketTyping.reciverId === profile[0]._id){
+                    setIsTyping(olddata=>[socketTyping])
+                }else{
+                    setIsTyping(olddata=>[])
+                }
+            }
+        }
+        return ()=>{isMount = false}
+    },[socketTyping])
+
     const SendMessage =()=>{
         const now = moment().format()
         const senderId = profile[0]._id
@@ -173,6 +266,7 @@ const ChatPage = (props) => {
             setMsg(oldMsg=>[
                 ...oldMsg,NewMessage
             ])
+            setPusherMassage(NewMessage)
             socket.on(`sendMsgReturn${profile[0]._id}${reciver._id}`, data =>{
                 if(data[reciver._id] === undefined) setMsg(data[profile[0]._id])
                 if(data[profile[0]._id] === undefined) setMsg(data[reciver._id])
@@ -191,7 +285,7 @@ const ChatPage = (props) => {
                 NewMessage: NewMessage,
                 Sender: profile[0]._id,
                 Reciver: reciver._id
-            }).then((data)=>{console.log(data.data)})
+            })
         }
     }
  
@@ -200,6 +294,7 @@ const ChatPage = (props) => {
             const socket = io();
             if(reciver !==null && reciver._id !==d._id ){
                 setChatBodyLoadingRoute(true)
+                setChatValue('')
                 setReciver(d)
                 setMsg([])
                 socket.emit(`room`, profile[0]._id,d._id)
@@ -219,6 +314,7 @@ const ChatPage = (props) => {
         } else {
             if(reciver !==null && reciver._id !==d._id ){
                 setChatBodyLoadingRoute(true)
+                setChatValue('')
                 setReciver(olddata => d)
                 setMsg(olddata => [])
                 axios.post('api/chat/getRooms',{
@@ -270,7 +366,6 @@ const ChatPage = (props) => {
                 SetShowToolbar(false)
                 setReciver(olddata => d)
                 setMsg(olddata => [])
-                console.log("if")
                 axios.post('api/chat/getRooms',{
                     roomID: profile[0]._id,
                     guestID: d._id
@@ -319,7 +414,12 @@ const ChatPage = (props) => {
                     <Grid container component={Paper} className={classes.chatSection}>
                         <ChatLeftPanel users={users} UserClicked={UserClicked} {...props} leftwidth={leftwidth} setLeftwidth={setLeftwidth} />
                         <Grid item xs={9}>
-                            {reciver !== null ? <ChatBody Msg={Msg} reciver={reciver} profile={profile} {...props} ChatBodyLoadingRoute={ChatBodyLoadingRoute}/> : 
+                            {reciver !== null ? <ChatBody 
+                            Msg={Msg} reciver={reciver} 
+                            profile={profile} 
+                            {...props} 
+                            ChatBodyLoadingRoute={ChatBodyLoadingRoute}
+                            isTyping={isTyping}/> : 
                             <div className={classes.messageAreaReplacement}>
                                 {chatText[`${nextI18Next}_users_empty`]}    
                             </div>}

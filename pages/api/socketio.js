@@ -1,5 +1,7 @@
 import { Server } from 'socket.io'
 import {connectToDatabase } from '../../lib/mongodb'
+import moment from 'moment'
+import aes256 from 'aes256'
 const ObjectID = require('mongodb').ObjectID;
 
 const ioHandler = async (req, res) => {
@@ -8,6 +10,7 @@ const ioHandler = async (req, res) => {
     const Users = await db.collection("users");
     const Rooms = await db.collection("rooms");
     const io = new Server(res.socket.server)
+    var key = process.env.SECRET;
     io.on('connection', async(socket) => {
       socket.sendBuffer = [];
       socket.on('login', async (userName)=>{
@@ -83,7 +86,12 @@ const ioHandler = async (req, res) => {
         Rooms.findOneAndUpdate(filterReciver, updateReciver,options,(err,res)=>{
           if(err) io.emit(`sendMsgReturn${Sender}${Reciver}`, err);
         })
+        io.emit('getMsg', msgTo)
       });
+      socket.on("typing", async(isTyping)=>{
+
+        io.emit("returnTyping",isTyping)
+      })
     })
     io.on('disconnect', async(socket)=>{
       console.log('client disconnect')
