@@ -27,6 +27,7 @@ let pusher ;
      cluster: process.env.PUSHER_APP_CLUSTER,
      encrypted: true,
      activityTimeout: 50000,
+     authEndpoint: '/api/pusher/auth',
     });
 // }
 const ChatPage = (props) => {
@@ -95,18 +96,20 @@ const ChatPage = (props) => {
             socket.disconnect()
         }
         } else {
-             const channel = pusher.subscribe('Chat-development')
+             const channel = pusher.subscribe('private-Chat-development')
+            //  const privatechannel = pusher.subscribe('private-Chat-development')
+             channel.bind("client-isTyping", function(data){
+                setSocketTyping(data.value)
+             })
                 channel.bind('user-login', function(data) {
                 setNewUserFromPush(data.value)
               });
-              channel.bind('isTyping', function(data) {
-                  setSocketTyping(data.value)
-                });
             setLoadingRoute(true)
             setUsers(ChatUsersProps)
             setLoadingRoute(false)
             return() =>{
                 isMount = false
+                pusher.unsubscribe('private-Chat-development');
                 pusher.disconnect();
               }
         }
@@ -115,8 +118,8 @@ const ChatPage = (props) => {
     useEffect(()=>{
         let isMount = true
         if(isMount && pusher !== undefined){
-            const channel = pusher.subscribe('Chat-development')
-            channel.bind('chat', function(data) {
+            const channel = pusher.subscribe('private-Chat-development')
+            channel.bind('client-chat', function(data) {
                 setNewChatFromPush(data.value)
               });
         }
@@ -191,6 +194,7 @@ const ChatPage = (props) => {
             }
         }else{
             if(isMount){
+                const channel = pusher.subscribe('private-Chat-development')
                 if(ChatValue !== ""){
                     const now = moment().format()
                     const senderId = profile[0]._id
@@ -202,14 +206,10 @@ const ChatPage = (props) => {
                         body: aes256.encrypt(key, "...is Typing"),
                         time: now
                       }
-                      axios.post('api/chat/isTyping',{
-                        isTyping: isTyping
-                    })
+                      channel.trigger('client-isTyping', { value: isTyping })
                 }else{
                     let isTyping =[]
-                    axios.post('api/chat/isTyping',{
-                      isTyping: isTyping
-                  })
+                    channel.trigger('client-isTyping', { value: isTyping })
                 }
             }
         }
@@ -277,10 +277,11 @@ const ChatPage = (props) => {
                 ...oldMsg,NewMessage
             ])
             setPusherMassage(NewMessage)
-            const channel = pusher.subscribe('Chat-development')
-            channel.bind('chat', function(data) {
-                setNewChatFromPush(data.value)
-              });
+            const channel = pusher.subscribe('private-Chat-development')
+            channel.trigger('client-chat', { value: NewMessage })
+            // channel.bind('chat', function(data) {
+            //     setNewChatFromPush(data.value)
+            //   });
             axios.post('api/chat/sendMsg',{
                 NewMessage: NewMessage,
                 Sender: profile[0]._id,

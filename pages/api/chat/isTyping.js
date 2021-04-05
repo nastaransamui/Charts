@@ -9,9 +9,15 @@ export const pusher = new Pusher({
 
 
 export default async (req, res) =>{
-        const {isTyping} = req.body;
-        pusher.trigger("Chat-development", "isTyping", {
-          value: {...isTyping}
-        });
-        res.json(isTyping);
+    const socketId = req.body.socket_id;
+  const channel = req.body.channel_name;
+  const presenceData = {
+    user_id: "unique_user_id",
+    user_info: {
+      name: "Mr Channels",
+      twitter_id: "@pusher"
+    }
+  };
+  const auth = pusher.authenticate(socketId, channel, presenceData);
+  res.send(auth);
 }

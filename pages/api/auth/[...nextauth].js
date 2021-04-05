@@ -84,7 +84,7 @@ export const options = {
             const options = { upsert: true, returnOriginal: false, setDefaultsOnInsert: true }
             if(newEmailUser){
               console.log("newemail user update photo and status")
-              pusher.trigger("Chat-development", "user-login", {
+              pusher.trigger("private-Chat-development", "user-login", {
                 value: {...message.user, 
                 online: true,
                 name : "Guest",
@@ -92,12 +92,12 @@ export const options = {
               }
               });
               const result =users.findOneAndUpdate(filter, updateDocImage, options)
-              // pusher.trigger("Chat-development", "user-login", {
+              // pusher.trigger("private-Chat-development", "user-login", {
               //   result
               // });
             }else{
               console.log("newuser update  status")
-              pusher.trigger("Chat-development", "user-login", {
+              pusher.trigger("private-Chat-development", "user-login", {
                 value: {...message.user, online: true}
               });
               const result = await users.findOneAndUpdate(filter, updateDoc, options)
@@ -128,7 +128,7 @@ export const options = {
                 online: false,
               },
             };
-            pusher.trigger("Chat-development", "user-login", {
+            pusher.trigger("private-Chat-development", "user-login", {
               value: {...message, online: false}
             });
             const options = { upsert: true, returnOriginal: false, setDefaultsOnInsert: true }

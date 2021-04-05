@@ -14,9 +14,9 @@ export default async (req, res) =>{
     
     const {NewMessage, Sender, Reciver} = req.body;
 
-        pusher.trigger("Chat-development", "chat", {
-          value: {...NewMessage}
-        });
+        // pusher.trigger("private-Chat-development", "chat", {
+        //   value: {...NewMessage}
+        // });
         setMsgLive(NewMessage, Sender, Reciver)
     // if (session) {
         res.json("done");
