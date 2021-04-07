@@ -7,6 +7,7 @@ import {
     Grid,
     Typography
 } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
 function ChatHeaderPage(props){
   const [countdown, SetCountdown] = useState();
@@ -47,5 +48,7 @@ function ChatHeaderPage(props){
     </Fragment>
 )
 }
-
+ChatHeaderPage.propTypes = {
+  chatText: PropTypes.object.isRequired,
+}
 export default ChatHeaderPage;

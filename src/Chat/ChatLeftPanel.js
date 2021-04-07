@@ -11,7 +11,6 @@ import {
     Paper
 } from '@material-ui/core'
 import useStyles, { AvatarOnline, AvatarOfline }  from './chat-styles';
-// import { useSession } from 'next-auth/client';
 import PropTypes from 'prop-types';
 import {useSelector} from 'react-redux';
 

@@ -315,6 +315,7 @@ export default function SignInSide(props) {
               required
               fullWidth
               value={email}
+              onBlur={()=>SetEmail(email.trim())}
               onChange={(e)=>SetEmail(e.target.value)}
               id="email"
               label={loginText[`${nextI18Next}_login_email_label`]}

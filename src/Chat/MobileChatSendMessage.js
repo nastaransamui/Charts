@@ -8,8 +8,6 @@ import { Picker } from 'emoji-mart'
 import {useTheme} from '@material-ui/core/styles'
 import EmojiSymbolsIcon from '@material-ui/icons/EmojiSymbols';
 import {useSelector} from 'react-redux';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import { Fragment } from 'react';
 
@@ -112,5 +110,12 @@ function MobileChatSendMessage(props){
         </Fragment>
     )
 }
+
+MobileChatSendMessage.propTypes = {
+    SendMessage: PropTypes.func.isRequired,
+    ChatValue: PropTypes.string.isRequired,
+    setChatValue: PropTypes.func.isRequired,
+    chatText: PropTypes.object.isRequired
+  }
 
 export default MobileChatSendMessage;

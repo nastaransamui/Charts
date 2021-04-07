@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Grid,  TextField, Fab, InputAdornment,Tooltip, Dialog, DialogContent, DialogActions} from '@material-ui/core'
+import {Grid,  TextField, Fab, InputAdornment,Tooltip, Dialog, DialogActions} from '@material-ui/core'
 import SendIcon from '@material-ui/icons/Send';
 import useStyles from './chat-styles';
 import PropTypes from 'prop-types';
@@ -8,8 +8,6 @@ import { Picker } from 'emoji-mart'
 import {useTheme} from '@material-ui/core/styles'
 import EmojiSymbolsIcon from '@material-ui/icons/EmojiSymbols';
 import {useSelector} from 'react-redux';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
   function ChatSendMessage(props){
     const {SendMessage, ChatValue, setChatValue, chatText, leftwidth} = props;
@@ -53,9 +51,6 @@ import CloseIcon from '@material-ui/icons/Close';
     const EmojiClicked = (emoji,event)=>{
         setChatValue(ChatValue.concat(`${emoji.native}`))
     }
-
-
-   
     return(
         <Grid container style={{padding: '20px'}} className={classes.SendMain}>
             <Grid item xs={11}>

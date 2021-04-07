@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { setCookies,getCookies, checkCookies } from 'cookies-next';
 import { wrapper } from '../redux/store'
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,7 +12,7 @@ import { ownUser } from '../lib/ownUser';
 import header from '../public/locale/header.json';
 import chatText from '../public/locale/chat.json'
 import {getUsersLive} from '../lib/chat/getUsers'
-
+import Router from 'next/router'
 const useStyles = makeStyles(theme => ({
   containerWrap: {
     marginTop: theme.spacing(10),
@@ -33,6 +33,7 @@ export default function Chat(props) {
   const classes = useStyles();
   const router = useRouter()
   const [showToolbar, SetShowToolbar] = useState(true)
+  const [onMount, setOnMount] = useState(true);
 
   return (
     <Fragment>
@@ -70,7 +71,6 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) =>{
     ctx.store.dispatch({type: `next-i18next`, payload: getCookies(ctx, `next-i18next`)})
   }
   const session = await getSession(ctx);
-
   const profile = session !== null && await ownUser(session)
   let ChatUsersProps = session !== null && await getUsersLive(profile[0]._id)
   if(ctx.res && session === null ){

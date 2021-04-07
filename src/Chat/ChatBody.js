@@ -74,6 +74,7 @@ ChatBody.propTypes = {
     reciver: PropTypes.object.isRequired,
     profile: PropTypes.array.isRequired,
     ChatBodyLoadingRoute: PropTypes.bool.isRequired,
+    isTyping: PropTypes.array.isRequired
 }
 
 export default ChatBody

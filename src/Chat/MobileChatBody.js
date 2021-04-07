@@ -23,7 +23,18 @@ function MobileChatBody(props){
     const {themeName }= useSelector(state => state)
     const theme = useTheme();
     const classes = useStyles({themeName});
-    const {Msg, profile, reciver,setReciver, ChatBodyLoadingRoute, setChatValue, ChatValue, SendMessage, SetShowToolbar,  showToolbar} = props
+    const {
+        Msg,
+        profile,
+        reciver,
+        setReciver,
+        ChatBodyLoadingRoute,
+        setChatValue,
+        ChatValue,
+        SendMessage,
+        SetShowToolbar, 
+        isTyping
+    } = props
     const messagesEndRef = useRef(null);
     var key = process.env.SECRET;
     const scrollToBottom = () => {
@@ -37,7 +48,7 @@ function MobileChatBody(props){
         return()=>{
             isMount = false
         }
-    },[Msg])
+    },[Msg, isTyping])
     const getCoversation =(Messages) =>{
         const listItems = Messages.map((message, index)=>{
         const profilePicture = message.senderId === profile[0]._id ? profile[0].image : reciver.image
@@ -68,55 +79,60 @@ function MobileChatBody(props){
 }
 
   return(
-    <LoadingOverlay active={ChatBodyLoadingRoute} spinner text='Loading ...' >
-         <Paper style={{width: "100%"}}>
-         <Grid container direction="row-reverse" justify="space-between" alignItems="center" 
-         style={{background: theme.palette.secondary.light,marginTop:-10,  position: 'fixed',  width: '100%', zIndex: 100,}}
-         >
-                     <List component="nav">
-                    <ListItem button key={reciver.name}>
-                        <ListItemIcon>
-                        {reciver.online ?
-                    <AvatarOnline style={{float: 'right'}} overlap="circle" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
-                        <Avatar alt={reciver.name} src={reciver.image} />
-                    </AvatarOnline>:
-                    <AvatarOfline style={{ float: 'right' }} overlap="circle" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
-                        <Avatar alt={reciver.name} src={reciver.image} />
-                    </AvatarOfline>
-                    }
-                        </ListItemIcon>
-                        <ListItemText primary={reciver.name}></ListItemText>
-                    </ListItem>
-                </List>
-                <IconButton onClick={()=>{setReciver(null);SetShowToolbar(true)}} >
-                    <ArrowBackIcon />
-                </IconButton>
-                </Grid>
-                <Divider classes={{root: classes.mobileDivider}}/>
-                </Paper>
-            <Grid container direction="column" style={{marginTop: 50,}}>
-            <Grid item 
-            style={{ height: "100%",width: '100%'}}
-            >
-            <List >
-        <div className={classes.MobilmessageArea}>
-            {Msg !== undefined && getCoversation(Msg)}
-        </div>
-        <div ref={messagesEndRef} />
-    </List>
-            </Grid>
-            <MobileChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue} {...props} />
-        </Grid>
-            {/* <MobileChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue} {...props} /> */}
-        </LoadingOverlay>
-)
+      <LoadingOverlay active={ChatBodyLoadingRoute} spinner text="Loading ...">
+          <Paper style={{width: "100%"}}>
+              <Grid container direction="row-reverse" justify="space-between" alignItems="center"
+              style={{background: theme.palette.secondary.light,marginTop:-10,  position: 'fixed',  width: '100%', zIndex: 100}}>
+                  <List component="nav">
+                      <ListItem button key={reciver.name}>
+                          <ListItemIcon>
+                              {
+                                  reciver.online 
+                                  ?
+                                  <AvatarOnline style={{float: 'right'}} overlap="circle" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
+                                      <Avatar alt={reciver.name} src={reciver.image} />
+                                  </AvatarOnline>
+                                  :
+                                  <AvatarOfline style={{ float: 'right' }} overlap="circle" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
+                                      <Avatar alt={reciver.name} src={reciver.image} />
+                                  </AvatarOfline>
+                              }
+                          </ListItemIcon>
+                          <ListItemText primary={reciver.name}></ListItemText>
+                      </ListItem>
+                  </List>
+                  <IconButton onClick={()=>{setReciver(null);SetShowToolbar(true)}}>
+                      <ArrowBackIcon />
+                  </IconButton>
+              </Grid>
+              <Divider classes={{root: classes.mobileDivider}}/>
+          </Paper>
+          <Grid container direction="column" style={{marginTop: 50}}>
+              <Grid item style={{ height: "100%",width: '100%' }}>
+                  <List>
+                      <div className={classes.MobilmessageArea}>
+                          {Msg !== undefined && getCoversation(Msg)}
+                          {getCoversation(isTyping)}
+                      </div>
+                      <div ref={messagesEndRef} style={{marginBottom: 40}} />
+                  </List>
+              </Grid>
+              <MobileChatSendMessage SendMessage={SendMessage} setChatValue={setChatValue} ChatValue={ChatValue} {...props} />
+          </Grid>
+      </LoadingOverlay>
+  )
 }
-
 MobileChatBody.propTypes = {
     Msg: PropTypes.array.isRequired,
     reciver: PropTypes.object.isRequired,
     profile: PropTypes.array.isRequired,
     ChatBodyLoadingRoute: PropTypes.bool.isRequired,
+    setReciver: PropTypes.func.isRequired,
+    setChatValue: PropTypes.func.isRequired,
+    ChatValue: PropTypes.string.isRequired,
+    SendMessage: PropTypes.func.isRequired,
+    SetShowToolbar: PropTypes.func.isRequired,
+    isTyping: PropTypes.array.isRequired
 }
 
 export default MobileChatBody

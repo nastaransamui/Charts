@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
       border: `1px solid ${theme.palette.primary.main}`,
     },
     MobilmessageArea:{
-      height: 'clac(100% - 3rem)',
+      // height: 'clac(100% - 3rem)',
       overflowY: 'scroll',
       padding: '1rem',
       paddingBottom: '0.5rem',
